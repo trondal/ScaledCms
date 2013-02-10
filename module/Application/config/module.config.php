@@ -49,7 +49,7 @@ return array(
                         'route' => 'db restart',
                         'defaults' => array(
                             'controller' => 'Application\Controller\Console',
-                            'action' => 'dropcreate'
+                            'action' => 'restart'
                         )
                     )
                 )
@@ -72,10 +72,9 @@ return array(
         ),
     ),
     'controllers' => array(
-        'invokables' => array(
-            'Application\Controller\Index' => 'Application\Controller\IndexController'
-        ),
+        'invokables' => array(),
         'factories' => array(
+            'Application\Controller\Index' => 'Application\Controller\Factory\Index',
             'Application\Controller\Console' => 'Application\Controller\Factory\Console'
         )
     ),
@@ -95,4 +94,16 @@ return array(
             __DIR__ . '/../view',
         ),
     ),
+    'view_helpers' => array(
+        'invokables' => array(
+            'tree' => 'Application\View\Helper\Tree'
+        )
+    ),
+    'doctrine' => array(
+        'eventmanager' => array(
+            'orm_default' => array(
+                'subscribers' => array('Gedmo\Tree\TreeListener')
+            )
+        ),
+    )
 );

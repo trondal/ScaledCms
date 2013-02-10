@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\SchemaTool;
 use Zend\Mvc\Controller\AbstractActionController;
 
-class ConsoleController extends AbstractActionController implements EntityManagerAware{
+class ConsoleController extends AbstractActionController implements EntityManagerAware {
 
     /**
      * @var EntityManager
@@ -24,6 +24,33 @@ class ConsoleController extends AbstractActionController implements EntityManage
         $tool->dropSchema($metaData);
         $tool->createSchema($metaData);
 
-        return 'Done' . PHP_EOL;
+        return 'Db dropped and created.' . PHP_EOL;
     }
+
+    public function restartAction() {
+        $this->dropcreateAction();
+
+        $page = new \Application\Entity\Page('index');
+        $page1_1 = new \Application\Entity\Page('page1_1');
+        $page1_2 = new \Application\Entity\Page('page1_2');
+        $page2_1 = new \Application\Entity\Page('page2_1');
+        $page2_2 = new \Application\Entity\Page('page2_2');
+
+        $page1_1->setParent($page);
+        $page1_2->setParent($page);
+
+        $page2_1->setParent($page1_1);
+        $page2_2->setParent($page1_1);
+
+        $this->em->persist($page);
+        $this->em->persist($page1_1);
+        $this->em->persist($page1_2);
+        $this->em->persist($page2_1);
+        $this->em->persist($page2_2);
+
+        $this->em->flush();
+
+        return 'Seeding done' . PHP_EOL;
+    }
+
 }
