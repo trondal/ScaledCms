@@ -1,4 +1,4 @@
-Skeleton
-========
+ScaledCms
+=========
 
-Skeleton for Zend Framework 2. Includes standard folders, composer, and IndexController action. Namespace is "Application"
+ScaledCms is a micro content management system build on top of ScaledSkeleton. The purpose is to explore various strategies and patterns to make a highly scalable cms.
