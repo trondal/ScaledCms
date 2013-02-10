@@ -30,6 +30,12 @@ class Page {
     private $title;
 
     /**
+     * @var string
+     * @ORM\Column(name="slug", type="string", length=100, nullable=true)
+     */
+    private $slug;
+
+    /**
      * @Gedmo\TreeLeft
      * @var int
      * @ORM\Column(name="lft", type="integer")
@@ -81,8 +87,9 @@ class Page {
      */
     private $site;
 
-    public function __construct($title) {
+    public function __construct($title, $slug = null) {
         $this->title = $title;
+        $this->slug = $slug;
         $this->children = new ArrayCollection();
         $this->nodes = new ArrayCollection();
     }
@@ -101,6 +108,14 @@ class Page {
 
     public function setTitle($title) {
         $this->title = $title;
+    }
+
+    public function setSlug($slug) {
+        $this->slug = $slug;
+    }
+
+    public function getSlug() {
+        return $this->slug;
     }
 
     /**

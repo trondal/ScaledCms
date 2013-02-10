@@ -22,17 +22,17 @@ class Site {
 
     /**
      * @var string
-     * @ORM\Column(name="name", type="string", length=100)
+     * @ORM\Column(name="name", type="string", length=100, nullable=true)
      */
     private $slug;
 
-    /*Pageon\Entity\Page[]
+    /**
      * @ORM\OneToMany(targetEntity="Page", mappedBy="site")
      * @ORM\OrderBy({"lft" = "ASC"})
      */
     private $pages;
 
-    public function __construct($slug) {
+    public function __construct($slug = null) {
         $this->slug = $slug;
         $this->pages = new ArrayCollection();
     }
