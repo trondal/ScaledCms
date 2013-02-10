@@ -1,6 +1,8 @@
 {
+    "minimum-stability":"stable",
     "require": {
-        "zendframework/zendframework": "*",
-        "doctrine/doctrine-orm-module": "*"
+        "zendframework/zendframework": "2.1.1",
+        "doctrine/doctrine-orm-module": "*",
+        "gedmo/doctrine-extensions":"*"
     }
 }
