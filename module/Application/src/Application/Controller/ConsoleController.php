@@ -30,6 +30,9 @@ class ConsoleController extends AbstractActionController implements EntityManage
     public function restartAction() {
         $this->dropcreateAction();
 
+        $site1 = new \Application\Entity\Site('blue');
+        $site2 = new \Application\Entity\Site('red');
+
         $page = new \Application\Entity\Page('index');
         $page1_1 = new \Application\Entity\Page('page1_1');
         $page1_2 = new \Application\Entity\Page('page1_2');
@@ -38,15 +41,37 @@ class ConsoleController extends AbstractActionController implements EntityManage
 
         $page1_1->setParent($page);
         $page1_2->setParent($page);
-
         $page2_1->setParent($page1_1);
         $page2_2->setParent($page1_1);
 
+        $site1->addPage($page);
+        $site1->addPage($page1_1);
+        $site1->addPage($page1_2);
+        $site1->addPage($page2_1);
+        $site1->addPage($page2_2);
+
+        $this->em->persist($site1);
+        $this->em->persist($site2);
         $this->em->persist($page);
         $this->em->persist($page1_1);
         $this->em->persist($page1_2);
         $this->em->persist($page2_1);
         $this->em->persist($page2_2);
+
+        // Add components
+        $twitter = new \Application\Entity\Twitter('<i>tweet:-)</i><br/>');
+        $facebook = new \Application\Entity\Facebook('<b>Face!</b><br/>', '45644523');
+
+        $node1 = new \Application\Entity\Node($twitter);
+        $node2 = new \Application\Entity\Node($facebook);
+
+        $page->addNode($node1);
+        $page->addNode($node2);
+
+        $this->em->persist($twitter);
+        $this->em->persist($facebook);
+        $this->em->persist($node1);
+        $this->em->persist($node2);
 
         $this->em->flush();
 

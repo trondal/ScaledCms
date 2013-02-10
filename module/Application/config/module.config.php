@@ -65,14 +65,17 @@ return array(
         'locale' => 'en_US',
         'translation_file_patterns' => array(
             array(
-                'type'     => 'array',
+                'type'     => 'phparray',
                 'base_dir' => __DIR__ . '/../language',
                 'pattern'  => '%s.php',
             ),
         ),
     ),
     'controllers' => array(
-        'invokables' => array(),
+        'invokables' => array(
+            'Application\Controller\Facebook' => 'Application\Controller\FacebookController',
+            'Application\Controller\Twitter' => 'Application\Controller\TwitterController'
+        ),
         'factories' => array(
             'Application\Controller\Index' => 'Application\Controller\Factory\Index',
             'Application\Controller\Console' => 'Application\Controller\Factory\Console'
@@ -102,7 +105,7 @@ return array(
     'doctrine' => array(
         'eventmanager' => array(
             'orm_default' => array(
-                'subscribers' => array('Gedmo\Tree\TreeListener')
+                'subscribers' => array('Gedmo\Tree\TreeListener', 'Application\Event\NodeListener')
             )
         ),
     )

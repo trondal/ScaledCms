@@ -2,7 +2,9 @@
 
 namespace Application\Entity;
 
+use Application\Entity\Node;
 use Application\Entity\Page;
+use Application\Entity\Site;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -68,12 +70,24 @@ class Page {
      */
     private $children;
 
+    /*Nodeon\Entity\Node[]
+     * @ORM\OneToMany(targetEntity="Application\Entity\Node", mappedBy="page")
+     */
+    protected $nodes;
+
+    /**
+     * @var \Entity\Site
+     * @ORM\ManyToOne(targetEntity="Site", inversedBy="pages")
+     */
+    private $site;
+
     public function __construct($title) {
         $this->title = $title;
         $this->children = new ArrayCollection();
+        $this->nodes = new ArrayCollection();
     }
 
-    public function getId(){
+    public function getId() {
         return $this->id;
     }
 
@@ -103,23 +117,52 @@ class Page {
         return $this->children;
     }
 
-    public function getLeft(){
+    public function getLeft() {
         return $this->lft;
     }
 
-    public function getRight(){
+    public function getRight() {
         return $this->rgt;
     }
 
     public function cloneChildren() {
         $children = $this->getChildren();
         $this->children = new ArrayCollection();
-        foreach($children as $child) {
+        foreach ($children as $child) {
             $clonedChild = clone $child;
             $clonedChild->cloneChildren();
             $this->children->add($clonedChild);
             $clonedChild->setParent($this);
         }
+    }
+
+    public function addNode(Node $node) {
+        $this->nodes[] = $node;
+        $node->setPage($this);
+    }
+
+    public function getNodes() {
+        return $this->nodes;
+    }
+
+    /**
+     * Set site.
+     *
+     * @param Site $site
+     * @return Page
+     */
+    public function setSite(Site $site) {
+        $this->site = $site;
+        return $this;
+    }
+
+    /**
+     * Retrieve site.
+     *
+     * @return Site
+     */
+    public function getSite() {
+        return $this->site;
     }
 
 }

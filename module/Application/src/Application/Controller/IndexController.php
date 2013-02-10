@@ -18,18 +18,33 @@ class IndexController extends AbstractActionController implements EntityManagerA
     }
 
     public function indexAction() {
+        $id = $this->getRequest()->getQuery('id');
+        $page = $this->em->find('Application\Entity\Page', $id);
 
-        $indexPage = $this->em->find('Application\Entity\Page', 1);
-        //$this->displayTree($indexPage);
+        $view = new ViewModel(array(
+            'page' => $page
+        ));
+
+        foreach ($page->getNodes() as $node) {
+            $component = $node->getComponent();
+            $controllerKey = 'Application\Controller\\' . $component->getClassName();
+
+            $componentView = $this->forward()->dispatch($controllerKey, array(
+                'controller' => $controllerKey,
+                'action' => 'index',
+                'component' => $component
+            ));
+
+            $view->addChild($componentView, 'components', true);
+        }
+        return $view;
+
+
 
         /*$clonePage = clone $indexPage;
         $clonePage->cloneChildren();
         $this->em->persist($clonePage);
         $this->em->flush();*/
-
-        return new ViewModel(array(
-            'page' => $indexPage
-        ));
     }
 
 
