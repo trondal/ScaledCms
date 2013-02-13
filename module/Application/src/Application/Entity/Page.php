@@ -76,7 +76,8 @@ class Page {
      */
     private $children;
 
-    /*Nodeon\Entity\Node[]
+    /**
+     * @var Application\Entity\Node[]
      * @ORM\OneToMany(targetEntity="Application\Entity\Node", mappedBy="page")
      */
     protected $nodes;
