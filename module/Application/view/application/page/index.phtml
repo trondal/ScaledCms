@@ -1,0 +1,29 @@
+<?php
+
+$form->setAttribute('action', $this->url('admin/segment'))
+        ->prepare();
+
+echo $this->form()->openTag($form);
+
+$user = $form->get('user');
+echo '<fieldset>';
+echo $this->formRow($user->get('name'));
+echo $this->formRow($user->get('password'));
+echo $this->formRow($user->get('email'));
+
+$sites = $user->get('sites');
+foreach ($sites as $site) {
+    echo '<fieldset>';
+    echo $this->formRow($site->get('name'));
+    echo $this->formRow($site->get('slug'));
+    $pages = $site->get('pages');
+    foreach ($pages as $page) {
+        echo '<fieldset>';
+        echo $this->formRow($page->get('name'));
+        echo $this->formRow($page->get('slug'));
+        echo '</fieldset>';
+    }
+    echo '</fieldset>';
+}
+echo '</fieldset>';
+echo $this->form()->closeTag();

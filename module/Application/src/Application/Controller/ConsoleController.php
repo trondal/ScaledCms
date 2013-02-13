@@ -2,6 +2,12 @@
 
 namespace Application\Controller;
 
+use Application\Entity\Facebook;
+use Application\Entity\Node;
+use Application\Entity\Page;
+use Application\Entity\Site;
+use Application\Entity\Twitter;
+use Application\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\SchemaTool;
 use Zend\Mvc\Controller\AbstractActionController;
@@ -30,30 +36,43 @@ class ConsoleController extends AbstractActionController implements EntityManage
     public function restartAction() {
         $this->dropcreateAction();
 
-        $site1 = new \Application\Entity\Site('yellow');
-        $site2 = new \Application\Entity\Site();
-        $site3 = new \Application\Entity\Site('red');
+        // Add user and site
+        $user1 = new User('Alice', 'password', 'alice@gmail.com');
+        $user2 = new User('Bob', 'password', 'bob@gmail.com');
 
-        $page = new \Application\Entity\Page('index');
-        $page1_1 = new \Application\Entity\Page('page1_1', 'page1_1');
-        $page1_2 = new \Application\Entity\Page('page1_2', 'page1_2');
-        $page2_1 = new \Application\Entity\Page('page2_1', 'page2_1');
-        $page2_2 = new \Application\Entity\Page('page2_2', 'page2_2');
+        $site1 = new Site('Alice\'s first site', 'alice');
+        $site2 = new Site('Alice\'s second site', 'alice2');
+        $site3 = new Site('Bob\'s site', 'bob');
+
+        $user1->addSite($site1);
+        $user1->addSite($site2);
+        $user2->addSite($site3);
+
+        $this->em->persist($user1);
+        $this->em->persist($user2);
+        $this->em->persist($site1);
+        $this->em->persist($site2);
+        $this->em->persist($site3);
+
+        // Add pages
+        $page = new Page('index');
+        $page1_1 = new Page('Page 1-1', 'page1_1');
+        $page1_2 = new Page('Page 1-2', 'page1_2');
+        $page2_1 = new Page('Page 2-1', 'page2_1');
+        $page2_2 = new Page('Page 2-2', 'page2_2');
 
         $page1_1->setParent($page);
         $page1_2->setParent($page);
         $page2_1->setParent($page1_1);
         $page2_2->setParent($page1_1);
 
-        $site2->addPage($page);
-        $site2->addPage($page1_1);
-        $site2->addPage($page1_2);
-        $site2->addPage($page2_1);
-        $site2->addPage($page2_2);
+        $site1->addPage($page);
+        $site1->addPage($page1_1);
+        $site1->addPage($page1_2);
+        $site1->addPage($page2_1);
+        $site1->addPage($page2_2);
 
-        $this->em->persist($site1);
-        $this->em->persist($site2);
-        $this->em->persist($site3);
+
         $this->em->persist($page);
         $this->em->persist($page1_1);
         $this->em->persist($page1_2);
@@ -61,11 +80,11 @@ class ConsoleController extends AbstractActionController implements EntityManage
         $this->em->persist($page2_2);
 
         // Add components
-        $twitter = new \Application\Entity\Twitter('<i>tweet:-)</i><br/>');
-        $facebook = new \Application\Entity\Facebook('<b>Face!</b><br/>', '45644523');
+        $twitter = new Twitter('<i>tweet:-)</i><br/>');
+        $facebook = new Facebook('<b>Face!</b><br/>', '45644523');
 
-        $node1 = new \Application\Entity\Node($twitter);
-        $node2 = new \Application\Entity\Node($facebook);
+        $node1 = new Node($twitter);
+        $node2 = new Node($facebook);
 
         $page->addNode($node1);
         $page->addNode($node2);

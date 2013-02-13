@@ -38,13 +38,6 @@ class IndexController extends AbstractActionController implements EntityManagerA
             $view->addChild($componentView, 'components', true);
         }
         return $view;
-
-
-
-        /*$clonePage = clone $indexPage;
-        $clonePage->cloneChildren();
-        $this->em->persist($clonePage);
-        $this->em->flush();*/
     }
 
 

@@ -1,12 +1,12 @@
 <?php
 
 return array(
-        'router' => array(
+    'router' => array(
         'routes' => array(
             'index' => array(
                 'type' => 'Zend\Mvc\Router\Http\Hostname',
                 'options' => array(
-                    'route' => 'scaledcms.local',
+                    'route' => 'mobil.scaledcms.local',
                 ),
                 'may_terminate' => true,
                 'child_routes' => array(
@@ -16,6 +16,26 @@ return array(
                             'route' => '/[:slug1][/:slug2][/:slug3][/:slug4][/:slug5]',
                             'defaults' => array(
                                 'controller' => 'Application\Controller\Index',
+                                'action' => 'index',
+                            ),
+                        ),
+                    )
+                )
+            ),
+            'admin' => array(
+                'type' => 'Zend\Mvc\Router\Http\Hostname',
+                'options' => array(
+                    'route' => 'admin.scaledcms.local',
+                ),
+                'may_terminate' => true,
+                'child_routes' => array(
+                    'segment' => array(
+                        'type' => 'Zend\Mvc\Router\Http\Segment',
+                        'options' => array(
+                            'route' => '/[:controller][/:action][/:id]',
+                            'defaults' => array(
+                                '__NAMESPACE__' => 'Application\Controller',
+                                'controller' => 'Page',
                                 'action' => 'index',
                             ),
                         ),
@@ -42,6 +62,8 @@ return array(
     'service_manager' => array(
         'factories' => array(
             'translator' => 'Zend\I18n\Translator\TranslatorServiceFactory',
+            'Application\Service\User' => 'Application\Service\Factory\User',
+            'Application\Service\Site' => 'Application\Service\Factory\Site'
         ),
     ),
     'translator' => array(
@@ -61,7 +83,8 @@ return array(
         ),
         'factories' => array(
             'Application\Controller\Index' => 'Application\Controller\Factory\Index',
-            'Application\Controller\Console' => 'Application\Controller\Factory\Console'
+            'Application\Controller\Console' => 'Application\Controller\Factory\Console',
+            'Application\Controller\Page' => 'Application\Controller\Factory\Page',
         )
     ),
     'view_manager' => array(
