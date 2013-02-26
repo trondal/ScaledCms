@@ -8,9 +8,10 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 class Site implements FactoryInterface {
 
     public function createService(ServiceLocatorInterface $serviceLocator) {
-        $service = new \Application\Service\Site();
-        $service->setEntityManager($serviceLocator->get('Doctrine\ORM\EntityManager'));
+	$service = new \Application\Service\Site();
+	$service->setEntityManager($serviceLocator->get('Doctrine\ORM\EntityManager'));
 
-        return $service;
+	return $service;
     }
+
 }

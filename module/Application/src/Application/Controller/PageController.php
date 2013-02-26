@@ -23,32 +23,32 @@ class PageController extends AbstractActionController implements UserServiceAwar
     protected $siteService;
 
     public function setUserService(User $userService) {
-        $this->userService = $userService;
+	$this->userService = $userService;
     }
 
     public function setSiteService(Site $siteService) {
-        $this->siteService = $siteService;
+	$this->siteService = $siteService;
     }
 
     public function indexAction() {
-        $form = new CreatePage($this->getServiceLocator());
+	$form = new CreatePage($this->getServiceLocator());
 
-        $user = $this->userService->findOneByName('Alice');
-        $form->bind($user);
+	$user = $this->userService->findOneByName('Alice');
+	$form->bind($user);
 
-        if ($this->request->isPost()) {
-            $form->setData($this->request->getPost());
+	if ($this->request->isPost()) {
+	    $form->setData($this->request->getPost());
 
-            if ($form->isValid()) {
-                echo '<pre>';
-                Debug::dump($user);
-                exit;
-            }
-        }
+	    if ($form->isValid()) {
+		echo '<pre>';
+		Debug::dump($user);
+		exit;
+	    }
+	}
 
-        return array(
-            'form' => $form
-        );
+	return array(
+	    'form' => $form
+	);
     }
 
 }

@@ -9,10 +9,11 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 class Console implements FactoryInterface {
 
     public function createService(ServiceLocatorInterface $services) {
-        $serviceLocator = $services->getServiceLocator();
+	$serviceLocator = $services->getServiceLocator();
 
-        $controller = new ConsoleController;
-        $controller->setEntityManager($serviceLocator->get('Doctrine\ORM\EntityManager'));
-        return $controller;
+	$controller = new ConsoleController;
+	$controller->setEntityManager($serviceLocator->get('Doctrine\ORM\EntityManager'));
+	return $controller;
     }
+
 }

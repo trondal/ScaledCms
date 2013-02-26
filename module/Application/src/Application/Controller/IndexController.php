@@ -14,32 +14,30 @@ class IndexController extends AbstractActionController implements EntityManagerA
     protected $em;
 
     public function setEntityManager(EntityManager $em) {
-        $this->em = $em;
+	$this->em = $em;
     }
 
     public function indexAction() {
-        $id = $this->getRequest()->getQuery('id');
-        $page = $this->em->find('Application\Entity\Page', $id);
+	$id = $this->getRequest()->getQuery('id');
+	$page = $this->em->find('Application\Entity\Page', $id);
 
-        $view = new ViewModel(array(
-            'page' => $page
-        ));
+	$view = new ViewModel(array(
+	    'page' => $page
+	));
 
-        foreach ($page->getNodes() as $node) {
-            $component = $node->getComponent();
-            $controllerKey = 'Application\Controller\\' . $component->getClassName();
+	foreach ($page->getNodes() as $node) {
+	    $component = $node->getComponent();
+	    $controllerKey = 'Application\Controller\\' . $component->getClassName();
 
-            $componentView = $this->forward()->dispatch($controllerKey, array(
-                'controller' => $controllerKey,
-                'action' => 'index',
-                'component' => $component
-            ));
+	    $componentView = $this->forward()->dispatch($controllerKey, array(
+		'controller' => $controllerKey,
+		'action' => 'index',
+		'component' => $component
+	    ));
 
-            $view->addChild($componentView, 'components', true);
-        }
-        return $view;
+	    $view->addChild($componentView, 'components', true);
+	}
+	return $view;
     }
-
-
 
 }

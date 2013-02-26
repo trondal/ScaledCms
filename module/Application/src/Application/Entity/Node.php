@@ -38,35 +38,35 @@ class Node {
     protected $component;
 
     public function __construct(\Application\Entity\ComponentAbstract $component) {
-        $this->component = $component;
-        $this->className = $component->getClassName();
-        $component->setNode($this);
+	$this->component = $component;
+	$this->className = $component->getClassName();
+	$component->setNode($this);
     }
 
     public function getId() {
-        return $this->id;
+	return $this->id;
     }
 
     public function setPage(Page $page = null) {
-        $this->page = $page;
+	$this->page = $page;
     }
 
     public function getPage() {
-        return $this->page;
+	return $this->page;
     }
 
     public function getClassName() {
-        return $this->className;
+	return $this->className;
     }
 
     public function getComponent() {
-        return $this->component;
+	return $this->component;
     }
 
     public function setComponent(\Application\Entity\ComponentAbstract $component) {
-        $this->component = $component;
-        $this->className = $component->getClassName();
-        $component->setNode($this);
+	$this->component = $component;
+	$this->className = $component->getClassName();
+	$component->setNode($this);
     }
 
 }

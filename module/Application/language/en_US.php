@@ -1,5 +1,5 @@
 <?php
 
 return array(
-  'message' => 'I am index controller'
+    'message' => 'I am index controller'
 );

@@ -14,30 +14,30 @@ use Doctrine\ORM\Events;
 class NodeListener implements EventSubscriber {
 
     public function getSubscribedEvents() {
-        return array(
-            Events::postLoad,
-            Events::prePersist
-        );
+	return array(
+	    Events::postLoad,
+	    Events::prePersist
+	);
     }
 
     public function postLoad(LifecycleEventArgs $args) {
-        $em = $args->getEntityManager();
-        $node = $args->getEntity();
+	$em = $args->getEntityManager();
+	$node = $args->getEntity();
 
-        if ($node instanceof Node) {
-            $className = 'Application\Entity\\' . $node->getClassName();
-            $component = $em->getRepository($className)->findOneBy(array('node' => $node->getId()));
-            $node->setComponent($component);
-        }
+	if ($node instanceof Node) {
+	    $className = 'Application\Entity\\' . $node->getClassName();
+	    $component = $em->getRepository($className)->findOneBy(array('node' => $node->getId()));
+	    $node->setComponent($component);
+	}
     }
 
-    public function prePersist(LifecycleEventArgs $args){
-        $node = $args->getEntity();
-        if ($node instanceOf Node){
-            $em = $args->getEntityManager();
-            $component = $node->getComponent();
-            $em->persist($component);
-        }
+    public function prePersist(LifecycleEventArgs $args) {
+	$node = $args->getEntity();
+	if ($node instanceOf Node) {
+	    $em = $args->getEntityManager();
+	    $component = $node->getComponent();
+	    $em->persist($component);
+	}
     }
 
 }

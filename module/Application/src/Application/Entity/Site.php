@@ -21,11 +21,13 @@ class Site {
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
+
     /**
      * @var string
      * @ORM\Column(name="name", type="string", length=100, nullable=true)
      */
     private $name;
+
     /**
      * @var string
      * @ORM\Column(name="slug", type="string", length=100, nullable=true)
@@ -44,25 +46,25 @@ class Site {
     private $pages;
 
     public function __construct($name, $slug = null) {
-        $this->name = $name;
-        $this->slug = $slug;
-        $this->pages = new ArrayCollection();
+	$this->name = $name;
+	$this->slug = $slug;
+	$this->pages = new ArrayCollection();
     }
 
     public function getName() {
-        return $this->name;
+	return $this->name;
     }
 
     public function setName($name) {
-        $this->name = $name;
+	$this->name = $name;
     }
 
     public function getSlug() {
-        return $this->slug;
+	return $this->slug;
     }
 
     public function setSlug($slug) {
-        $this->slug = $slug;
+	$this->slug = $slug;
     }
 
     /**
@@ -72,8 +74,8 @@ class Site {
      * @return Site
      */
     public function addPage(Page $page) {
-        $this->pages[] = $page;
-        $page->setSite($this);
+	$this->pages[] = $page;
+	$page->setSite($this);
     }
 
     /**
@@ -82,11 +84,11 @@ class Site {
      * @return Collection
      */
     public function getPages() {
-        return $this->pages;
+	return $this->pages;
     }
 
     public function setUser(User $user) {
-        $this->user = $user;
+	$this->user = $user;
     }
 
 }

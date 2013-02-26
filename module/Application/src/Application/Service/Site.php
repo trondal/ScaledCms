@@ -13,16 +13,16 @@ class Site implements EntityManagerAware {
     protected $em;
 
     public function setEntityManager(EntityManager $em) {
-        $this->em = $em;
+	$this->em = $em;
     }
 
     public function find($id) {
-        return $this->em->find('Application\Entity\Site', $id);
+	return $this->em->find('Application\Entity\Site', $id);
     }
 
     public function findOneByName($name) {
-        return $this->em->getRepository('Application\Entity\Site')
-                        ->findOneBy(array('name' => $name));
+	return $this->em->getRepository('Application\Entity\Site')
+			->findOneBy(array('name' => $name));
     }
 
 }

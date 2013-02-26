@@ -18,15 +18,15 @@ class Twitter extends ComponentAbstract {
     private $html;
 
     public function __construct($html) {
-        $this->html = $html;
+	$this->html = $html;
     }
 
     public function setHtml($html) {
-        $this->html = $html;
+	$this->html = $html;
     }
 
     public function getHtml() {
-        return $this->html;
+	return $this->html;
     }
 
 }

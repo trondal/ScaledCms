@@ -89,34 +89,34 @@ class Page {
     private $site;
 
     public function __construct($title, $slug = null) {
-        $this->title = $title;
-        $this->slug = $slug;
-        $this->children = new ArrayCollection();
-        $this->nodes = new ArrayCollection();
+	$this->title = $title;
+	$this->slug = $slug;
+	$this->children = new ArrayCollection();
+	$this->nodes = new ArrayCollection();
     }
 
     public function getId() {
-        return $this->id;
+	return $this->id;
     }
 
     public function setId() {
-        $this->id = null;
+	$this->id = null;
     }
 
     public function getTitle() {
-        return $this->title;
+	return $this->title;
     }
 
     public function setTitle($title) {
-        $this->title = $title;
+	$this->title = $title;
     }
 
     public function setSlug($slug) {
-        $this->slug = $slug;
+	$this->slug = $slug;
     }
 
     public function getSlug() {
-        return $this->slug;
+	return $this->slug;
     }
 
     /**
@@ -126,39 +126,39 @@ class Page {
      * @return void
      */
     public function setParent(Page $parent = null) {
-        $this->parent = $parent;
+	$this->parent = $parent;
     }
 
     public function getChildren() {
-        return $this->children;
+	return $this->children;
     }
 
     public function getLeft() {
-        return $this->lft;
+	return $this->lft;
     }
 
     public function getRight() {
-        return $this->rgt;
+	return $this->rgt;
     }
 
     public function cloneChildren() {
-        $children = $this->getChildren();
-        $this->children = new ArrayCollection();
-        foreach ($children as $child) {
-            $clonedChild = clone $child;
-            $clonedChild->cloneChildren();
-            $this->children->add($clonedChild);
-            $clonedChild->setParent($this);
-        }
+	$children = $this->getChildren();
+	$this->children = new ArrayCollection();
+	foreach ($children as $child) {
+	    $clonedChild = clone $child;
+	    $clonedChild->cloneChildren();
+	    $this->children->add($clonedChild);
+	    $clonedChild->setParent($this);
+	}
     }
 
     public function addNode(Node $node) {
-        $this->nodes[] = $node;
-        $node->setPage($this);
+	$this->nodes[] = $node;
+	$node->setPage($this);
     }
 
     public function getNodes() {
-        return $this->nodes;
+	return $this->nodes;
     }
 
     /**
@@ -168,8 +168,8 @@ class Page {
      * @return Page
      */
     public function setSite(Site $site) {
-        $this->site = $site;
-        return $this;
+	$this->site = $site;
+	return $this;
     }
 
     /**
@@ -178,7 +178,7 @@ class Page {
      * @return Site
      */
     public function getSite() {
-        return $this->site;
+	return $this->site;
     }
 
 }

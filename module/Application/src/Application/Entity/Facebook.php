@@ -24,25 +24,24 @@ class Facebook extends ComponentAbstract {
     private $token;
 
     public function __construct($html, $token) {
-        $this->html = $html;
-        $this->token = $token;
+	$this->html = $html;
+	$this->token = $token;
     }
 
     public function setHtml($html) {
-        $this->html = $html;
+	$this->html = $html;
     }
 
     public function getHtml() {
-        return $this->html;
+	return $this->html;
     }
 
     public function getToken() {
-        return $this->token;
+	return $this->token;
     }
 
-
     public function setToken($token) {
-        $this->token = $token;
+	$this->token = $token;
     }
 
 }

@@ -45,43 +45,43 @@ class User {
     private $sites;
 
     public function __construct($name, $password, $email) {
-        $this->name = $name;
-        $this->password = $password;
-        $this->email = $email;
-        $this->sites = new ArrayCollection();
+	$this->name = $name;
+	$this->password = $password;
+	$this->email = $email;
+	$this->sites = new ArrayCollection();
     }
 
     public function getId() {
-        return $this->id;
+	return $this->id;
     }
 
     public function getName() {
-        return $this->name;
+	return $this->name;
     }
 
     public function setName($name) {
-        $this->name = $name;
+	$this->name = $name;
     }
 
     public function getEmail() {
-        return $this->email;
+	return $this->email;
     }
 
     public function setEmail($email) {
-        $this->email = $email;
+	$this->email = $email;
     }
 
     public function getPassword() {
-        return $this->password;
+	return $this->password;
     }
 
     public function setPassword($password) {
-        $this->password = $password;
+	$this->password = $password;
     }
 
     public function addSite(Site $site) {
-        $this->sites[] = $site;
-        $site->setUser($this);
+	$this->sites[] = $site;
+	$site->setUser($this);
     }
 
     /**
@@ -89,14 +89,14 @@ class User {
      * @return Collection
      */
     public function getSites() {
-        return $this->sites;
+	return $this->sites;
     }
 
-    public function removeSites(Collection $sites){
-        foreach($sites as $site){
-            $site->setUser(null);
-            $this->sites->removeElement($site);
-        }
+    public function removeSites(Collection $sites) {
+	foreach ($sites as $site) {
+	    $site->setUser(null);
+	    $this->sites->removeElement($site);
+	}
     }
 
 }

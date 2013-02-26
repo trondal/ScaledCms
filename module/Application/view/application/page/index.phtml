@@ -1,7 +1,7 @@
 <?php
 
 $form->setAttribute('action', $this->url('admin/segment'))
-        ->prepare();
+	->prepare();
 
 echo $this->form()->openTag($form);
 
@@ -18,10 +18,10 @@ foreach ($sites as $site) {
     echo $this->formRow($site->get('slug'));
     $pages = $site->get('pages');
     foreach ($pages as $page) {
-        echo '<fieldset>';
-        echo $this->formRow($page->get('name'));
-        echo $this->formRow($page->get('slug'));
-        echo '</fieldset>';
+	echo '<fieldset>';
+	echo $this->formRow($page->get('name'));
+	echo $this->formRow($page->get('slug'));
+	echo '</fieldset>';
     }
     echo '</fieldset>';
 }

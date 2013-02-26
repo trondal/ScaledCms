@@ -21,16 +21,15 @@ abstract class ComponentAbstract {
      * @ORM\OneToOne(targetEntity="Node")
      */
     private $node;
-
     protected $className;
 
     public function setNode(Node $node) {
-        $this->node = $node;
+	$this->node = $node;
     }
 
     public function getClassName() {
-        $array = explode('\\', get_class($this));
-        return $array[2];
+	$array = explode('\\', get_class($this));
+	return $array[2];
     }
 
 }
