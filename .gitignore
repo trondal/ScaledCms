@@ -9,3 +9,4 @@ config/autoload/local.php
 nbproject/
 data/
 .DS_Store
+.settings/
