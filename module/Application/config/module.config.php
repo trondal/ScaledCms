@@ -35,7 +35,7 @@ return array(
 			    'route' => '/[:controller][/:action][/:id]',
 			    'defaults' => array(
 				'__NAMESPACE__' => 'Application\Controller',
-				'controller' => 'Page',
+				'controller' => 'Admin',
 				'action' => 'index',
 			    ),
 			),
@@ -60,10 +60,17 @@ return array(
 	)
     ),
     'service_manager' => array(
+	'invokables' => array(
+
+	),
 	'factories' => array(
 	    'translator' => 'Zend\I18n\Translator\TranslatorServiceFactory',
 	    'Application\Service\User' => 'Application\Service\Factory\User',
-	    'Application\Service\Site' => 'Application\Service\Factory\Site'
+	    'Application\Service\Site' => 'Application\Service\Factory\Site',
+	    'Application\Service\Acl' =>  'Application\Service\Factory\AclFactory',
+	    'Zend\Authentication\AuthenticationService' => function($serviceManager) {
+		return $serviceManager->get('doctrine.authenticationservice.orm_default');
+            }
 	),
     ),
     'translator' => array(
@@ -85,6 +92,7 @@ return array(
 	    'Application\Controller\Index' => 'Application\Controller\Factory\Index',
 	    'Application\Controller\Console' => 'Application\Controller\Factory\Console',
 	    'Application\Controller\Page' => 'Application\Controller\Factory\Page',
+	    'Application\Controller\Admin' => 'Application\Controller\Factory\Admin'
 	)
     ),
     'view_manager' => array(

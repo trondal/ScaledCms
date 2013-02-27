@@ -52,5 +52,13 @@ return array(
 	'entity_resolver' => array(
 	    'orm_default' => array()
 	),
+	'authentication' => array(
+	    'orm_default' => array(
+		'object_manager' => 'Doctrine\ORM\EntityManager',
+                'identity_class' => 'Application\Entity\User',
+                'identity_property' => 'email',
+                'credential_property' => 'password',
+	    )
+	)
     ),
 );

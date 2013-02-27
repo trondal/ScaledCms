@@ -4,9 +4,10 @@ namespace Application\Controller;
 
 use Doctrine\ORM\EntityManager;
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Permissions\Acl\Resource\ResourceInterface;
 use Zend\View\Model\ViewModel;
 
-class IndexController extends AbstractActionController implements EntityManagerAware {
+class IndexController extends AbstractActionController implements EntityManagerAware, ResourceInterface {
 
     /**
      * @var EntityManager
@@ -15,6 +16,10 @@ class IndexController extends AbstractActionController implements EntityManagerA
 
     public function setEntityManager(EntityManager $em) {
 	$this->em = $em;
+    }
+
+    public function getResourceId() {
+	return __CLASS__;
     }
 
     public function indexAction() {
