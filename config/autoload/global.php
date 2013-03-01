@@ -36,7 +36,7 @@ return array(
 		'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
 		'cache' => 'array',
 		'paths' => array(
-		    'module/Application/src/Application/Entity'
+		    __DIR__ . '/../../module/Application/src/Application/Entity'
 		),
 	    ),
 	),

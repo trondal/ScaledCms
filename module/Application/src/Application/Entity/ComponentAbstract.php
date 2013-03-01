@@ -21,6 +21,11 @@ abstract class ComponentAbstract {
      * @ORM\OneToOne(targetEntity="Node")
      */
     private $node;
+
+    /**
+     * Short notation of instance classname, eg. 'Facebook'
+     * @var string
+     */
     protected $className;
 
     public function setNode(Node $node) {

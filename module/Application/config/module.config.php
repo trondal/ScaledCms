@@ -70,8 +70,9 @@ return array(
 	    'Application\Service\Acl' =>  'Application\Service\Factory\AclFactory',
 	    'Zend\Authentication\AuthenticationService' => function($serviceManager) {
 		return $serviceManager->get('doctrine.authenticationservice.orm_default');
-            }
-	),
+            },
+            'Application\Service\PageService' => 'Application\Service\Factory\Page'
+	)
     ),
     'translator' => array(
 	'locale' => 'en_US',
@@ -119,7 +120,7 @@ return array(
     'doctrine' => array(
 	'eventmanager' => array(
 	    'orm_default' => array(
-		'subscribers' => array('Gedmo\Tree\TreeListener', 'Application\Event\NodeListener')
+		'subscribers' => array('Gedmo\Tree\TreeListener'/*, 'Application\Event\NodeListener'*/)
 	    )
 	),
     )
