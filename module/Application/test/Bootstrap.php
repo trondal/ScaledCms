@@ -15,7 +15,6 @@ class Bootstrap {
 
     protected static $serviceManager;
     protected static $config;
-    protected static $bootstrap;
 
     /**
      * Bootstrap the application.
@@ -62,7 +61,7 @@ class Bootstrap {
         static::$serviceManager = $serviceManager;
         static::$config = $config;
 
-	require 'ControllerTestCase.php';
+	require_once 'HttpControllerTestCase.php';
     }
 
     /**

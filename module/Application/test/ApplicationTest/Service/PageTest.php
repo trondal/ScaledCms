@@ -6,9 +6,9 @@ use Application\Entity\Page;
 use Application\Entity\Site;
 use Application\Entity\User;
 use Application\Service\PageService;
-use ApplicationTest\ControllerTestCase;
+use ApplicationTest\HttpControllerTestCase;
 
-class PageTest extends ControllerTestCase {
+class PageTest extends HttpControllerTestCase {
 
     /**
      * @var PageService

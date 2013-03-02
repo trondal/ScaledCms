@@ -99,10 +99,6 @@ class Page {
 	return $this->id;
     }
 
-    public function setId() {
-	$this->id = null;
-    }
-
     public function getTitle() {
 	return $this->title;
     }

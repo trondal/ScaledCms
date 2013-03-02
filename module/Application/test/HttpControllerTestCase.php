@@ -7,7 +7,7 @@ use DoctrineORMModule\Options\EntityManager;
 use Zend\ServiceManager\ServiceManager;
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 
-abstract class ControllerTestCase extends AbstractHttpControllerTestCase {
+abstract class HttpControllerTestCase extends AbstractHttpControllerTestCase {
     /**
      * @var ServiceManager
      */
@@ -17,7 +17,9 @@ abstract class ControllerTestCase extends AbstractHttpControllerTestCase {
      * @var EntityManager
      */
     protected $em;
-    
+
+    protected $traceError = true;
+
     public function setUp() {
 	$this->setApplicationConfig(
 		include 'TestConfig.php'
