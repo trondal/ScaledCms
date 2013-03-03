@@ -34,8 +34,7 @@ return array(
 			'options' => array(
 			    'route' => '/[:controller][/:action][/:id]',
 			    'defaults' => array(
-				'__NAMESPACE__' => 'Application\Controller',
-				'controller' => 'Admin',
+				'controller' => 'Application\Controller\Admin',
 				'action' => 'index',
 			    ),
 			),
@@ -120,7 +119,7 @@ return array(
     'doctrine' => array(
 	'eventmanager' => array(
 	    'orm_default' => array(
-		'subscribers' => array('Gedmo\Tree\TreeListener'/*, 'Application\Event\NodeListener'*/)
+		'subscribers' => array('Gedmo\Tree\TreeListener', 'Application\Event\NodeListener')
 	    )
 	),
     )

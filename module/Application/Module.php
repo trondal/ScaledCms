@@ -2,6 +2,7 @@
 
 namespace Application;
 
+use Application\Service\Factory\AclFactory;
 use Zend\Mvc\MvcEvent;
 
 class Module {
@@ -28,7 +29,7 @@ class Module {
     }
 
     /**
-     * @param \Zend\Mvc\MvcEvent $e
+     * @param MvcEvent $e
      */
     public function getGateKeeper(MvcEvent $e) {
 	$app = $e->getApplication();
@@ -38,11 +39,12 @@ class Module {
 
 	$authService = $sm->get('Zend\Authentication\AuthenticationService');
 
-	$role = $authService->getIdentity() ? $authService->getIdentity()->getRole() : \Application\Service\Factory\AclFactory::GUEST;
+	$role = $authService->getIdentity() ? $authService->getIdentity()->getRole() : AclFactory::GUEST;
 	$controller = $routeMatch->getParam('controller') . 'Controller';
 
 	$action = $routeMatch->getParam('action') . 'Action';
 
+	// TODO: does not handle console requests.
 	if ($acl->isAllowed($role, $controller, $action) === false) {
 	    $response = $e->getResponse();
 	    $response->setStatusCode(402);

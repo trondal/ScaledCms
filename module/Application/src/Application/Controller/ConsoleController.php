@@ -11,8 +11,9 @@ use Application\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\SchemaTool;
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Permissions\Acl\Resource\ResourceInterface;
 
-class ConsoleController extends AbstractActionController implements EntityManagerAware {
+class ConsoleController extends AbstractActionController implements EntityManagerAware, ResourceInterface {
 
     /**
      * @var EntityManager
@@ -21,6 +22,10 @@ class ConsoleController extends AbstractActionController implements EntityManage
 
     public function setEntityManager(EntityManager $em) {
 	$this->em = $em;
+    }
+
+    public function getResourceId() {
+	return __CLASS__;
     }
 
     public function dropcreateAction() {
