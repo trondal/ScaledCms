@@ -144,6 +144,9 @@ class PageService implements EntityManagerAware {
 	}
 	$query->setMaxResults(1);
 	$pages = $query->getResult();
+	if (empty($pages)) {
+	    return null;
+	}
 	return $pages[0];
     }
 

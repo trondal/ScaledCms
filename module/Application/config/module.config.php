@@ -14,6 +14,13 @@ return array(
 			'type' => 'Zend\Mvc\Router\Http\Segment',
 			'options' => array(
 			    'route' => '/[:a[/:b[/:c[/:d[/]]]]]',
+			    'constraints' => array(
+				'a' => '[a-zA-Z][a-zA-Z0-9_-]+',
+				'b' => '[a-zA-Z][a-zA-Z0-9_-]+',
+				'c' => '[a-zA-Z][a-zA-Z0-9_-]+',
+				'd' => '[a-zA-Z][a-zA-Z0-9_-]+',
+				'e' => '[a-zA-Z][a-zA-Z0-9_-]+',
+			    ),
 			    'defaults' => array(
 				'controller' => 'Application\Controller\Index',
 				'action' => 'index',
@@ -96,8 +103,8 @@ return array(
 	)
     ),
     'view_manager' => array(
-	'display_not_found_reason' => true,
-	'display_exceptions' => true,
+	'display_not_found_reason' => false,
+	'display_exceptions' => false,
 	'doctype' => 'HTML5',
 	'not_found_template' => 'error/404',
 	'exception_template' => 'error/index',

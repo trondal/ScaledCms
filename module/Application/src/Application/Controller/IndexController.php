@@ -3,7 +3,6 @@
 namespace Application\Controller;
 
 use Application\Service\PageService;
-use Doctrine\ORM\EntityManager;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 use Zend\View\Model\ViewModel;
@@ -34,6 +33,11 @@ class IndexController extends AbstractActionController
 	$paths = array_filter($ary);
 
 	$page = $this->pageService->findByMaterializedPath($paths);
+
+	if (!$page) {
+	    $this->getResponse()-> setStatusCode(404);
+	    return;
+	}
 
 	$view = new ViewModel(array(
 	    'page' => $page,
