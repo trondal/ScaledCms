@@ -131,24 +131,4 @@ class PageTest extends HttpControllerTestCase {
 	$this->assertNull($repo->findOneByTitle('page5'));
     }
 
-    /**
-     * @test
-     */
-    public function persistDeleteWithoutCascade() {
-	$repo = $this->em->getRepository('Application\Entity\Page');
-	$page3 = $repo->findOneByTitle('page3');
-
-	$this->pageService->persistDelete($page3, false);
-
-	$this->assertNull($repo->findOneByTitle('page3'));
-
-	$page4 = $repo->findOneByTitle('page4');
-	$page5 = $repo->findOneByTitle('page5');
-
-	$this->assertEquals(4, $page4->getLeft());
-	$this->assertEquals(5, $page4->getRight());
-
-	$this->assertEquals(6, $page5->getLeft());
-	$this->assertEquals(7, $page5->getRight());
-    }
 }

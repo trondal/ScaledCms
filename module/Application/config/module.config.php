@@ -13,7 +13,7 @@ return array(
 		    'userslug' => array(
 			'type' => 'Zend\Mvc\Router\Http\Segment',
 			'options' => array(
-			    'route' => '/[:slug1][/:slug2][/:slug3][/:slug4][/:slug5]',
+			    'route' => '/[:a[/:b[/:c[/:d[/]]]]]',
 			    'defaults' => array(
 				'controller' => 'Application\Controller\Index',
 				'action' => 'index',

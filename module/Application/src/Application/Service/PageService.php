@@ -30,82 +30,121 @@ class PageService implements EntityManagerAware {
 	$repo->moveDown($page, $number);
     }
 
-    public function persistDelete(Page $page, $cascade = true) {
-	if ($cascade) {
-	    $this->em->remove($page);
-	    $this->em->flush();
-	} else {
-	    $repo = $this->em->getRepository('Application\Entity\Page');
-	    $repo->removeFromTree($page);
+    public function persistDelete(Page $page) {
+	$this->em->remove($page);
+	$this->em->flush();
+    }
+
+    /**
+     * @param Page $page
+     * @throws \Exception
+     */
+    public function persistAsFirstChild(Page $page) {
+	throw new \Exception('Not implemented');
+    }
+
+    /**
+     * @param Page $node
+     * @param Page $parent
+     * @throws \Exception
+     */
+    public function persistAsFirstChildOf(Page $node, Page $parent) {
+	throw new \Exception('Not implemented');
+    }
+
+    /**
+     * @param Page $node
+     * @throws \Exception
+     */
+    public function persistAsLastChild(Page $node) {
+	throw new \Exception('Not implemented');
+    }
+
+    /**
+     * @param Page $node
+     * @param Page $parent
+     * @throws \Exception
+     */
+    public function persistAsLastChildOf(Page $node, Page $parent) {
+	throw new \Exception('Not implemented');
+    }
+
+    /**
+     * @param Page $node
+     * @throws \Exception
+     */
+    public function persistAsNextSibling(Page $node) {
+	throw new \Exception('Not implemented');
+    }
+
+    /**
+     * @param Page $node
+     * @param Page $sibling
+     * @throws \Exception
+     */
+    public function persistAsNextSiblingOf(Page $node, Page $sibling) {
+	throw new \Exception('Not implemented');
+    }
+
+    /**
+     * @param Page $node
+     * @throws \Exception
+     */
+    public function persistAsPrevSibling(Page $node) {
+	throw new \Exception('Not implemented');
+    }
+
+    /**
+     * @param Page $node
+     * @param Page $sibling
+     * @throws \Exception
+     */
+    public function persistAsPrevSiblingOf(Page $node, Page $sibling) {
+	throw new \Exception('Not implemented');
+    }
+
+    public function getMaterializedPath(Page $page) {
+	$array = $this->em->createQuery(
+			'SELECT a.slug FROM Application\Entity\Page a, Application\Entity\Page c
+	 WHERE c.lft >= a.lft AND c.rgt <= a.rgt
+	 AND c.slug = :slug
+	 ORDER BY a.lft'
+		)->setParameter('slug', $page->getSlug())
+		->getScalarResult();
+
+	$ary = array();
+	foreach ($array as $values) {
+	    $ary[] = $values['slug'];
 	}
+	return implode('/', $ary);
     }
 
-    /**
-     * @param \Application\Entity\Page $page
-     * @throws \Exception
-     */
-    public function persistAsFirstChild(\Application\Entity\Page $page) {
-	throw new \Exception('Not implemented');
+    public function findBySlug($slug) {
+	$repo = $this->em->getRepository('Application\Entity\Page');
+	return $repo->findOneBy(array('slug' => $slug));
     }
 
-    /**
-     * @param \Application\Entity\Page $node
-     * @param \Application\Entity\Page $parent
-     * @throws \Exception
-     */
-    public function persistAsFirstChildOf(\Application\Entity\Page $node, \Application\Entity\Page $parent) {
-	throw new \Exception('Not implemented');
-    }
-
-    /**
-     * @param \Application\Entity\Page $node
-     * @throws \Exception
-     */
-    public function persistAsLastChild(\Application\Entity\Page $node) {
-	throw new \Exception('Not implemented');
-    }
-
-    /**
-     * @param \Application\Entity\Page $node
-     * @param \Application\Entity\Page $parent
-     * @throws \Exception
-     */
-    public function persistAsLastChildOf(\Application\Entity\Page $node, \Application\Entity\Page $parent) {
-	throw new \Exception('Not implemented');
-    }
-
-    /**
-     * @param \Application\Entity\Page $node
-     * @throws \Exception
-     */
-    public function persistAsNextSibling(\Application\Entity\Page $node) {
-	throw new \Exception('Not implemented');
-    }
-
-    /**
-     * @param \Application\Entity\Page $node
-     * @param \Application\Entity\Page $sibling
-     * @throws \Exception
-     */
-    public function persistAsNextSiblingOf(\Application\Entity\Page $node, \Application\Entity\Page $sibling) {
-	throw new \Exception('Not implemented');
-    }
-
-    /**
-     * @param \Application\Entity\Page $node
-     * @throws \Exception
-     */
-    public function persistAsPrevSibling(\Application\Entity\Page $node) {
-	throw new \Exception('Not implemented');
-    }
-
-    /**
-     * @param \Application\Entity\Page $node
-     * @param \Application\Entity\Page $sibling
-     * @throws \Exception
-     */
-    public function persistAsPrevSiblingOf(\Application\Entity\Page $node, \Application\Entity\Page $sibling) {
-	throw new \Exception('Not implemented');
+    public function findByMaterializedPath(array $paths) {
+	$query = null;
+	if (empty($paths)) {
+	    $query = $this->em->createQuery(
+		'SELECT a FROM Application\Entity\Page a, Application\Entity\Page c
+		 WHERE c.lft >= a.lft AND c.rgt <= a.rgt AND c.slug IS NULL
+		 AND c.slug IS NULL
+		 ORDER BY a.lft DESC');
+	} else {
+	    $last = end($paths);
+	    $query = $this->em->createQuery(
+		'SELECT a FROM Application\Entity\Page a, Application\Entity\Page c
+		 WHERE c.lft >= a.lft AND c.rgt <= a.rgt AND c.slug IN (:slugs)
+		 AND c.slug = :slug
+		 ORDER BY a.lft DESC
+		')->setParameter(':slug', $last)
+		->setParameter(':slugs', $paths);
+	}
+	$query->setMaxResults(1);
+	$pages = $query->getResult();
+	return $pages[0];
     }
 
 }

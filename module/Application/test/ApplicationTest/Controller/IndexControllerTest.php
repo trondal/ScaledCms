@@ -31,18 +31,22 @@ class IndexControllerTest extends PHPUnit_Framework_TestCase {
 	);
 	$event->setRouteMatch($routeMatch);
 	$request = new Request();
-	$request->setQuery(new Parameters(array('id' => 1)));
+	$request->setQuery(new Parameters(array('a' => '')));
 	$indexController->setEvent($event);
 
 	$pageMock = $this->getMockBuilder('Application\Entity\Page')->disableOriginalConstructor()->getMock();
 	$pageMock->expects($this->any())
 		->method('getNodes')
 		->will($this->returnValue(array()));
-	$emMock = $this->getMockBuilder('Doctrine\ORM\EntityManager')->disableOriginalConstructor()->getMock();
-	$emMock->expects($this->any())
-		->method('find')
+	$pageServiceMock = $this->getMock('Application\Service\PageService');
+	$pageServiceMock->expects($this->any())
+		->method('findByMaterializedPath')
 		->will($this->returnValue($pageMock));
-	$indexController->setEntityManager($emMock);
+	$pageServiceMock->expects($this->any())
+		->method('getMaterializedPath')
+		->will($this->returnValue('/dummy-url'));
+
+	$indexController->setPageService($pageServiceMock);
 
 	$indexController->dispatch($request);
 

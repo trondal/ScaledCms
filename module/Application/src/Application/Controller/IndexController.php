@@ -2,20 +2,23 @@
 
 namespace Application\Controller;
 
+use Application\Service\PageService;
 use Doctrine\ORM\EntityManager;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 use Zend\View\Model\ViewModel;
 
-class IndexController extends AbstractActionController implements EntityManagerAware, ResourceInterface {
+class IndexController extends AbstractActionController
+    implements ResourceInterface, PageServiceAware {
 
     /**
-     * @var EntityManager
+     *
+     * @var PageService
      */
-    protected $em;
+    protected $pageService;
 
-    public function setEntityManager(EntityManager $em) {
-	$this->em = $em;
+    public function setPageService(PageService $pageService){
+	$this->pageService = $pageService;
     }
 
     public function getResourceId() {
@@ -23,11 +26,18 @@ class IndexController extends AbstractActionController implements EntityManagerA
     }
 
     public function indexAction() {
-	$id = $this->getRequest()->getQuery('id');
-	$page = $this->em->find('Application\Entity\Page', $id);
+	$ary[] = $this->params()->fromRoute('a');
+	$ary[] = $this->params()->fromRoute('b');
+	$ary[] = $this->params()->fromRoute('c');
+	$ary[] = $this->params()->fromRoute('d');
+
+	$paths = array_filter($ary);
+
+	$page = $this->pageService->findByMaterializedPath($paths);
 
 	$view = new ViewModel(array(
-	    'page' => $page
+	    'page' => $page,
+	    'path' => $this->pageService->getMaterializedPath($page)
 	));
 
 	foreach ($page->getNodes() as $node) {

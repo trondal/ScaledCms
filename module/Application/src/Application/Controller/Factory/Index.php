@@ -12,7 +12,7 @@ class Index implements FactoryInterface {
 	$serviceLocator = $services->getServiceLocator();
 
 	$controller = new IndexController;
-	$controller->setEntityManager($serviceLocator->get('Doctrine\ORM\EntityManager'));
+	$controller->setPageService($serviceLocator->get('Application\Service\PageService'));
 	return $controller;
     }
 
