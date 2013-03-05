@@ -1,5 +1,7 @@
 <?php
 
+namespace Application;
+
 return array(
     'router' => array(
 	'routes' => array(
@@ -7,6 +9,11 @@ return array(
 		'type' => 'Zend\Mvc\Router\Http\Hostname',
 		'options' => array(
 		    'route' => 'mobil.scaledcms.local',
+		    'defaults' => array(
+			'__NAMESPACE__' => 'Application\Controller',
+			'controller' => 'Index',
+			'action' => 'index'
+		    )
 		),
 		'may_terminate' => true,
 		'child_routes' => array(
@@ -22,7 +29,7 @@ return array(
 				'e' => '[a-zA-Z][a-zA-Z0-9_-]+',
 			    ),
 			    'defaults' => array(
-				'controller' => 'Application\Controller\Index',
+				'controller' => 'Index',
 				'action' => 'index',
 			    ),
 			),
@@ -33,20 +40,27 @@ return array(
 		'type' => 'Zend\Mvc\Router\Http\Hostname',
 		'options' => array(
 		    'route' => 'admin.scaledcms.local',
-		),
-		'may_terminate' => true,
-		'child_routes' => array(
-		    'segment' => array(
-			'type' => 'Zend\Mvc\Router\Http\Segment',
-			'options' => array(
-			    'route' => '/[:controller][/:action][/:id]',
-			    'defaults' => array(
-				'controller' => 'Application\Controller\Admin',
-				'action' => 'index',
-			    ),
-			),
+		    'defaults' => array(
+			'__NAMESPACE__' => 'Application\Controller',
 		    )
-		)
+		),
+		'may_terminate' => false,
+                'child_routes' => array(
+                    'admin-segment' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => '/[:controller[/:action]]',
+                            'constraints' => array(
+                                'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                            ),
+                            'defaults' => array(
+				'controller' => 'Admin',
+				'action' => 'index'
+                            )
+                        )
+                    )
+                )
 	    )
 	)
     ),
@@ -77,7 +91,8 @@ return array(
 	    'Zend\Authentication\AuthenticationService' => function($serviceManager) {
 		return $serviceManager->get('doctrine.authenticationservice.orm_default');
             },
-            'Application\Service\PageService' => 'Application\Service\Factory\Page'
+            'Application\Service\PageService' => 'Application\Service\Factory\Page',
+	    'Application\Form\LoginForm' => 'Application\Form\Factory\LoginFormFactory'
 	)
     ),
     'translator' => array(
@@ -93,7 +108,8 @@ return array(
     'controllers' => array(
 	'invokables' => array(
 	    'Application\Controller\Facebook' => 'Application\Controller\FacebookController',
-	    'Application\Controller\Twitter' => 'Application\Controller\TwitterController'
+	    'Application\Controller\Twitter' => 'Application\Controller\TwitterController',
+	    'Application\Controller\Login' => 'Application\Controller\LoginController',
 	),
 	'factories' => array(
 	    'Application\Controller\Index' => 'Application\Controller\Factory\Index',

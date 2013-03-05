@@ -1,0 +1,40 @@
+<?php
+    $form = $this->form;
+    $form->setAttribute('action', $this->url('admin/admin-segment', array('controller' => 'login', 'action' => 'index')));
+    $form->prepare();
+?>
+<style type="text/css">
+    body {
+	background-color: gray;
+    }
+    #login-header {
+	color: orange;
+	font-family: fantasy;
+	font-size: x-large;
+    }
+    fieldset {
+	padding: 1em;
+    }
+
+</style>
+<p id="login-header">ScaledCms</p>
+<?php echo $this->form()->openTag($form); ?>
+    <fieldset>
+	<table>
+	    <tr>
+		<td>Username</td>
+		<td><?php echo $this->formText($form->get('username')) ?></td>
+		<td><?php echo $this->formElementErrors($form->get('username'));?></td>
+	    </tr>
+	    <tr>
+		<td><label for="password">Password</label></td>
+		<td><?php echo $this->formPassword($form->get('password')) ?></td>
+		<td><?php echo $this->formElementErrors($form->get('password'));?></td>
+	    </tr>
+	    <tr>
+		<td></td>
+		<td><?php echo $this->formSubmit($form->get('submit')); ?></td>
+		<td></td>
+	    </tr>
+    </fieldset>
+<?php echo $this->form()->closeTag();
