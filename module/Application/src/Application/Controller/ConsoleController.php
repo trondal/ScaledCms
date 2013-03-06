@@ -42,8 +42,9 @@ class ConsoleController extends AbstractActionController implements EntityManage
 	$this->dropcreateAction();
 
 	// Add user and site
-	$user1 = new User('Alice', 'password', 'alice@gmail.com');
-	$user2 = new User('Bob', 'password', 'bob@gmail.com');
+	$bcrypt = new \Zend\Crypt\Password\Bcrypt();
+	$user1 = new User('Alice', $bcrypt->create('password'), 'alice@gmail.com');
+	$user2 = new User('Bob', $bcrypt->create('password'), 'bob@gmail.com');
 
 	$site1 = new Site('Alice\'s first site', 'alice');
 	$site2 = new Site('Alice\'s second site', 'alice2');

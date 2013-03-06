@@ -2,6 +2,9 @@
 
 namespace Application;
 
+use Application\Entity\User;
+use Zend\Crypt\Password\Bcrypt;
+
 return array(
     'router' => array(
 	'routes' => array(
@@ -31,8 +34,8 @@ return array(
 			    'defaults' => array(
 				'controller' => 'Index',
 				'action' => 'index',
-			    ),
-			),
+			    )
+			)
 		    )
 		)
 	    ),
@@ -88,9 +91,6 @@ return array(
 	    'Application\Service\User' => 'Application\Service\Factory\User',
 	    'Application\Service\Site' => 'Application\Service\Factory\Site',
 	    'Application\Service\Acl' =>  'Application\Service\Factory\AclFactory',
-	    'Zend\Authentication\AuthenticationService' => function($serviceManager) {
-		return $serviceManager->get('doctrine.authenticationservice.orm_default');
-            },
             'Application\Service\PageService' => 'Application\Service\Factory\Page',
 	    'Application\Form\LoginForm' => 'Application\Form\Factory\LoginFormFactory'
 	)
@@ -101,21 +101,21 @@ return array(
 	    array(
 		'type' => 'phparray',
 		'base_dir' => __DIR__ . '/../language',
-		'pattern' => '%s.php',
-	    ),
-	),
+		'pattern' => '%s.php'
+	    )
+	)
     ),
     'controllers' => array(
 	'invokables' => array(
 	    'Application\Controller\Facebook' => 'Application\Controller\FacebookController',
-	    'Application\Controller\Twitter' => 'Application\Controller\TwitterController',
-	    'Application\Controller\Login' => 'Application\Controller\LoginController',
+	    'Application\Controller\Twitter' => 'Application\Controller\TwitterController'
 	),
 	'factories' => array(
 	    'Application\Controller\Index' => 'Application\Controller\Factory\Index',
 	    'Application\Controller\Console' => 'Application\Controller\Factory\Console',
 	    'Application\Controller\Page' => 'Application\Controller\Factory\Page',
-	    'Application\Controller\Admin' => 'Application\Controller\Factory\Admin'
+	    'Application\Controller\Admin' => 'Application\Controller\Factory\Admin',
+	    'Application\Controller\Login' => 'Application\Controller\Factory\Login'
 	)
     ),
     'view_manager' => array(
@@ -128,11 +128,11 @@ return array(
 	    'layout/layout' => __DIR__ . '/../view/layout/layout.phtml',
 	    'application/index/index' => __DIR__ . '/../view/application/index/index.phtml',
 	    'error/404' => __DIR__ . '/../view/error/404.phtml',
-	    'error/index' => __DIR__ . '/../view/error/index.phtml',
+	    'error/index' => __DIR__ . '/../view/error/index.phtml'
 	),
 	'template_path_stack' => array(
-	    __DIR__ . '/../view',
-	),
+	    __DIR__ . '/../view'
+	)
     ),
     'view_helpers' => array(
 	'invokables' => array(
@@ -145,5 +145,17 @@ return array(
 		'subscribers' => array('Gedmo\Tree\TreeListener', 'Application\Event\NodeListener')
 	    )
 	),
+	'authentication' => array(
+            'orm_default' => array(
+                'objectManager' => 'Doctrine\ORM\EntityManager',
+                'identityClass' => 'Application\Entity\User',
+                'identityProperty' => 'username',
+                'credentialProperty' => 'password',
+                'credentialCallable' => function(User $user, $passwordGiven) {
+                    $bcrypt = new Bcrypt();
+                    return $bcrypt->verify($passwordGiven, $user->getPassword());
+                }
+            )
+        )
     )
 );

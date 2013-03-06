@@ -6,6 +6,11 @@
     </head>
     <body>
 	<?php
+	if ($user = $this->identity()) {
+	    echo 'Logged in as ' . $this->escapeHtml($user->getName());
+	} else {
+	    echo 'Not logged in';
+	}
 	echo $this->content;
 	?>
     </body>

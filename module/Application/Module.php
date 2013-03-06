@@ -3,24 +3,30 @@
 namespace Application;
 
 use Application\Service\Factory\AclFactory;
+use Zend\EventManager\EventInterface;
+use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
+use Zend\ModuleManager\Feature\BootstrapListenerInterface;
+use Zend\ModuleManager\Feature\ConfigProviderInterface;
+use Zend\ModuleManager\Feature\ServiceProviderInterface;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 
-class Module {
+class Module implements BootstrapListenerInterface, ConfigProviderInterface,
+	AutoloaderProviderInterface, ServiceProviderInterface {
 
-    public function onBootstrap(MvcEvent $e) {
+    public function onBootstrap(EventInterface $e) {
 	$app = $e->getApplication();
 
-	$eventManager        = $e->getApplication()->getEventManager();
+	$eventManager = $e->getApplication()->getEventManager();
 	$moduleRouteListener = new ModuleRouteListener();
-        $moduleRouteListener->attach($eventManager);
+	$moduleRouteListener->attach($eventManager);
 
 	$app->getEventManager()->attach(MvcEvent::EVENT_ROUTE,
-	    array($this, 'checkAuthenticationControl'), -90
+		array($this, 'checkAuthenticationControl'), -90
 	);
 
 	$app->getEventManager()->attach(MvcEvent::EVENT_ROUTE,
-	    array($this, 'checkAccessControl'), -100
+		array($this, 'checkAccessControl'), -100
 	);
     }
 
@@ -38,10 +44,20 @@ class Module {
 	);
     }
 
+    public function getServiceConfig() {
+	return array(
+	    'factories' => array(
+		'Zend\Authentication\AuthenticationService' => function($serviceManager) {
+		    return $serviceManager->get('doctrine.authenticationservice.orm_default');
+		}
+	    )
+	);
+    }
+
     public function checkAuthenticationControl(MvcEvent $e) {
 	$routeMatch = $e->getRouteMatch();
 	// No need to check auth for non-admin routes
-	if ($routeMatch->getMatchedRouteName() != 'admin/admin-segment'){
+	if ($routeMatch->getMatchedRouteName() != 'admin/admin-segment') {
 	    return;
 	}
 	$sm = $e->getApplication()->getServiceManager();
@@ -56,16 +72,15 @@ class Module {
 	    }
 
 	    $url = $e->getRouter()->assemble(
-		    array('controller' => 'login', 'action' => 'index'),
-		    array('name' => 'admin/admin-segment')
+		    array('controller' => 'login', 'action' => 'index'), array('name' => 'admin/admin-segment')
 	    );
 	    $response = $e->getResponse();
-            $response->getHeaders()->addHeaderLine('Location', $url);
-            $response->setStatusCode(302);
-            $response->sendHeaders();
-            // When an MvcEvent Listener returns a Response object,
-            // It automatically short-circuits the Application running
-            return $response;
+	    $response->getHeaders()->addHeaderLine('Location', $url);
+	    $response->setStatusCode(302);
+	    $response->sendHeaders();
+	    // When an MvcEvent Listener returns a Response object,
+	    // It automatically short-circuits the Application running
+	    return $response;
 	}
     }
 
@@ -80,7 +95,7 @@ class Module {
 	$acl = $sm->get('Application\Service\Acl');
 
 	$authService = $sm->get('Zend\Authentication\AuthenticationService');
-	$role = $authService->getIdentity() ? $authService->getIdentity()->getRole() : AclFactory::GUEST;
+	$role = $authService->getIdentity() ? AclFactory::ADMIN : AclFactory::GUEST;
 	$controller = $routeMatch->getParam('controller') . 'Controller';
 
 	$action = $routeMatch->getParam('action') . 'Action';

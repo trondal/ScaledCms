@@ -5,10 +5,19 @@ namespace Application\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 
-class LoginController extends AbstractActionController implements ResourceInterface {
+class LoginController extends AbstractActionController implements ResourceInterface, AuthServiceAware {
+
+    /**
+     * @var \Zend\Authentication\AuthenticationService
+     */
+    protected $authService;
 
     public function getResourceId() {
 	return __CLASS__;
+    }
+
+    public function setAuthService(\Zend\Authentication\AuthenticationService $authService) {
+	$this->authService = $authService;
     }
 
     public function indexAction() {
@@ -17,22 +26,17 @@ class LoginController extends AbstractActionController implements ResourceInterf
 	$request = $this->getRequest();
 
 	if ($request->isPost()) {
-            //$album = new Album();
-            //$form->setInputFilter($album->getInputFilter());
-            $form->setData($request->getPost());
+	    $form->setData($request->getPost());
 
-            if ($form->isValid()) {
-		echo '<pre>';
-		var_dump($form->getData());
-		exit;
+	    $adapter = $this->authService->getAdapter();
+	    $adapter->setIdentityValue($this->params()->fromPost('username'));
+	    $adapter->setCredentialValue($this->params()->fromPost('password'));
+	    $authResult = $this->authService->authenticate();
 
-		//$album->exchangeArray($form->getData());
-                //$this->getAlbumTable()->saveAlbum($album);
-
-                // Redirect to list of albums
-                //return $this->redirect()->toRoute('album');
-            }
-        }
+	    if ($authResult->isValid()) {
+		return $this->redirect()->toRoute('admin/admin-segment');
+	    }
+	}
 
 	return array('form' => $form);
     }

@@ -12,7 +12,7 @@ class AdminController extends AbstractActionController implements ResourceInterf
     }
 
     public function indexAction() {
-
+	$this->layout()->setTemplate('layout/admin');
     }
 
 }
