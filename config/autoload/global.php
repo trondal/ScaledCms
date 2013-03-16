@@ -36,7 +36,7 @@ return array(
 		'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
 		'cache' => 'array',
 		'paths' => array(
-		    __DIR__ . '/../../module/Application/src/Application/Entity'
+		    __DIR__ . '/../../module/Scc/src/Scc/Entity'
 		),
 	    ),
 	),
@@ -55,7 +55,7 @@ return array(
 	'authentication' => array(
 	    'orm_default' => array(
 		'object_manager' => 'Doctrine\ORM\EntityManager',
-                'identity_class' => 'Application\Entity\User',
+                'identity_class' => 'Scc\Entity\User',
                 'identity_property' => 'email',
                 'credential_property' => 'password',
 	    )
