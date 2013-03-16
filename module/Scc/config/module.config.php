@@ -92,7 +92,8 @@ return array(
 	    'Scc\Service\Site' => 'Scc\Service\Factory\Site',
 	    'Scc\Service\Acl' =>  'Scc\Service\Factory\AclFactory',
             'Scc\Service\PageService' => 'Scc\Service\Factory\Page',
-	    'Scc\Form\LoginForm' => 'Scc\Form\Factory\LoginFormFactory'
+	    'Scc\Form\LoginForm' => 'Scc\Form\Factory\LoginFormFactory',
+	    'Scc\Service\NodeService' => 'Scc\Service\Factory\Node'
 	)
     ),
     'translator' => array(
@@ -142,7 +143,7 @@ return array(
     'doctrine' => array(
 	'eventmanager' => array(
 	    'orm_default' => array(
-		'subscribers' => array('Gedmo\Tree\TreeListener', 'Scc\Event\NodeListener')
+		'subscribers' => array('Gedmo\Tree\TreeListener'/*, 'Scc\Event\NodeListener'*/)
 	    )
 	),
 	'authentication' => array(

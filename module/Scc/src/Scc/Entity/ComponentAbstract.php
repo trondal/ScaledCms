@@ -18,15 +18,9 @@ abstract class ComponentAbstract {
 
     /**
      * @var Node
-     * @ORM\OneToOne(targetEntity="Node")
+     * @ORM\ManyToOne(targetEntity="Node")
      */
     private $node;
-
-    /**
-     * Short notation of instance classname, eg. 'Facebook'
-     * @var string
-     */
-    protected $className;
 
     public function setNode(Node $node) {
 	$this->node = $node;

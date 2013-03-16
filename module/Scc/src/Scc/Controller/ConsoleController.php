@@ -91,6 +91,7 @@ class ConsoleController extends AbstractActionController implements EntityManage
 
 	$node1 = new Node($twitter);
 	$node2 = new Node($facebook);
+	$node2->setParent($node1);
 
 	$page->addNode($node1);
 	$page->addNode($node2);

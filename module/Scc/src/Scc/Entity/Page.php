@@ -79,6 +79,7 @@ class Page {
     /**
      * @var Scc\Entity\Node[]
      * @ORM\OneToMany(targetEntity="Scc\Entity\Node", mappedBy="page")
+     * @ORM\OrderBy{"left" = ASC}
      */
     protected $nodes;
 

@@ -3,19 +3,58 @@
 namespace Scc\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="\Scc\Entity\Repository\NodeRepository")
  * @ORM\Table(name="node")
+ * @Gedmo\Tree(type="nested")
  */
 class Node {
 
     /**
      * @ORM\Id
-     * @ORM\Column(name="id")
+     * @ORM\Column(name="id", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
+
+    /**
+     * @Gedmo\TreeLeft
+     * @ORM\Column(name="lft", type="integer")
+     */
+    private $lft;
+
+    /**
+     * @Gedmo\TreeLevel
+     * @ORM\Column(name="lvl", type="integer")
+     */
+    private $lvl;
+
+    /**
+     * @Gedmo\TreeRight
+     * @ORM\Column(name="rgt", type="integer")
+     */
+    private $rgt;
+
+    /**
+     * @Gedmo\TreeRoot
+     * @ORM\Column(name="root", type="integer", nullable=true)
+     */
+    private $root;
+
+    /**
+     * @Gedmo\TreeParent
+     * @ORM\ManyToOne(targetEntity="Node", inversedBy="children")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    private $parent;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Node", mappedBy="parent")
+     * @ORM\OrderBy({"lft" = "ASC"})
+     */
+    private $children;
 
     /**
      * @ORM\ManyToOne(targetEntity="Scc\Entity\Page", inversedBy="nodes")
@@ -31,14 +70,7 @@ class Node {
      */
     protected $className;
 
-    /**
-     * This var contains an instance of $this->nodesStrategy.
-     * The instance is loaded with a PostLoad event listener and will not be persisted by Doctrine.
-     */
-    protected $component;
-
     public function __construct(\Scc\Entity\ComponentAbstract $component) {
-	$this->component = $component;
 	$this->className = $component->getClassName();
 	$component->setNode($this);
     }
@@ -59,14 +91,12 @@ class Node {
 	return $this->className;
     }
 
-    public function getComponent() {
-	return $this->component;
+    public function setParent(Node $parent = null) {
+	$this->parent = $parent;
     }
 
-    public function setComponent(\Scc\Entity\ComponentAbstract $component) {
-	$this->component = $component;
-	$this->className = $component->getClassName();
-	$component->setNode($this);
+    public function getParent() {
+	return $this->parent;
     }
 
 }

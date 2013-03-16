@@ -2,22 +2,31 @@
 
 namespace Scc\Controller;
 
+use Scc\Service\NodeService;
 use Scc\Service\PageService;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 use Zend\View\Model\ViewModel;
 
 class IndexController extends AbstractActionController
-    implements ResourceInterface, PageServiceAware {
+    implements ResourceInterface, PageServiceAware, NodeServiceAware {
 
     /**
-     *
      * @var PageService
      */
     protected $pageService;
 
+    /**
+     * @var NodeService
+     */
+    protected $nodeService;
+
     public function setPageService(PageService $pageService){
 	$this->pageService = $pageService;
+    }
+
+    public function setNodeService(NodeService $nodeService) {
+	$this->nodeService = $nodeService;
     }
 
     public function getResourceId() {
@@ -45,7 +54,7 @@ class IndexController extends AbstractActionController
 	));
 
 	foreach ($page->getNodes() as $node) {
-	    $component = $node->getComponent();
+	    $component = $this->nodeService->findByNode($node);
 	    $controllerKey = 'Scc\Controller\\' . $component->getClassName();
 
 	    $componentView = $this->forward()->dispatch($controllerKey, array(
