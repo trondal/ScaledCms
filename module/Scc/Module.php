@@ -79,7 +79,7 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface,
 	    $response->setStatusCode(302);
 	    $response->sendHeaders();
 	    // When an MvcEvent Listener returns a Response object,
-	    // It automatically short-circuits the Scc running
+	    // It automatically short-circuits the Application running
 	    return $response;
 	}
     }
