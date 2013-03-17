@@ -3,16 +3,19 @@
 namespace Scc;
 
 use Scc\Service\Factory\AclFactory;
+use Zend\Console\Adapter\AdapterInterface;
+use Zend\Console\Response;
 use Zend\EventManager\EventInterface;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\BootstrapListenerInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
+use Zend\ModuleManager\Feature\ConsoleUsageProviderInterface;
 use Zend\ModuleManager\Feature\ServiceProviderInterface;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 
 class Module implements BootstrapListenerInterface, ConfigProviderInterface,
-	AutoloaderProviderInterface, ServiceProviderInterface {
+	AutoloaderProviderInterface, ServiceProviderInterface, ConsoleUsageProviderInterface {
 
     public function onBootstrap(EventInterface $e) {
 	$app = $e->getApplication();
@@ -102,7 +105,7 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface,
 
 	if ($acl->isAllowed($role, $controller, $action) === false) {
 	    $response = $e->getResponse();
-	    if ($response instanceof \Zend\Console\Response) {
+	    if ($response instanceof Response) {
 		echo 'Not allowed!';
 		exit;
 	    }
@@ -110,6 +113,14 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface,
 	    $response->setStatusCode(403);
 	    return $response;
 	}
+    }
+
+    public function getConsoleUsage(AdapterInterface $console) {
+	return array(
+            'db create'     => 'Create database from Doctrine Metadata',
+	    'db drop' => 'Drop database from Doctrine Metadata',
+	    'db rebuild' => 'Drop, create and populate database from Doctrine Metadata'
+        );
     }
 
 }

@@ -2,14 +2,16 @@
 
 namespace Scc\Controller;
 
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Tools\SchemaTool;
 use Scc\Entity\Facebook;
 use Scc\Entity\Node;
 use Scc\Entity\Page;
 use Scc\Entity\Site;
 use Scc\Entity\Twitter;
 use Scc\Entity\User;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Tools\SchemaTool;
+use Zend\Console\Request as ConsoleRequest;
+use Zend\Crypt\Password\Bcrypt;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 
@@ -28,21 +30,45 @@ class ConsoleController extends AbstractActionController implements EntityManage
 	return __CLASS__;
     }
 
-    public function dropcreateAction() {
+    public function createAction() {
+	$request = $this->getRequest();
+	if (!$request instanceof ConsoleRequest){
+            throw new \RuntimeException('You can only use this action from a console!');
+        }
+
+	$tool = new SchemaTool($this->em);
+	$metaData = $this->em->getMetadataFactory()->getAllMetadata();
+
+	$tool->createSchema($metaData);
+	return 'Database created.' . PHP_EOL;
+    }
+
+    public function dropAction() {
+	$request = $this->getRequest();
+	if (!$request instanceof ConsoleRequest){
+            throw new \RuntimeException('You can only use this action from a console!');
+        }
+
 	$tool = new SchemaTool($this->em);
 	$metaData = $this->em->getMetadataFactory()->getAllMetadata();
 
 	$tool->dropSchema($metaData);
-	$tool->createSchema($metaData);
-
-	return 'Db dropped and created.' . PHP_EOL;
+	return 'Database dropped.' . PHP_EOL;
     }
 
-    public function restartAction() {
-	$this->dropcreateAction();
+
+
+    public function rebuildAction() {
+	echo $this->dropAction();
+	echo $this->createAction();
+
+	$request = $this->getRequest();
+	if (!$request instanceof ConsoleRequest){
+            throw new \RuntimeException('You can only use this action from a console!');
+        }
 
 	// Add user and site
-	$bcrypt = new \Zend\Crypt\Password\Bcrypt();
+	$bcrypt = new Bcrypt();
 	$user1 = new User('Alice', $bcrypt->create('password'), 'alice@gmail.com');
 	$user2 = new User('Bob', $bcrypt->create('password'), 'bob@gmail.com');
 
@@ -103,7 +129,7 @@ class ConsoleController extends AbstractActionController implements EntityManage
 
 	$this->em->flush();
 
-	return 'Seeding done' . PHP_EOL;
+	return 'Database populated' . PHP_EOL;
     }
 
 }

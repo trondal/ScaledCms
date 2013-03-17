@@ -70,12 +70,30 @@ return array(
     'console' => array(
 	'router' => array(
 	    'routes' => array(
-		'restart' => array(
+		'create' => array(
 		    'options' => array(
-			'route' => 'db restart',
+			'route' => 'db create',
 			'defaults' => array(
 			    'controller' => 'Scc\Controller\Console',
-			    'action' => 'restart'
+			    'action' => 'create'
+			)
+		    )
+		),
+		'drop' => array(
+		    'options' => array(
+			'route' => 'db drop',
+			'defaults' => array(
+			    'controller' => 'Scc\Controller\Console',
+			    'action' => 'drop'
+			)
+		    )
+		),
+		'rebuild' => array(
+		    'options' => array(
+			'route' => 'db rebuild',
+			'defaults' => array(
+			    'controller' => 'Scc\Controller\Console',
+			    'action' => 'rebuild'
 			)
 		    )
 		)
