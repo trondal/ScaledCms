@@ -11,7 +11,8 @@ return array(
 	    'index' => array(
 		'type' => 'Zend\Mvc\Router\Http\Hostname',
 		'options' => array(
-		    'route' => 'mobil.scaledcms.local',
+		    'priority' => 75,
+		    'route' => ':subdomain.:domain.:tld',
 		    'defaults' => array(
 			'__NAMESPACE__' => 'Scc\Controller',
 			'controller' => 'Index',
@@ -42,7 +43,8 @@ return array(
 	    'admin' => array(
 		'type' => 'Zend\Mvc\Router\Http\Hostname',
 		'options' => array(
-		    'route' => 'admin.scaledcms.local',
+		    'priority' => 100,
+		    'route' => 'admin.:domain.:tld',
 		    'defaults' => array(
 			'__NAMESPACE__' => 'Scc\Controller',
 		    )
@@ -126,7 +128,7 @@ return array(
     ),
     'controllers' => array(
 	'invokables' => array(
-	    'Scc\Controller\Facebook' => 'Scc\Controller\FacebookController',
+	    'Scc\Controller\Contact' => 'Scc\Controller\ContactController',
 	    'Scc\Controller\Twitter' => 'Scc\Controller\TwitterController'
 	),
 	'factories' => array(
@@ -155,7 +157,15 @@ return array(
     ),
     'view_helpers' => array(
 	'invokables' => array(
-	    'tree' => 'Scc\View\Helper\Tree'
+	    'tree' => 'Scc\View\Helper\Tree',
+	    'panel' => 'Scc\View\Helper\Panel',
+	    'twitter' => 'Scc\View\Helper\Twitter',
+	),
+	'factories' => array(
+	    'Scc\View\Helper\Contact' => function($sm) {
+		$request = $sm->getServiceLocator()->get('Request');
+		return new \Scc\View\Helper\Contact($request);
+	    }
 	)
     ),
     'doctrine' => array(

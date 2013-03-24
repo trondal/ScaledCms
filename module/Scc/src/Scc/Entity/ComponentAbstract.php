@@ -22,13 +22,26 @@ abstract class ComponentAbstract {
      */
     private $node;
 
+    public function getId() {
+	return $this->id;
+    }
+
     public function setNode(Node $node) {
 	$this->node = $node;
     }
 
     public function getClassName() {
-	$array = explode('\\', get_class($this));
-	return $array[2];
+	return get_class($this);
+    }
+
+    public function getNsPrefix() {
+	$result = explode('\\', get_class($this));
+	return $result[0];
+    }
+
+    public function getNsSuffix() {
+	$result = explode('\\', get_class($this));
+	return $result[count($result) - 1];
     }
 
 }

@@ -4,7 +4,7 @@ namespace Scc\Controller;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\SchemaTool;
-use Scc\Entity\Facebook;
+use Scc\Entity\Contact;
 use Scc\Entity\Node;
 use Scc\Entity\Page;
 use Scc\Entity\Site;
@@ -113,19 +113,36 @@ class ConsoleController extends AbstractActionController implements EntityManage
 
 	// Add components
 	$twitter = new Twitter('<i>tweet:-)</i><br/>');
-	$facebook = new Facebook('<b>Face!</b><br/>', '45644523');
+	$contact = new Contact('Send us a message', 'trond.albinussen@gmail.com', 'Message sent.');
+
+	//$board = new \MessageBoard\Entity\Board('My message board');
+
+	//$message1 = new \MessageBoard\Entity\Message('Alice Jones', 'Alice says hi', 'Hi from Alice');
+	//$message2 = new \MessageBoard\Entity\Message('Bob Olsen', 'Bob says hi', 'Hi from Bob');
+
+	//$this->em->persist($message1);
+	//$this->em->persist($message2);
+
+	//$board->addMessage($message1);
+	//$board->addMessage($message2);
 
 	$node1 = new Node($twitter);
-	$node2 = new Node($facebook);
+	$node2 = new Node($contact);
+	//$node3 = new Node($board);
+
 	$node2->setParent($node1);
+	//$node3->setParent($node1);
 
 	$page->addNode($node1);
 	$page->addNode($node2);
+	//$page->addNode($node3);
 
 	$this->em->persist($twitter);
-	$this->em->persist($facebook);
+	$this->em->persist($contact);
+	//$this->em->persist($board);
 	$this->em->persist($node1);
 	$this->em->persist($node2);
+	//$this->em->persist($node3);
 
 	$this->em->flush();
 
