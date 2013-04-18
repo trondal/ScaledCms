@@ -3,7 +3,7 @@
     "require": {
         "php": ">=5.3.3",
         "doctrine/doctrine-orm-module": "*",
-        "doctrine/migrations":"*",
+        "doctrine/migrations":"dev-master",
         "zendframework/zendframework":"2.1.*",
         "gedmo/doctrine-extensions":"2.3.*"
     }

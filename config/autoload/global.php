@@ -8,15 +8,7 @@ return array(
 	    // default connection name
 	    'orm_default' => array(
 		'configuration' => 'orm_default',
-		'eventmanager' => 'orm_default',
-		'driverClass' => 'Doctrine\DBAL\Driver\PDOPgSql\Driver',
-		'params' => array(
-		    'host' => 'localhost',
-		    'port' => '5432',
-		    'user' => '',
-		    'password' => '',
-		    'dbname' => '',
-		)
+		'eventmanager' => 'orm_default'
 	    )
 	),
 	'configuration' => array(
@@ -25,7 +17,7 @@ return array(
 		'query_cache' => 'array',
 		'result_cache' => 'array',
 		'driver' => 'orm_default',
-		'generate_proxies' => true,
+		'generate_proxies' => false,
 		'proxy_dir' => sys_get_temp_dir(),
 		'proxy_namespace' => 'DoctrineORMModule\Proxy',
 		'filters' => array()
@@ -34,11 +26,8 @@ return array(
 	'driver' => array(
 	    'orm_default' => array(
 		'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
-		'cache' => 'array',
-		'paths' => array(
-		    __DIR__ . '/../../module/Scc/src/Scc/Entity'
-		),
-	    ),
+		'cache' => 'array'
+	    )
 	),
 	'entitymanager' => array(
 	    'orm_default' => array(
@@ -51,14 +40,6 @@ return array(
 	),
 	'entity_resolver' => array(
 	    'orm_default' => array()
-	),
-	'authentication' => array(
-	    'orm_default' => array(
-		'object_manager' => 'Doctrine\ORM\EntityManager',
-                'identity_class' => 'Scc\Entity\User',
-                'identity_property' => 'email',
-                'credential_property' => 'password',
-	    )
 	)
-    ),
+    )
 );

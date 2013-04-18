@@ -84,9 +84,6 @@ return array(
 	)
     ),
     'service_manager' => array(
-	'invokables' => array(
-
-	),
 	'factories' => array(
 	    'translator' => 'Zend\I18n\Translator\TranslatorServiceFactory',
 	    'Scc\Service\User' => 'Scc\Service\Factory\User',
@@ -146,6 +143,13 @@ return array(
 		'subscribers' => array('Gedmo\Tree\TreeListener', 'Scc\Event\NodeListener')
 	    )
 	),
+        'driver' => array(
+            'orm_default' => array(
+                'paths' => array(
+		    __DIR__ . '/../src/Scc/Entity'
+		)
+            )
+        ),
 	'authentication' => array(
             'orm_default' => array(
                 'objectManager' => 'Doctrine\ORM\EntityManager',
