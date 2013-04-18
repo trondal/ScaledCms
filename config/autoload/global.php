@@ -13,9 +13,9 @@ return array(
 		'params' => array(
 		    'host' => 'localhost',
 		    'port' => '5432',
-		    'user' => 'playground',
-		    'password' => 'playground',
-		    'dbname' => 'playground',
+		    'user' => '',
+		    'password' => '',
+		    'dbname' => '',
 		)
 	    )
 	),

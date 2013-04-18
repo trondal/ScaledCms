@@ -24,18 +24,17 @@ return array(
 		    'userslug' => array(
 			'type' => 'Zend\Mvc\Router\Http\Segment',
 			'options' => array(
-			    'route' => '/[:a[/:b[/:c[/:d[/]]]]]',
+			    'route' => '/[:a][/:b][/:c][/:d]',
 			    'constraints' => array(
 				'a' => '[a-zA-Z][a-zA-Z0-9_-]+',
 				'b' => '[a-zA-Z][a-zA-Z0-9_-]+',
 				'c' => '[a-zA-Z][a-zA-Z0-9_-]+',
 				'd' => '[a-zA-Z][a-zA-Z0-9_-]+',
-				'e' => '[a-zA-Z][a-zA-Z0-9_-]+',
 			    ),
 			    'defaults' => array(
 				'controller' => 'Index',
 				'action' => 'index',
-			    )
+			    ),
 			)
 		    )
 		)
