@@ -11,7 +11,8 @@ return array(
 	    'index' => array(
 		'type' => 'Zend\Mvc\Router\Http\Hostname',
 		'options' => array(
-		    'route' => 'mobil.scaledcms.local',
+                    'priority' => 50,
+		    'route' => 'mobil.:domain.:tld',
 		    'defaults' => array(
 			'__NAMESPACE__' => 'Scc\Controller',
 			'controller' => 'Index',
@@ -23,18 +24,17 @@ return array(
 		    'userslug' => array(
 			'type' => 'Zend\Mvc\Router\Http\Segment',
 			'options' => array(
-			    'route' => '/[:a[/:b[/:c[/:d[/]]]]]',
+			    'route' => '/[:a][/:b][/:c][/:d]',
 			    'constraints' => array(
 				'a' => '[a-zA-Z][a-zA-Z0-9_-]+',
 				'b' => '[a-zA-Z][a-zA-Z0-9_-]+',
 				'c' => '[a-zA-Z][a-zA-Z0-9_-]+',
 				'd' => '[a-zA-Z][a-zA-Z0-9_-]+',
-				'e' => '[a-zA-Z][a-zA-Z0-9_-]+',
 			    ),
 			    'defaults' => array(
 				'controller' => 'Index',
 				'action' => 'index',
-			    )
+			    ),
 			)
 		    )
 		)
@@ -42,7 +42,8 @@ return array(
 	    'admin' => array(
 		'type' => 'Zend\Mvc\Router\Http\Hostname',
 		'options' => array(
-		    'route' => 'admin.scaledcms.local',
+                    'priority' => 100,
+		    'route' => 'admin.:domain.:tld',
 		    'defaults' => array(
 			'__NAMESPACE__' => 'Scc\Controller',
 		    )
