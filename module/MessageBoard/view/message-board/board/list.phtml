@@ -1,0 +1,12 @@
+<?php
+echo '<h2>'.$this->board->getTitle().'</h2>';
+echo '<a href="?editboard='.$this->board->getId().'">Edit Board</a><br/><br/>';
+echo '<div>';
+foreach ($this->board->getMessages() as $msg) {
+    $created = $this->dateFormat($msg->getCreated(), IntlDateFormatter::SHORT, IntlDateFormatter::SHORT, "nb_NO");
+    echo '<div>';
+    echo '<div><b>'.$msg->getTitle().'</b> - by '. $msg->getSender().' on <i>'.$created.'</i></div>';
+    echo '<div>'.$msg->getText().'</div>';
+    echo '</div>';
+}
+echo '</div>';

@@ -1,0 +1,25 @@
+<?php
+
+
+$board = $form->get('board');
+
+$boardUrl = $this->url('messageboard',
+	array('controller' => 'board',
+	      'action' => 'index',
+	      'id' => $board->get('id')->getValue()));
+
+echo '<h2><a href="'. $boardUrl .'">Back</a></h2>';
+
+$postUrl = $this->url('messageboard',
+    array('controller' => 'board',
+	  'action'=> 'edit',
+	  'id' => $board->get('id')->getValue())
+);
+$form->setAttribute('action', $postUrl)->prepare();
+
+echo $this->form()->openTag($form);
+//echo $this->formHidden($board->get('id'));
+//echo $this->formRow($board->get('title'));
+echo $this->formCollection($form);
+//echo $this->formElement($form->get('submit'));
+echo $this->form()->closeTag();
