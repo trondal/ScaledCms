@@ -10,4 +10,5 @@ nbproject/
 data/
 .DS_Store
 .settings/
-module/Application/test/report/
+module/Scc/test/report/
+
