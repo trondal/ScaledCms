@@ -4,9 +4,11 @@ namespace Scc\Controller;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\SchemaTool;
+use RuntimeException;
 use Scc\Entity\Contact;
 use Scc\Entity\Node;
 use Scc\Entity\Page;
+use Scc\Entity\Panel;
 use Scc\Entity\Site;
 use Scc\Entity\Twitter;
 use Scc\Entity\User;
@@ -33,7 +35,7 @@ class ConsoleController extends AbstractActionController implements EntityManage
     public function createAction() {
 	$request = $this->getRequest();
 	if (!$request instanceof ConsoleRequest){
-            throw new \RuntimeException('You can only use this action from a console!');
+            throw new RuntimeException('You can only use this action from a console!');
         }
 
 	$tool = new SchemaTool($this->em);
@@ -46,7 +48,7 @@ class ConsoleController extends AbstractActionController implements EntityManage
     public function dropAction() {
 	$request = $this->getRequest();
 	if (!$request instanceof ConsoleRequest){
-            throw new \RuntimeException('You can only use this action from a console!');
+            throw new RuntimeException('You can only use this action from a console!');
         }
 
 	$tool = new SchemaTool($this->em);
@@ -64,7 +66,7 @@ class ConsoleController extends AbstractActionController implements EntityManage
 
 	$request = $this->getRequest();
 	if (!$request instanceof ConsoleRequest){
-            throw new \RuntimeException('You can only use this action from a console!');
+            throw new RuntimeException('You can only use this action from a console!');
         }
 
 	// Add user and site
@@ -112,7 +114,9 @@ class ConsoleController extends AbstractActionController implements EntityManage
 	$this->em->persist($page2_2);
 
 	// Add components
-	$twitter = new Twitter('<i>tweet:-)</i><br/>');
+        $panel = new Panel();
+	$twitter1 = new Twitter('<i>tweet:-)</i>');
+        $twitter2 = new Twitter('<b>BOBBO</b>');
 	$contact = new Contact('Send us a message', 'trond.albinussen@gmail.com', 'Message sent.');
 
 	//$board = new \MessageBoard\Entity\Board('My message board');
@@ -126,23 +130,32 @@ class ConsoleController extends AbstractActionController implements EntityManage
 	//$board->addMessage($message1);
 	//$board->addMessage($message2);
 
-	$node1 = new Node($twitter);
-	$node2 = new Node($contact);
+	$node1 = new Node($panel);
+        $node2 = new Node($twitter1);
+	$node3 = new Node($twitter2);
+        $node4 = new Node($contact);
+        
 	//$node3 = new Node($board);
 
 	$node2->setParent($node1);
+        $node3->setParent($node1);
+        $node4->setParent($node1);
 	//$node3->setParent($node1);
 
 	$page->addNode($node1);
 	$page->addNode($node2);
-	//$page->addNode($node3);
+        $page->addNode($node3);
+	$page->addNode($node4);
 
-	$this->em->persist($twitter);
+	$this->em->persist($twitter1);
+        $this->em->persist($twitter2);
 	$this->em->persist($contact);
-	//$this->em->persist($board);
+	$this->em->persist($panel);
+        
 	$this->em->persist($node1);
 	$this->em->persist($node2);
-	//$this->em->persist($node3);
+	$this->em->persist($node3);
+        $this->em->persist($node4);
 
 	$this->em->flush();
 

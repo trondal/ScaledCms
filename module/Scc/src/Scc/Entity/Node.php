@@ -69,8 +69,14 @@ class Node {
      * @ORM\Column(type="string", name="classname", length=64, nullable=false )
      */
     protected $className;
+    
+    /**
+     * This entity will not be persisted by Doctrine
+     */
+    protected $component;
 
     public function __construct(\Scc\Entity\ComponentAbstract $component) {
+        $this->component = $component;
 	$this->className = $component->getClassName();
 	$component->setNode($this);
     }
@@ -97,6 +103,24 @@ class Node {
 
     public function getParent() {
 	return $this->parent;
+    }
+    
+    public function getChildren() {
+        return $this->children;
+    }
+    
+    public function loadComponent(\Scc\Entity\ComponentAbstract $component) {
+        $this->component = $component;
+        $this->className = $component->getClassName();
+        $component->setNode($this);
+    }
+    
+    public function getComponent() {
+        return $this->component;
+    }
+    
+    public function hasChildren() {
+        return (count($this->children) > 0) ? true : false;
     }
 
 }

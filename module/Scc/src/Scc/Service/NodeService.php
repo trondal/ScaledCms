@@ -20,7 +20,7 @@ class NodeService implements EntityManagerAware {
 	$this->em = $em;
     }
 
-    public function findByNode(Node $node) {
+    public function findComponentByNode(Node $node) {
 	$repo = $this->em->getRepository('Scc\Entity\Node');
 	return $repo->getComponent($node);
     }

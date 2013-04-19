@@ -48,15 +48,26 @@ class IndexController extends AbstractActionController
 	    return;
 	}
 
-	$components = array();
+        $locator = $this->getServiceLocator();
+        foreach ($page->getNodes() as $node) {
+            $service = $locator->get($node->getClassName());
+            $node->loadComponent($service->findOneByNode($node));
+        }
+        $nodes = $page->getNodes();
+
+	/*$components = array();
 	foreach ($page->getNodes() as $node) {
 	    $components[] = $this->nodeService->findByNode($node);
-	}
+	}*/
+                
 	$view = new ViewModel(array(
 	    'page' => $page,
 	    'path' => $this->pageService->getMaterializedPath($page),
-	    'components' => $components
+	    'node' => $nodes[0]
 	));
+        
+        // first node is always connected to an panel
+        $view->setTemplate('scc/panel/index');
 	return $view;
     }
 

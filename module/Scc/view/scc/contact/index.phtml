@@ -1,5 +1,7 @@
-<form action="" method="POST">
-    <label for="email"><?php echo $this->component->getTitle(); ?></label>
-    <input type="text" value="" name="email"/>
-    <input type="submit" value="Send"/>
-</form>
+<div style="border:1px solid black; padding:2px">
+    <form action="" method="POST">
+        <label for="email"><?php echo $this->component->getTitle(); ?></label>
+        <input type="text" value="<?php echo $this->component->getMsg()?>" name="email"/>
+        <input type="submit" value="Send"/>
+    </form>
+</div>

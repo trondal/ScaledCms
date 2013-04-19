@@ -15,7 +15,7 @@ use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 
 class Module implements BootstrapListenerInterface, ConfigProviderInterface,
-	AutoloaderProviderInterface, ServiceProviderInterface, ConsoleUsageProviderInterface {
+	AutoloaderProviderInterface, ServiceProviderInterface, ConsoleUsageProviderInterface, \Zend\ModuleManager\Feature\ViewHelperProviderInterface{
 
     public function onBootstrap(EventInterface $e) {
 	$app = $e->getApplication();
@@ -120,6 +120,27 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface,
             'db create'     => 'Create database from Doctrine Metadata',
 	    'db drop' => 'Drop database from Doctrine Metadata',
 	    'db rebuild' => 'Drop, create and populate database from Doctrine Metadata'
+        );
+    }
+    
+    public function getViewHelperConfig() {
+        return array(
+            'factories' => array(
+                'Twitter' => function($sm) {
+                    $helper = new \Scc\View\Helper\Twitter();
+                    $locator = $sm->getServiceLocator();
+                    $helper->setEntityManager($locator->get('Doctrine\ORM\EntityManager'));
+                    return $helper;
+                },
+                'Contact' => function($sm) {
+                    $locator = $sm->getServiceLocator();
+                    $request = $locator->get('Request');
+                    $helper = new \Scc\View\Helper\Contact();
+                    $helper->setEntityManager($locator->get('Doctrine\ORM\EntityManager'));
+                    $helper->setRequest($request);
+                    return $helper;
+                },
+            )
         );
     }
 

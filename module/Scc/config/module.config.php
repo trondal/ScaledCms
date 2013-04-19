@@ -109,7 +109,10 @@ return array(
 	    'Scc\Service\Acl' =>  'Scc\Service\Factory\AclFactory',
             'Scc\Service\PageService' => 'Scc\Service\Factory\Page',
 	    'Scc\Form\LoginForm' => 'Scc\Form\Factory\LoginFormFactory',
-	    'Scc\Service\NodeService' => 'Scc\Service\Factory\Node'
+	    'Scc\Service\NodeService' => 'Scc\Service\Factory\Node',
+            'Scc\Entity\Panel' => 'Scc\Service\Factory\PanelServiceFactory',
+            'Scc\Entity\Twitter' => 'Scc\Service\Factory\TwitterServiceFactory',
+            'Scc\Entity\Contact' => 'Scc\Service\Factory\ContactServiceFactory'
 	)
     ),
     'translator' => array(
@@ -149,19 +152,6 @@ return array(
 	),
 	'template_path_stack' => array(
 	    __DIR__ . '/../view'
-	)
-    ),
-    'view_helpers' => array(
-	'invokables' => array(
-	    'tree' => 'Scc\View\Helper\Tree',
-	    'panel' => 'Scc\View\Helper\Panel',
-	    'twitter' => 'Scc\View\Helper\Twitter',
-	),
-	'factories' => array(
-	    'Scc\View\Helper\Contact' => function($sm) {
-		$request = $sm->getServiceLocator()->get('Request');
-		return new \Scc\View\Helper\Contact($request);
-	    }
 	)
     ),
     'doctrine' => array(
