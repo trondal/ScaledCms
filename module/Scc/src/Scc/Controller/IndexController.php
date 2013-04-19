@@ -2,22 +2,31 @@
 
 namespace Scc\Controller;
 
+use Scc\Service\NodeService;
 use Scc\Service\PageService;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 use Zend\View\Model\ViewModel;
 
 class IndexController extends AbstractActionController
-    implements ResourceInterface, PageServiceAware {
+    implements ResourceInterface, PageServiceAware, NodeServiceAware {
 
     /**
-     *
      * @var PageService
      */
     protected $pageService;
 
+    /**
+     * @var NodeService
+     */
+    protected $nodeService;
+
     public function setPageService(PageService $pageService){
 	$this->pageService = $pageService;
+    }
+
+    public function setNodeService(NodeService $nodeService) {
+	$this->nodeService = $nodeService;
     }
 
     public function getResourceId() {
@@ -39,23 +48,15 @@ class IndexController extends AbstractActionController
 	    return;
 	}
 
+	$components = array();
+	foreach ($page->getNodes() as $node) {
+	    $components[] = $this->nodeService->findByNode($node);
+	}
 	$view = new ViewModel(array(
 	    'page' => $page,
-	    'path' => $this->pageService->getMaterializedPath($page)
+	    'path' => $this->pageService->getMaterializedPath($page),
+	    'components' => $components
 	));
-
-	foreach ($page->getNodes() as $node) {
-	    $component = $node->getComponent();
-	    $controllerKey = 'Scc\Controller\\' . $component->getClassName();
-
-	    $componentView = $this->forward()->dispatch($controllerKey, array(
-		'controller' => $controllerKey,
-		'action' => 'index',
-		'component' => $component
-	    ));
-
-	    $view->addChild($componentView, 'components', true);
-	}
 	return $view;
     }
 

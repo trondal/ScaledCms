@@ -2,14 +2,14 @@
 
 namespace Scc\Entity;
 
-use Scc\Entity\ComponentAbstract;
 use Doctrine\ORM\Mapping as ORM;
+use Scc\Entity\ComponentAbstract;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="twitter")
  */
-class Twitter extends ComponentAbstract {
+class Twitter extends ComponentAbstract implements ComponentAware {
 
     /**
      * @var string

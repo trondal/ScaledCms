@@ -21,6 +21,6 @@ class TwitterTest extends \PHPUnit_Framework_TestCase {
 	$component->setHtml('Html');
 
 	$this->assertEquals('Html', $component->getHtml());
-	$this->assertEquals('Twitter', $component->getClassName());
+	$this->assertEquals('Scc\Entity\Twitter', $component->getClassName());
     }
 }

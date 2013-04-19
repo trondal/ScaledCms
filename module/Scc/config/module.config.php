@@ -11,8 +11,8 @@ return array(
 	    'index' => array(
 		'type' => 'Zend\Mvc\Router\Http\Hostname',
 		'options' => array(
-                    'priority' => 50,
-		    'route' => 'mobil.:domain.:tld',
+		    'priority' => 75,
+		    'route' => ':subdomain.:domain.:tld',
 		    'defaults' => array(
 			'__NAMESPACE__' => 'Scc\Controller',
 			'controller' => 'Index',
@@ -42,7 +42,7 @@ return array(
 	    'admin' => array(
 		'type' => 'Zend\Mvc\Router\Http\Hostname',
 		'options' => array(
-                    'priority' => 100,
+		    'priority' => 100,
 		    'route' => 'admin.:domain.:tld',
 		    'defaults' => array(
 			'__NAMESPACE__' => 'Scc\Controller',
@@ -71,12 +71,30 @@ return array(
     'console' => array(
 	'router' => array(
 	    'routes' => array(
-		'restart' => array(
+		'create' => array(
 		    'options' => array(
-			'route' => 'db restart',
+			'route' => 'db create',
 			'defaults' => array(
 			    'controller' => 'Scc\Controller\Console',
-			    'action' => 'restart'
+			    'action' => 'create'
+			)
+		    )
+		),
+		'drop' => array(
+		    'options' => array(
+			'route' => 'db drop',
+			'defaults' => array(
+			    'controller' => 'Scc\Controller\Console',
+			    'action' => 'drop'
+			)
+		    )
+		),
+		'rebuild' => array(
+		    'options' => array(
+			'route' => 'db rebuild',
+			'defaults' => array(
+			    'controller' => 'Scc\Controller\Console',
+			    'action' => 'rebuild'
 			)
 		    )
 		)
@@ -90,7 +108,8 @@ return array(
 	    'Scc\Service\Site' => 'Scc\Service\Factory\Site',
 	    'Scc\Service\Acl' =>  'Scc\Service\Factory\AclFactory',
             'Scc\Service\PageService' => 'Scc\Service\Factory\Page',
-	    'Scc\Form\LoginForm' => 'Scc\Form\Factory\LoginFormFactory'
+	    'Scc\Form\LoginForm' => 'Scc\Form\Factory\LoginFormFactory',
+	    'Scc\Service\NodeService' => 'Scc\Service\Factory\Node'
 	)
     ),
     'translator' => array(
@@ -105,7 +124,7 @@ return array(
     ),
     'controllers' => array(
 	'invokables' => array(
-	    'Scc\Controller\Facebook' => 'Scc\Controller\FacebookController',
+	    'Scc\Controller\Contact' => 'Scc\Controller\ContactController',
 	    'Scc\Controller\Twitter' => 'Scc\Controller\TwitterController'
 	),
 	'factories' => array(
@@ -134,13 +153,21 @@ return array(
     ),
     'view_helpers' => array(
 	'invokables' => array(
-	    'tree' => 'Scc\View\Helper\Tree'
+	    'tree' => 'Scc\View\Helper\Tree',
+	    'panel' => 'Scc\View\Helper\Panel',
+	    'twitter' => 'Scc\View\Helper\Twitter',
+	),
+	'factories' => array(
+	    'Scc\View\Helper\Contact' => function($sm) {
+		$request = $sm->getServiceLocator()->get('Request');
+		return new \Scc\View\Helper\Contact($request);
+	    }
 	)
     ),
     'doctrine' => array(
 	'eventmanager' => array(
 	    'orm_default' => array(
-		'subscribers' => array('Gedmo\Tree\TreeListener', 'Scc\Event\NodeListener')
+		'subscribers' => array('Gedmo\Tree\TreeListener'/*, 'Scc\Event\NodeListener'*/)
 	    )
 	),
         'driver' => array(

@@ -44,7 +44,9 @@ class AclFactory implements FactoryInterface {
 
 	$acl->addResource($consoleControllerResource);
         $acl->allow($guestRole, $consoleControllerResource, array(
-	    $consoleControllerRefClass->getMethod('restartAction')->name
+	    $consoleControllerRefClass->getMethod('createAction')->name,
+	    $consoleControllerRefClass->getMethod('dropAction')->name,
+	    $consoleControllerRefClass->getMethod('rebuildAction')->name
 	));
 
 	$loginControllerRefClass = new ReflectionClass('Scc\Controller\LoginController');

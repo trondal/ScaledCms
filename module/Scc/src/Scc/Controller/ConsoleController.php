@@ -2,14 +2,16 @@
 
 namespace Scc\Controller;
 
-use Scc\Entity\Facebook;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Tools\SchemaTool;
+use Scc\Entity\Contact;
 use Scc\Entity\Node;
 use Scc\Entity\Page;
 use Scc\Entity\Site;
 use Scc\Entity\Twitter;
 use Scc\Entity\User;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Tools\SchemaTool;
+use Zend\Console\Request as ConsoleRequest;
+use Zend\Crypt\Password\Bcrypt;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 
@@ -28,21 +30,45 @@ class ConsoleController extends AbstractActionController implements EntityManage
 	return __CLASS__;
     }
 
-    public function dropcreateAction() {
+    public function createAction() {
+	$request = $this->getRequest();
+	if (!$request instanceof ConsoleRequest){
+            throw new \RuntimeException('You can only use this action from a console!');
+        }
+
+	$tool = new SchemaTool($this->em);
+	$metaData = $this->em->getMetadataFactory()->getAllMetadata();
+
+	$tool->createSchema($metaData);
+	return 'Database created.' . PHP_EOL;
+    }
+
+    public function dropAction() {
+	$request = $this->getRequest();
+	if (!$request instanceof ConsoleRequest){
+            throw new \RuntimeException('You can only use this action from a console!');
+        }
+
 	$tool = new SchemaTool($this->em);
 	$metaData = $this->em->getMetadataFactory()->getAllMetadata();
 
 	$tool->dropSchema($metaData);
-	$tool->createSchema($metaData);
-
-	return 'Db dropped and created.' . PHP_EOL;
+	return 'Database dropped.' . PHP_EOL;
     }
 
-    public function restartAction() {
-	$this->dropcreateAction();
+
+
+    public function rebuildAction() {
+	echo $this->dropAction();
+	echo $this->createAction();
+
+	$request = $this->getRequest();
+	if (!$request instanceof ConsoleRequest){
+            throw new \RuntimeException('You can only use this action from a console!');
+        }
 
 	// Add user and site
-	$bcrypt = new \Zend\Crypt\Password\Bcrypt();
+	$bcrypt = new Bcrypt();
 	$user1 = new User('Alice', $bcrypt->create('password'), 'alice@gmail.com');
 	$user2 = new User('Bob', $bcrypt->create('password'), 'bob@gmail.com');
 
@@ -87,22 +113,40 @@ class ConsoleController extends AbstractActionController implements EntityManage
 
 	// Add components
 	$twitter = new Twitter('<i>tweet:-)</i><br/>');
-	$facebook = new Facebook('<b>Face!</b><br/>', '45644523');
+	$contact = new Contact('Send us a message', 'trond.albinussen@gmail.com', 'Message sent.');
+
+	//$board = new \MessageBoard\Entity\Board('My message board');
+
+	//$message1 = new \MessageBoard\Entity\Message('Alice Jones', 'Alice says hi', 'Hi from Alice');
+	//$message2 = new \MessageBoard\Entity\Message('Bob Olsen', 'Bob says hi', 'Hi from Bob');
+
+	//$this->em->persist($message1);
+	//$this->em->persist($message2);
+
+	//$board->addMessage($message1);
+	//$board->addMessage($message2);
 
 	$node1 = new Node($twitter);
-	$node2 = new Node($facebook);
+	$node2 = new Node($contact);
+	//$node3 = new Node($board);
+
+	$node2->setParent($node1);
+	//$node3->setParent($node1);
 
 	$page->addNode($node1);
 	$page->addNode($node2);
+	//$page->addNode($node3);
 
 	$this->em->persist($twitter);
-	$this->em->persist($facebook);
+	$this->em->persist($contact);
+	//$this->em->persist($board);
 	$this->em->persist($node1);
 	$this->em->persist($node2);
+	//$this->em->persist($node3);
 
 	$this->em->flush();
 
-	return 'Seeding done' . PHP_EOL;
+	return 'Database populated' . PHP_EOL;
     }
 
 }
