@@ -150,4 +150,13 @@ class PageService implements EntityManagerAware {
 	return $pages[0];
     }
 
+    public function getNodeTree(Page $page) {
+        $query = $this->em->createQuery('SELECT n FROM Scc\Entity\Node n WHERE n.page = :page')
+                ->setParameter('page', $page);
+        $nodeArray = $query->getArrayResult();
+
+        $nodeRepo = $this->em->getRepository('Scc\Entity\Node');
+        return $nodeRepo->buildTree($nodeArray);
+    }
+
 }

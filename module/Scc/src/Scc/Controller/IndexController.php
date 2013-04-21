@@ -43,7 +43,7 @@ class IndexController extends AbstractActionController
 
 	$page = $this->pageService->findByMaterializedPath($paths);
 
-	if (!$page) {
+        if (!$page) {
 	    $this->getResponse()-> setStatusCode(404);
 	    return;
 	}
@@ -59,13 +59,13 @@ class IndexController extends AbstractActionController
 	foreach ($page->getNodes() as $node) {
 	    $components[] = $this->nodeService->findByNode($node);
 	}*/
-                
+
 	$view = new ViewModel(array(
 	    'page' => $page,
 	    'path' => $this->pageService->getMaterializedPath($page),
 	    'node' => $nodes[0]
 	));
-        
+
         // first node is always connected to an panel
         $view->setTemplate('scc/panel/index');
 	return $view;

@@ -4,12 +4,5 @@ $this->headTitle($this->page->getTitle());
 
 foreach ($this->components as $component) {
     $helperName = $component->getNsPrefix() . '\\View\\Helper\\' . $component->getNsSuffix();
-
-
     echo $this->$helperName()->handle($component);
-    /*if ($component instanceof \Scc\Entity\ContainerAware) {
-	echo $this->$helperName()->renderStart($component);
-    } else {
-	echo $this->$helperName()->render($component);
-    }*/
 }

@@ -2,10 +2,10 @@
 
 namespace Scc\Entity\Repository;
 
-use Doctrine\ORM\EntityRepository;
+use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
 use Scc\Entity\Node;
 
-class NodeRepository extends EntityRepository {
+class NodeRepository extends NestedTreeRepository {
 
     public function getComponent(Node $node) {
 	$fqcName = $node->getClassName();
