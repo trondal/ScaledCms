@@ -2,9 +2,9 @@
     "minimum-stability": "stable",
     "require": {
         "php": ">=5.3.3",
-        "doctrine/doctrine-orm-module": "*",
+        "doctrine/doctrine-orm-module": "0.7.0",
         "doctrine/migrations":"dev-master",
-        "zendframework/zendframework":"2.1.*",
-        "gedmo/doctrine-extensions":"2.3.*"
+        "zendframework/zendframework":"2.1.5",
+        "gedmo/doctrine-extensions":"2.3.5"
     }
 }
