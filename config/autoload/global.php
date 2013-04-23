@@ -17,7 +17,7 @@ return array(
 		'query_cache' => 'array',
 		'result_cache' => 'array',
 		'driver' => 'orm_default',
-		'generate_proxies' => false,
+		'generate_proxies' => true,
 		'proxy_dir' => sys_get_temp_dir(),
 		'proxy_namespace' => 'DoctrineORMModule\Proxy',
 		'filters' => array()

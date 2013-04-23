@@ -5,7 +5,7 @@ namespace Scc\Service;
 use Scc\Controller\EntityManagerAware;
 use Doctrine\ORM\EntityManager;
 
-class Site implements EntityManagerAware {
+class SiteService implements EntityManagerAware {
 
     /**
      * @var EntityManager
@@ -25,4 +25,10 @@ class Site implements EntityManagerAware {
 			->findOneBy(array('name' => $name));
     }
 
+    public function findOneByHostName($hostName) {
+        $query = $this->em->createQuery('SELECT s FROM Scc\Entity\Site s JOIN s.hostNames h
+            WHERE h.hostName = :hostName')
+            ->setParameter('hostName', $hostName);
+        return $query->getOneOrNullResult();
+    }
 }

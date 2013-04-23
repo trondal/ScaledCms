@@ -124,23 +124,25 @@ class PageService implements EntityManagerAware {
 	return $repo->findOneBy(array('slug' => $slug));
     }
 
-    public function findByMaterializedPath(array $paths) {
+    public function findByMaterializedPathAndSite(array $paths, \Scc\Entity\Site $site) {
 	$query = null;
 	if (empty($paths)) {
 	    $query = $this->em->createQuery(
 		'SELECT a FROM Scc\Entity\Page a, Scc\Entity\Page c
 		 WHERE c.lft >= a.lft AND c.rgt <= a.rgt AND c.slug IS NULL
-		 AND c.slug IS NULL
-		 ORDER BY a.lft DESC');
+		 AND c.slug IS NULL AND c.site = :site
+                 ORDER BY a.lft DESC')
+                 ->setParameter('site', $site);
 	} else {
 	    $last = end($paths);
 	    $query = $this->em->createQuery(
 		'SELECT a FROM Scc\Entity\Page a, Scc\Entity\Page c
 		 WHERE c.lft >= a.lft AND c.rgt <= a.rgt AND c.slug IN (:slugs)
-		 AND c.slug = :slug
-		 ORDER BY a.lft DESC
+		 AND c.slug = :slug AND c.site = :site  
+                 ORDER BY a.lft DESC
 		')->setParameter(':slug', $last)
-		->setParameter(':slugs', $paths);
+		->setParameter(':slugs', $paths)
+                ->setParameter(':site', $site);
 	}
 	$query->setMaxResults(1);
 	$pages = $query->getResult();

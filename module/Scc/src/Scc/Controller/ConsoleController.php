@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Tools\SchemaTool;
 use RuntimeException;
 use Scc\Entity\Contact;
+use Scc\Entity\HostName;
 use Scc\Entity\Node;
 use Scc\Entity\Page;
 use Scc\Entity\Panel;
@@ -78,6 +79,18 @@ class ConsoleController extends AbstractActionController implements EntityManage
 	$site2 = new Site('Alice\'s second site', 'alice2');
 	$site3 = new Site('Bob\'s site', 'bob');
 
+        $hostName1 = new HostName('alice.scaledcms.trondal');
+        $site1->addHostName($hostName1);
+        
+        $hostName2 = new HostName('alice2.scaledcms.trondal');
+        $site1->addHostName($hostName2);
+        
+        $hostName3 = new HostName('alice.test.scaledcms.trondal');
+        $site2->addHostName($hostName3);
+        
+        $hostName4 = new HostName('bob.scaledcms.trondal');
+        $site3->addHostName($hostName4);
+        
 	$user1->addSite($site1);
 	$user1->addSite($site2);
 	$user2->addSite($site3);
@@ -87,6 +100,11 @@ class ConsoleController extends AbstractActionController implements EntityManage
 	$this->em->persist($site1);
 	$this->em->persist($site2);
 	$this->em->persist($site3);
+        
+        $this->em->persist($hostName1);
+        $this->em->persist($hostName2);
+        $this->em->persist($hostName3);
+        $this->em->persist($hostName4);
 
 	// Add pages
 	$page = new Page('index');

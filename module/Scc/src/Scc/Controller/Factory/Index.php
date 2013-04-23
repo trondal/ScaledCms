@@ -14,6 +14,7 @@ class Index implements FactoryInterface {
 	$controller = new IndexController;
 	$controller->setPageService($serviceLocator->get('Scc\Service\PageService'));
 	$controller->setNodeService($serviceLocator->get('Scc\Service\NodeService'));
+        $controller->setSiteService($serviceLocator->get('Scc\Service\SiteService'));
 	return $controller;
     }
 

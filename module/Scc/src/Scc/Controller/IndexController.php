@@ -4,12 +4,13 @@ namespace Scc\Controller;
 
 use Scc\Service\NodeService;
 use Scc\Service\PageService;
+use Scc\Service\SiteServiceAware;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 use Zend\View\Model\ViewModel;
 
 class IndexController extends AbstractActionController
-    implements ResourceInterface, PageServiceAware, NodeServiceAware {
+    implements ResourceInterface, PageServiceAware, NodeServiceAware, SiteServiceAware {
 
     /**
      * @var PageService
@@ -20,6 +21,11 @@ class IndexController extends AbstractActionController
      * @var NodeService
      */
     protected $nodeService;
+    
+    /**
+     * @var SiteService 
+     */
+    protected $siteService;
 
     public function setPageService(PageService $pageService){
 	$this->pageService = $pageService;
@@ -29,11 +35,20 @@ class IndexController extends AbstractActionController
 	$this->nodeService = $nodeService;
     }
 
+    public function setSiteService(\Scc\Service\SiteService $siteService) {
+        $this->siteService = $siteService;
+    }
+    
     public function getResourceId() {
 	return __CLASS__;
     }
 
     public function indexAction() {
+        $serverUrl = $this->getServiceLocator()->get('viewhelpermanager')->get('ServerUrl');
+        // Strip ports due to Varnish.
+        $tmpArray = explode(':', $serverUrl->getHost());
+        $hostName = $tmpArray[0]; 
+
 	$ary[] = $this->params()->fromRoute('a');
 	$ary[] = $this->params()->fromRoute('b');
 	$ary[] = $this->params()->fromRoute('c');
@@ -41,7 +56,8 @@ class IndexController extends AbstractActionController
 
 	$paths = array_filter($ary);
 
-	$page = $this->pageService->findByMaterializedPath($paths);
+        $site = $this->siteService->findOneByHostName($hostName);
+	$page = $this->pageService->findByMaterializedPathAndSite($paths, $site);
 
         if (!$page) {
 	    $this->getResponse()-> setStatusCode(404);

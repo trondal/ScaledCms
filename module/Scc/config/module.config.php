@@ -12,7 +12,7 @@ return array(
 		'type' => 'Zend\Mvc\Router\Http\Hostname',
 		'options' => array(
 		    'priority' => 75,
-		    'route' => ':subdomain.:domain.:tld',
+		    'route' => ':subdomain.[:optional.]:domain.:tld',
 		    'defaults' => array(
 			'__NAMESPACE__' => 'Scc\Controller',
 			'controller' => 'Index',
@@ -105,7 +105,7 @@ return array(
 	'factories' => array(
 	    'translator' => 'Zend\I18n\Translator\TranslatorServiceFactory',
 	    'Scc\Service\User' => 'Scc\Service\Factory\User',
-	    'Scc\Service\Site' => 'Scc\Service\Factory\Site',
+	    'Scc\Service\SiteService' => 'Scc\Service\Factory\Site',
 	    'Scc\Service\Acl' =>  'Scc\Service\Factory\AclFactory',
             'Scc\Service\PageService' => 'Scc\Service\Factory\Page',
 	    'Scc\Form\LoginForm' => 'Scc\Form\Factory\LoginFormFactory',
