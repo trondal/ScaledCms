@@ -5,6 +5,8 @@
         "doctrine/doctrine-orm-module": "0.7.0",
         "doctrine/migrations":"dev-master",
         "zendframework/zendframework":"2.1.5",
-        "gedmo/doctrine-extensions":"2.3.5"
+        "gedmo/doctrine-extensions":"2.3.5",
+        "phly/phly-restfully": "dev-master",
+        "phly/phly-simple-page": "dev-master"
     }
 }

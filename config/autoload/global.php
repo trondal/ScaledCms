@@ -3,6 +3,12 @@
 namespace Application;
 
 return array(
+    'db' => array(
+        'driver'         => 'Pdo_Pgsql',
+        'dsn'            => 'pgsql:dbname=scaledcms;host=localhost',
+        'username' => 'scaledcms',
+        'password' => 'scaledcms'
+    ),
     'doctrine' => array(
 	'connection' => array(
 	    // default connection name

@@ -4,7 +4,9 @@ return array(
     'modules' => array(
 	'Scc',
 	'DoctrineModule',
-	'DoctrineORMModule'
+	'DoctrineORMModule',
+        'PhlyRestfully',
+        'PhlySimplePage'
     ),
     'module_listener_options' => array(
 	'config_glob_paths' => array(
