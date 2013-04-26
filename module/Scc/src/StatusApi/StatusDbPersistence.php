@@ -2,9 +2,12 @@
 
 namespace StatusApi;
 
+use Doctrine\ORM\EntityManager;
 use PhlyRestfully\Exception\CreationException;
 use PhlyRestfully\Exception\PatchException;
 use PhlyRestfully\Exception\UpdateException;
+use Scc\Controller\EntityManagerAware;
+use StatusApi\Entity\Status;
 use Zend\Db\Exception\ExceptionInterface as DbException;
 use Zend\Db\TableGateway\TableGatewayInterface as TableGateway;
 use Zend\EventManager\EventManagerInterface;
@@ -12,7 +15,7 @@ use Zend\EventManager\ListenerAggregateInterface;
 use Zend\Stdlib\CallbackHandler;
 use Zend\Stdlib\Hydrator\ClassMethods as ClassMethodsHydrator;
 
-class StatusDbPersistence implements ListenerAggregateInterface, StatusPersistenceInterface {
+class StatusDbPersistence implements ListenerAggregateInterface, StatusPersistenceInterface, EntityManagerAware {
 
     /**
      * @var ClassMethodsHydrator
@@ -41,6 +44,12 @@ class StatusDbPersistence implements ListenerAggregateInterface, StatusPersisten
      * @var StatusValidator
      */
     protected $validator;
+    
+    protected $em;
+
+    public function setEntityManager(EntityManager $em) {
+        $this->em = $em;
+    }
 
     public function __construct(TableGateway $table, $user = null) {
         $this->table = $table;
@@ -87,7 +96,7 @@ class StatusDbPersistence implements ListenerAggregateInterface, StatusPersisten
         // Inject user into data
         $data['user'] = $this->user;
 
-        $status = new \StatusApi\Status();
+        $status = new Status();
         $status = $this->hydrator->hydrate($data, $status);
         if (!$this->validator->isValid($status)) {
             throw new CreationException('Status failed validation');
@@ -115,26 +124,19 @@ class StatusDbPersistence implements ListenerAggregateInterface, StatusPersisten
         }
 
         $data = (array) $data;
-        $rowset = $this->table->select(array('id' => $id));
-        $original = $rowset->current();
+        
+        $original = $this->em->getRepository('StatusApi\Entity\Status')->findOneBy(array('id' => $id));
+
         if (!$original) {
             throw new UpdateException('Cannot update; status not found', 404);
         }
 
-        $updated = $this->hydrator->hydrate($data, new \StatusApi\Status());
-        $updated->setId($original->getId());
-        $updated->setTimestamp($original->getTimestamp());
+        $hydrator = new \DoctrineModule\Stdlib\Hydrator\DoctrineObject($this->em, 'StatusApi\Entity\Status');
 
-        if (!$this->validator->isValid($updated)) {
-            throw new UpdateException('Updated status failed validation');
-        }
-
-        $data = $this->hydrator->extract($updated);
-        try {
-            $this->table->update($data, array('id' => $id));
-        } catch (DbException $exception) {
-            throw new UpdateException('DB exception when updating status', null, $exception);
-        }
+        $updated = $hydrator->hydrate($data, $original);
+        
+        $this->em->persist($updated);
+        $this->em->flush();
 
         return $updated;
     }
@@ -215,7 +217,8 @@ class StatusDbPersistence implements ListenerAggregateInterface, StatusPersisten
     }
 
     public function onFetchAll($e) {
-        return $this->table->fetchAll($this->user);
+        $result = $this->table->fetchAll($this->user);
+        return $result;
     }
 
 }

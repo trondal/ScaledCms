@@ -28,7 +28,6 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface, Aut
 
     public function onBootstrap(EventInterface $e) {
         $app = $e->getApplication();
-
         $eventManager = $e->getApplication()->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
@@ -193,7 +192,6 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface, Aut
                 $controllers, 'dispatch', array($this, 'onDispatchCollection'), -1
         );
 
-        // $sharedEvents->attach('Phpbnl13StatusApi\StatusResourcePublicController', 'getList.post', function ($e) {
         $sharedEvents->attach($controllers, 'getList.post', function ($e) {
                     $collection = $e->getParam('collection');
                     $collection->setResourceRoute('status_api/user');

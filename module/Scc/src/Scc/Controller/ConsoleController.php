@@ -175,8 +175,27 @@ class ConsoleController extends AbstractActionController implements EntityManage
 	$this->em->persist($node3);
         $this->em->persist($node4);
 
-	$this->em->flush();
-
+        /** FOO */
+        $status1 = new \StatusApi\Entity\Status('status', 1366808961, 'trond', 'text1');
+        $status2 = new \StatusApi\Entity\Status('status', 1366808962, 'trond', 'text2');
+        $status3 = new \StatusApi\Entity\Status('status', 1366808963, 'trond', 'text3');
+        $status4 = new \StatusApi\Entity\Status('status', 1366808964, 'trond', 'text4');
+        $status5 = new \StatusApi\Entity\Status('status', 1366808965, 'trond', 'text5');
+        $status6 = new \StatusApi\Entity\Status('status', 1366808966, 'trond', 'text6');
+        $status7 = new \StatusApi\Entity\Status('status', 1366808967, 'trond', 'text7');
+        $status8 = new \StatusApi\Entity\Status('status', 1366808968, 'rob', 'text8');
+        
+        $this->em->persist($status1);
+        $this->em->persist($status2);
+        $this->em->persist($status3);
+        $this->em->persist($status4);
+        $this->em->persist($status5);
+        $this->em->persist($status6);
+        $this->em->persist($status7);
+        $this->em->persist($status8);
+        
+        $this->em->flush();
+        
 	return 'Database populated' . PHP_EOL;
     }
 

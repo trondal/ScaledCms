@@ -20,19 +20,7 @@ class StatusValidator {
         }
 
         $type = $status->getType();
-        switch ($type) {
-            case StatusInterface::TYPE_STATUS:
-                return $this->validateStatus($status);
-                break;
-            case StatusInterface::TYPE_IMAGE:
-                return $this->validateImage($status);
-                break;
-            case StatusInterface::TYPE_LINK:
-                return $this->validateLink($status);
-                break;
-            default:
-                return false;
-        }
+        return true;
     }
 
     public function validateStatus(StatusInterface $status) {

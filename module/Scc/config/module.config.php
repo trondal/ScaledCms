@@ -7,8 +7,7 @@ use Zend\Crypt\Password\Bcrypt;
 
 return array(
     'status_api' => array(
-        'table' => 'status',
-        'page_size' => 10, // number of status items to return by default
+        'page_size' => 3, // number of status items to return by default
     ),
     'phlyrestfully' => array(
         'renderer' => array(
@@ -102,7 +101,7 @@ return array(
                             ),
                             'constraints' => array(
                                 'user' => '[a-z0-9_-]+',
-                                'id' => '[a-f0-9]{5,40}',
+                                'id' => '[0-9]',
                             ),
                         ),
                     ),
@@ -196,7 +195,7 @@ return array(
             
             'StatusApi\StatusResource' => 'StatusApi\Service\StatusResourceFactory',
             'StatusApi\StatusDbPersistence' => 'StatusApi\Service\StatusDbPersistenceFactory',
-            'StatusApi\DbTable' => 'StatusApi\Service\DbTableFactory',
+            'StatusApi\DbTableGateway' => 'StatusApi\Service\DbTableGatewayFactory',
             'Zend\Db\Adapter\Adapter' => 'Zend\Db\Adapter\AdapterServiceFactory',
         )
     ),
@@ -251,7 +250,8 @@ return array(
         'driver' => array(
             'orm_default' => array(
                 'paths' => array(
-                    __DIR__ . '/../src/Scc/Entity'
+                    __DIR__ . '/../src/Scc/Entity',
+                    __DIR__ . '/../src/StatusApi/Entity'
                 )
             )
         ),

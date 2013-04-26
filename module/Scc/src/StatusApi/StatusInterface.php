@@ -21,12 +21,6 @@ interface StatusInterface {
 
     public function setTimestamp($timestamp);
 
-    public function setImageUrl($url);
-
-    public function setLinkUrl($url);
-
-    public function setLinkTitle($title);
-
     public function getId();
 
     public function getType();
@@ -37,9 +31,4 @@ interface StatusInterface {
 
     public function getTimestamp();
 
-    public function getImageUrl();
-
-    public function getLinkUrl();
-
-    public function getLinkTitle();
 }
