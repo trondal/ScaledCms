@@ -7,11 +7,60 @@ use Zend\Crypt\Password\Bcrypt;
 
 return array(
     'router' => array(
-	'routes' => array(
-	    'index' => array(
+        'routes' => array(
+            'admin' => array(
 		'type' => 'Zend\Mvc\Router\Http\Hostname',
 		'options' => array(
-		    'priority' => 75,
+		    'priority' => 100,
+		    'route' => 'admin.:domain.:tld',
+		    'defaults' => array(
+			'__NAMESPACE__' => 'Scc\Controller',
+		    )
+		),
+		'may_terminate' => false,
+                'child_routes' => array(
+                    'admin-segment' => array(
+                        'type'    => 'Segment',
+                        'options' => array(
+                            'route'    => '/[:controller[/:action]]',
+                            'constraints' => array(
+                                'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                            ),
+                            'defaults' => array(
+				'controller' => 'Admin',
+				'action' => 'index'
+                            )
+                        )
+                    )
+                )
+	    ),
+            'api' => array(
+                'type' => 'Zend\Mvc\Router\Http\Hostname',
+                'priority' => 100,
+                'options' => array(
+                    'route' => 'api.:domain.:tld',
+                    'defaults' => array(
+                        '__NAMESPACE__' => 'Scc\Controller'
+                    )
+                ),
+                'may_terminate' => false,
+                'child_routes' => array(
+                    'api-segment' => array(
+                        'type' => 'Segment',
+                        'options' => array(
+                            'route' => '/[:controller[/:id]]',
+                            'constraints' => array(
+                                'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                            )
+                        )
+                    )
+                )
+            ),
+            'index' => array(
+		'type' => 'Zend\Mvc\Router\Http\Hostname',
+		'options' => array(
+		    'priority' => 50,
 		    'route' => ':subdomain.[:optional.]:domain.:tld',
 		    'defaults' => array(
 			'__NAMESPACE__' => 'Scc\Controller',
@@ -38,136 +87,109 @@ return array(
 			)
 		    )
 		)
-	    ),
-	    'admin' => array(
-		'type' => 'Zend\Mvc\Router\Http\Hostname',
-		'options' => array(
-		    'priority' => 100,
-		    'route' => 'admin.:domain.:tld',
-		    'defaults' => array(
-			'__NAMESPACE__' => 'Scc\Controller',
-		    )
-		),
-		'may_terminate' => false,
-                'child_routes' => array(
-                    'admin-segment' => array(
-                        'type'    => 'Segment',
-                        'options' => array(
-                            'route'    => '/[:controller[/:action]]',
-                            'constraints' => array(
-                                'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
-                            ),
-                            'defaults' => array(
-				'controller' => 'Admin',
-				'action' => 'index'
-                            )
+	    )
+        )
+    ),
+    'console' => array(
+        'router' => array(
+            'routes' => array(
+                'create' => array(
+                    'options' => array(
+                        'route' => 'db create',
+                        'defaults' => array(
+                            'controller' => 'Scc\Controller\Console',
+                            'action' => 'create'
+                        )
+                    )
+                ),
+                'drop' => array(
+                    'options' => array(
+                        'route' => 'db drop',
+                        'defaults' => array(
+                            'controller' => 'Scc\Controller\Console',
+                            'action' => 'drop'
+                        )
+                    )
+                ),
+                'rebuild' => array(
+                    'options' => array(
+                        'route' => 'db rebuild',
+                        'defaults' => array(
+                            'controller' => 'Scc\Controller\Console',
+                            'action' => 'rebuild'
                         )
                     )
                 )
-	    )
-	)
-    ),
-    'console' => array(
-	'router' => array(
-	    'routes' => array(
-		'create' => array(
-		    'options' => array(
-			'route' => 'db create',
-			'defaults' => array(
-			    'controller' => 'Scc\Controller\Console',
-			    'action' => 'create'
-			)
-		    )
-		),
-		'drop' => array(
-		    'options' => array(
-			'route' => 'db drop',
-			'defaults' => array(
-			    'controller' => 'Scc\Controller\Console',
-			    'action' => 'drop'
-			)
-		    )
-		),
-		'rebuild' => array(
-		    'options' => array(
-			'route' => 'db rebuild',
-			'defaults' => array(
-			    'controller' => 'Scc\Controller\Console',
-			    'action' => 'rebuild'
-			)
-		    )
-		)
-	    )
-	)
+            )
+        )
     ),
     'service_manager' => array(
-	'factories' => array(
-	    'translator' => 'Zend\I18n\Translator\TranslatorServiceFactory',
-	    'Scc\Service\User' => 'Scc\Service\Factory\User',
-	    'Scc\Service\SiteService' => 'Scc\Service\Factory\Site',
-	    'Scc\Service\Acl' =>  'Scc\Service\Factory\AclFactory',
+        'factories' => array(
+            'translator' => 'Zend\I18n\Translator\TranslatorServiceFactory',
+            'Scc\Service\User' => 'Scc\Service\Factory\User',
+            'Scc\Service\SiteService' => 'Scc\Service\Factory\Site',
+            'Scc\Service\Acl' => 'Scc\Service\Factory\AclFactory',
             'Scc\Service\PageService' => 'Scc\Service\Factory\Page',
-	    'Scc\Form\LoginForm' => 'Scc\Form\Factory\LoginFormFactory',
-	    'Scc\Service\NodeService' => 'Scc\Service\Factory\Node',
+            'Scc\Form\LoginForm' => 'Scc\Form\Factory\LoginFormFactory',
+            'Scc\Service\NodeService' => 'Scc\Service\Factory\Node',
             'Scc\Entity\Panel' => 'Scc\Service\Factory\PanelServiceFactory',
-            'Scc\Entity\Twitter' => 'Scc\Service\Factory\TwitterServiceFactory',
+            'Scc\Service\Twitter' => 'Scc\Service\Factory\TwitterServiceFactory',
             'Scc\Entity\Contact' => 'Scc\Service\Factory\ContactServiceFactory'
-	)
+        )
     ),
     'translator' => array(
-	'locale' => 'en_US',
-	'translation_file_patterns' => array(
-	    array(
-		'type' => 'phparray',
-		'base_dir' => __DIR__ . '/../language',
-		'pattern' => '%s.php'
-	    )
-	)
+        'locale' => 'en_US',
+        'translation_file_patterns' => array(
+            array(
+                'type' => 'phparray',
+                'base_dir' => __DIR__ . '/../language',
+                'pattern' => '%s.php'
+            )
+        )
     ),
     'controllers' => array(
-	'invokables' => array(
-	    'Scc\Controller\Contact' => 'Scc\Controller\ContactController',
-	    'Scc\Controller\Twitter' => 'Scc\Controller\TwitterController'
-	),
-	'factories' => array(
-	    'Scc\Controller\Index' => 'Scc\Controller\Factory\Index',
-	    'Scc\Controller\Console' => 'Scc\Controller\Factory\Console',
-	    'Scc\Controller\Page' => 'Scc\Controller\Factory\Page',
-	    'Scc\Controller\Admin' => 'Scc\Controller\Factory\Admin',
-	    'Scc\Controller\Login' => 'Scc\Controller\Factory\Login'
-	)
+        'invokables' => array(
+            'Scc\Controller\Contact' => 'Scc\Controller\ContactController',
+        ),
+        'factories' => array(
+            'Scc\Controller\Index' => 'Scc\Controller\Factory\Index',
+            'Scc\Controller\Console' => 'Scc\Controller\Factory\Console',
+            'Scc\Controller\Page' => 'Scc\Controller\Factory\Page',
+            'Scc\Controller\Admin' => 'Scc\Controller\Factory\Admin',
+            'Scc\Controller\Login' => 'Scc\Controller\Factory\Login',
+            'Scc\Controller\Twitter' => 'Scc\Controller\Factory\Twitter',
+        )
     ),
     'view_manager' => array(
-	'display_not_found_reason' => false,
-	'display_exceptions' => false,
-	'doctype' => 'HTML5',
-	'not_found_template' => 'error/404',
-	'exception_template' => 'error/index',
-	'template_map' => array(
-	    'layout/layout' => __DIR__ . '/../view/layout/layout.phtml',
-	    'application/index/index' => __DIR__ . '/../view/application/index/index.phtml',
-	    'error/404' => __DIR__ . '/../view/error/404.phtml',
-	    'error/index' => __DIR__ . '/../view/error/index.phtml'
-	),
-	'template_path_stack' => array(
-	    __DIR__ . '/../view'
-	)
+        'display_not_found_reason' => false,
+        'display_exceptions' => false,
+        'doctype' => 'HTML5',
+        'not_found_template' => 'error/404',
+        'exception_template' => 'error/index',
+        'template_map' => array(
+            'layout/layout' => __DIR__ . '/../view/layout/layout.phtml',
+            'application/index/index' => __DIR__ . '/../view/application/index/index.phtml',
+            'error/404' => __DIR__ . '/../view/error/404.phtml',
+            'error/index' => __DIR__ . '/../view/error/index.phtml'
+        ),
+        'template_path_stack' => array(
+            __DIR__ . '/../view'
+        )
     ),
     'doctrine' => array(
-	'eventmanager' => array(
-	    'orm_default' => array(
-		'subscribers' => array('Gedmo\Tree\TreeListener'/*, 'Scc\Event\NodeListener'*/)
-	    )
-	),
+        'eventmanager' => array(
+            'orm_default' => array(
+                'subscribers' => array('Gedmo\Tree\TreeListener'/* , 'Scc\Event\NodeListener' */)
+            )
+        ),
         'driver' => array(
             'orm_default' => array(
                 'paths' => array(
-		    __DIR__ . '/../src/Scc/Entity'
-		)
+                    __DIR__ . '/../src/Scc/Entity'
+                )
             )
         ),
-	'authentication' => array(
+        'authentication' => array(
             'orm_default' => array(
                 'objectManager' => 'Doctrine\ORM\EntityManager',
                 'identityClass' => 'Scc\Entity\User',
@@ -179,5 +201,8 @@ return array(
                 }
             )
         )
+    ),
+    'api' => array(
+        'page_size' => 10
     )
 );

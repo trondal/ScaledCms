@@ -24,13 +24,13 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface,
 	$moduleRouteListener = new ModuleRouteListener();
 	$moduleRouteListener->attach($eventManager);
 
-	$app->getEventManager()->attach(MvcEvent::EVENT_ROUTE,
+	/*$app->getEventManager()->attach(MvcEvent::EVENT_ROUTE,
 		array($this, 'checkAuthenticationControl'), -90
 	);
 
 	$app->getEventManager()->attach(MvcEvent::EVENT_ROUTE,
 		array($this, 'checkAccessControl'), -100
-	);
+	);*/
     }
 
     public function getConfig() {
@@ -143,5 +143,17 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface,
             )
         );
     }
+    
+    /*public function onRoute(MvcEvent $e) {
+        $matches  = $e->getRouteMatch();
+        if (!$matches) {
+            return;
+        }
+        
+        $controller = $matches->getParam('controller');
+        echo '<pre>';
+        var_dump($controller);
+        exit;
+    }*/
 
 }
