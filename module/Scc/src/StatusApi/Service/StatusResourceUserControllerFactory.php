@@ -18,7 +18,7 @@ class StatusResourceUserControllerFactory implements FactoryInterface {
         $controller = new ResourceController('StatusApi\StatusResourceController');
         $controller->setResource($resource);
         $controller->setPageSize($pageSize);
-        $controller->setRoute('status_api/user');
+        $controller->setRoute('api/status_api/user');
         $controller->setCollectionName('status');
         return $controller;
     }

@@ -18,125 +18,147 @@ return array(
     ),
     'router' => array(
         'routes' => array(
-            /* 'index' => array(
-              'type' => 'Zend\Mvc\Router\Http\Hostname',
-              'options' => array(
-              'priority' => 75,
-              'route' => ':subdomain.[:optional.]:domain.:tld',
-              'defaults' => array(
-              '__NAMESPACE__' => 'Scc\Controller',
-              'controller' => 'Index',
-              'action' => 'index'
-              )
-              ),
-              'may_terminate' => true,
-              'child_routes' => array(
-              'userslug' => array(
-              'type' => 'Zend\Mvc\Router\Http\Segment',
-              'options' => array(
-              'route' => '/[:a][/:b][/:c][/:d]',
-              'constraints' => array(
-              'a' => '[a-zA-Z][a-zA-Z0-9_-]+',
-              'b' => '[a-zA-Z][a-zA-Z0-9_-]+',
-              'c' => '[a-zA-Z][a-zA-Z0-9_-]+',
-              'd' => '[a-zA-Z][a-zA-Z0-9_-]+',
-              ),
-              'defaults' => array(
-              'controller' => 'Index',
-              'action' => 'index',
-              ),
-              )
-              )
-              )
-              ),
-              'admin' => array(
-              'type' => 'Zend\Mvc\Router\Http\Hostname',
-              'options' => array(
-              'priority' => 100,
-              'route' => 'admin.:domain.:tld',
-              'defaults' => array(
-              '__NAMESPACE__' => 'Scc\Controller',
-              )
-              ),
-              'may_terminate' => false,
-              'child_routes' => array(
-              'admin-segment' => array(
-              'type'    => 'Segment',
-              'options' => array(
-              'route'    => '/[:controller[/:action]]',
-              'constraints' => array(
-              'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
-              'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
-              ),
-              'defaults' => array(
-              'controller' => 'Admin',
-              'action' => 'index'
-              )
-              )
-              )
-              )
-              ), */
-            'status_api' => array(
-                'type' => 'Literal',
+            'index' => array(
+                'type' => 'Zend\Mvc\Router\Http\Hostname',
                 'options' => array(
-                    'route' => '/api/status',
+                    'priority' => 50,
+                    'route' => ':subdomain.[:optional.]:scaledcms.:tld',
                     'defaults' => array(
-                        'controller' => 'StatusApi\StatusResourcePublicController',
-                    ),
+                        '__NAMESPACE__' => 'Scc\Controller',
+                        'controller' => 'Index',
+                        'action' => 'index'
+                    )
+                ),
+                'may_terminate' => true,
+                'child_routes' => array(
+                    'userslug' => array(
+                        'type' => 'Zend\Mvc\Router\Http\Segment',
+                        'options' => array(
+                            'route' => '/[:a][/:b][/:c][/:d]',
+                            'constraints' => array(
+                                'a' => '[a-zA-Z][a-zA-Z0-9_-]+',
+                                'b' => '[a-zA-Z][a-zA-Z0-9_-]+',
+                                'c' => '[a-zA-Z][a-zA-Z0-9_-]+',
+                                'd' => '[a-zA-Z][a-zA-Z0-9_-]+',
+                            ),
+                            'defaults' => array(
+                                'controller' => 'Index',
+                                'action' => 'index',
+                            ),
+                        )
+                    )
+                )
+            ),
+            'admin' => array(
+                'type' => 'Zend\Mvc\Router\Http\Hostname',
+                'options' => array(
+                    'priority' => 100,
+                    'route' => 'admin.:domain.:tld',
+                    'defaults' => array(
+                        '__NAMESPACE__' => 'Scc\Controller',
+                    )
                 ),
                 'may_terminate' => false,
                 'child_routes' => array(
-                    'public' => array(
-                        'type' => 'Literal',
-                        'options' => array(
-                            'route' => '/public',
-                        ),
-                    ),
-                    'user' => array(
+                    'admin-segment' => array(
                         'type' => 'Segment',
                         'options' => array(
-                            'route' => '/user/:user[/:id]',
-                            'defaults' => array(
-                                'controller' => 'StatusApi\StatusResourceUserController',
-                            ),
+                            'route' => '/[:controller[/:action]]',
                             'constraints' => array(
-                                'user' => '[a-z0-9_-]+',
-                                'id' => '[0-9]',
+                                'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                             ),
-                        ),
-                    ),
-                    'documentation' => array(
+                            'defaults' => array(
+                                'controller' => 'Admin',
+                                'action' => 'index'
+                            )
+                        )
+                    )
+                )
+            ),
+            'api' => array(
+                'type' => 'Zend\Mvc\Router\Http\Hostname',
+                'options' => array(
+                    'priority' => 75,
+                    'route' => 'api.:domain.:tld',
+                ),
+                'may_terminate' => false,
+                'child_routes' => array(
+                    'status_api' => array(
                         'type' => 'Literal',
                         'options' => array(
-                            'route' => '/documentation',
+                            'route' => '/api/status',
                             'defaults' => array(
-                                'controller' => 'PhlySimplePage\Controller\Page',
-                                'template' => 'status_api/documentation',
-                            ),
+                                'controller' => 'StatusApi\StatusResourcePublicController',
+                            )
                         ),
-                        'may_terminate' => true,
+                        'may_terminate' => false,
                         'child_routes' => array(
-                            'collection' => array(
+                            'public' => array(
                                 'type' => 'Literal',
                                 'options' => array(
-                                    'route' => '/collection',
-                                    'defaults' => array(
-                                        'template' => 'status_api/documentation/collection',
-                                    ),
-                                ),
+                                    'route' => '/public',
+                                )
                             ),
-                            'status' => array(
+                            'user' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/user/:user[/:id]',
+                                    'defaults' => array(
+                                        'controller' => 'StatusApi\StatusResourceUserController',
+                                    ),
+                                    'constraints' => array(
+                                        'user' => '[a-z0-9_-]+',
+                                        'id' => '[0-9]',
+                                    )
+                                )
+                            ),
+                            'documentation' => array(
                                 'type' => 'Literal',
                                 'options' => array(
-                                    'route' => '/status',
+                                    'route' => '/documentation',
                                     'defaults' => array(
-                                        'template' => 'status_api/documentation/status',
-                                    ),
+                                        'controller' => 'PhlySimplePage\Controller\Page',
+                                        'template' => 'status_api/documentation',
+                                    )
                                 ),
-                            ),
-                        ),
-                    ),
-                ),
+                                'may_terminate' => true,
+                                'child_routes' => array(
+                                    'collection' => array(
+                                        'type' => 'Literal',
+                                        'options' => array(
+                                            'route' => '/collection',
+                                            'defaults' => array(
+                                                'template' => 'status_api/documentation/collection',
+                                            )
+                                        )
+                                    ),
+                                    'status' => array(
+                                        'type' => 'Literal',
+                                        'options' => array(
+                                            'route' => '/status',
+                                            'defaults' => array(
+                                                'template' => 'status_api/documentation/status',
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            ),
+            'index' => array(
+                'type' => 'Zend\Mvc\Router\Http\Hostname',
+                'options' => array(
+                    'priority' => 65,
+                    'route' => ':status.scaledcms.:tld',
+                    'defaults' => array(
+                        '__NAMESPACE__' => 'StatusApi\Controller',
+                        'controller' => 'Index',
+                        'action' => 'index'
+                    )
+                )
             )
         )
     ),
@@ -176,7 +198,7 @@ return array(
     'service_manager' => array(
         'aliases' => array(
             'StatusApi\DbAdapter' => 'Zend\Db\Adapter\Adapter',
-            'StatusApi\PersistenceListener' => 'StatusApi\StatusDbPersistence',
+            'StatusApi\PersistenceListener' => 'StatusApi\StatusService',
         ),
         'invokables' => array(
             'Hydrator\ClassMethods' => 'Zend\Stdlib\Hydrator\ClassMethods',
@@ -194,7 +216,7 @@ return array(
             'Scc\Entity\Contact' => 'Scc\Service\Factory\ContactServiceFactory',
             
             'StatusApi\StatusResource' => 'StatusApi\Service\StatusResourceFactory',
-            'StatusApi\StatusDbPersistence' => 'StatusApi\Service\StatusDbPersistenceFactory',
+            'StatusApi\StatusService' => 'StatusApi\Service\StatusServiceFactory',
             'StatusApi\DbTableGateway' => 'StatusApi\Service\DbTableGatewayFactory',
             'Zend\Db\Adapter\Adapter' => 'Zend\Db\Adapter\AdapterServiceFactory',
         )
@@ -212,7 +234,8 @@ return array(
     'controllers' => array(
         'invokables' => array(
             'Scc\Controller\Contact' => 'Scc\Controller\ContactController',
-            'Scc\Controller\Twitter' => 'Scc\Controller\TwitterController'
+            'Scc\Controller\Twitter' => 'Scc\Controller\TwitterController',
+            'StatusApi\Controller\Index' => 'StatusApi\Controller\IndexController'
         ),
         'factories' => array(
             'Scc\Controller\Index' => 'Scc\Controller\Factory\Index',
@@ -220,6 +243,7 @@ return array(
             'Scc\Controller\Page' => 'Scc\Controller\Factory\Page',
             'Scc\Controller\Admin' => 'Scc\Controller\Factory\Admin',
             'Scc\Controller\Login' => 'Scc\Controller\Factory\Login',
+            
             'StatusApi\StatusResourceUserController' => 'StatusApi\Service\StatusResourceUserControllerFactory',
             'StatusApi\StatusResource' => 'StatusApi\Service\StatusResourceFactory',
             'StatusApi\StatusResourcePublicController' => 'StatusApi\Service\StatusResourcePublicControllerFactory',

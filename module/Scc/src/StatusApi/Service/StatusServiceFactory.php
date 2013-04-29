@@ -2,20 +2,20 @@
 
 namespace StatusApi\Service;
 
-use StatusApi\StatusDbPersistence;
+use StatusApi\StatusService;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class StatusDbPersistenceFactory implements FactoryInterface {
+class StatusServiceFactory implements FactoryInterface {
 
     public function createService(ServiceLocatorInterface $services) {
         $em = $services->get('Doctrine\ORM\EntityManager');
-        $table = $services->get('StatusApi\DbTableGateway');
+        //$table = $services->get('StatusApi\DbTableGateway');
 
-        $persistence = new StatusDbPersistence($table);
+        $service = new StatusService();
         //$persistence = new StatusDbPersistence();
-        $persistence->setEntityManager($em);
-        return $persistence;
+        $service->setEntityManager($em);
+        return $service;
     }
 
 }

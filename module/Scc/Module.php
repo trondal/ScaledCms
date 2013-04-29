@@ -194,7 +194,7 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface, Aut
 
         $sharedEvents->attach($controllers, 'getList.post', function ($e) {
                     $collection = $e->getParam('collection');
-                    $collection->setResourceRoute('status_api/user');
+                    $collection->setResourceRoute('api/status_api/user');
                 });
 
         // Set a listener on the renderCollection.resource event to ensure 
@@ -206,14 +206,14 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface, Aut
                     $route = $eventParams['route'];
                     $routeParams = $eventParams['routeParams'];
 
-                    if ($route != 'status_api/user' && $route != 'status_api/public') {
+                    if ($route != 'api/status_api/user' && $route != 'api/status_api/public') {
                         return;
                     }
 
                     $resource = $eventParams['resource'];
 
                     if ($resource instanceof Status) {
-                        $eventParams['route'] = 'status_api/user';
+                        $eventParams['route'] = 'api/status_api/user';
                         $eventParams['routeParams']['user'] = $resource->getUser();
                         return;
                     }
@@ -226,7 +226,7 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface, Aut
                         return;
                     }
 
-                    $eventParams['route'] = 'status_api/user';
+                    $eventParams['route'] = 'api/status_api/user';
                     $eventParams['routeParams']['user'] = $resource['user'];
                 });
 
@@ -263,15 +263,24 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface, Aut
         $headers->addHeaderLine('content-type', 'application/json');
     }
 
+    /**
+     * Add link to header
+     * @param type $e
+     */
     public function setDocumentationLink($e) {
         $controller = $e->getTarget();
-        $docsUrl = $controller->halLinks()->createLink('status_api/documentation', false);
+        $docsUrl = $controller->halLinks()->createLink('api/status_api/documentation', true);
         $response = $e->getResponse();
         $response->getHeaders()->addHeaderLine(
                 'Link', sprintf('<%s>; rel="describedby"', $docsUrl)
         );
     }
 
+    /**
+     * Add counts to collection
+     * @param type $e
+     * @return type
+     */
     public function onDispatchCollection($e) {
         $result = $e->getResult();
         if (!$result instanceof RestfulJsonModel) {
@@ -304,9 +313,9 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface, Aut
         $link = new Link('describedby');
 
         if ($resource instanceof HalResource) {
-            $link->setRoute('status_api/documentation/status');
+            $link->setRoute('api/status_api/documentation/status');
         } else {
-            $link->setRoute('status_api/documentation/collection');
+            $link->setRoute('api/status_api/documentation/collection');
         }
         $resource->getLinks()->add($link);
     }

@@ -14,8 +14,9 @@ use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
 use Zend\Stdlib\CallbackHandler;
 use Zend\Stdlib\Hydrator\ClassMethods as ClassMethodsHydrator;
+use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 
-class StatusDbPersistence implements ListenerAggregateInterface, StatusPersistenceInterface, EntityManagerAware {
+class StatusService implements ListenerAggregateInterface, StatusPersistenceInterface, EntityManagerAware {
 
     /**
      * @var ClassMethodsHydrator
@@ -26,11 +27,6 @@ class StatusDbPersistence implements ListenerAggregateInterface, StatusPersisten
      * @var CallbackHandler[]
      */
     protected $listeners = array();
-
-    /**
-     * @var TableGateway
-     */
-    protected $table;
 
     /**
      * User for whom to manipulate status; none removes ability to
@@ -51,11 +47,9 @@ class StatusDbPersistence implements ListenerAggregateInterface, StatusPersisten
         $this->em = $em;
     }
 
-    public function __construct(TableGateway $table, $user = null) {
-        $this->table = $table;
+    public function __construct($user = null) {
         $this->user = $user;
         $this->validator = new StatusValidator();
-        $this->hydrator = new ClassMethodsHydrator();
     }
 
     public function attach(EventManagerInterface $events) {
@@ -96,8 +90,9 @@ class StatusDbPersistence implements ListenerAggregateInterface, StatusPersisten
         // Inject user into data
         $data['user'] = $this->user;
 
-        $status = new Status();
-        $status = $this->hydrator->hydrate($data, $status);
+        $hydrator = new DoctrineHydrator($this->em, 'StatusApi\Entity\Status');
+        $status = $hydrator->hydrate($data, new Status());
+
         if (!$this->validator->isValid($status)) {
             throw new CreationException('Status failed validation');
         }
@@ -191,10 +186,15 @@ class StatusDbPersistence implements ListenerAggregateInterface, StatusPersisten
         if (false === $id = $e->getParam('id', false)) {
             return false;
         }
-        if (!$this->table->delete(array('id' => $id))) {
+        
+        $repo = $this->em->getRepository('StatusApi\Entity\Status');
+        $item = $repo->find($id);
+        if (!$item) {
             return false;
         }
-
+        $this->em->remove($item);
+        $this->em->flush();
+        
         return true;
     }
 
@@ -208,8 +208,8 @@ class StatusDbPersistence implements ListenerAggregateInterface, StatusPersisten
             $criteria['user'] = $this->user;
         }
 
-        $rowset = $this->table->select($criteria);
-        $item = $rowset->current();
+        $repo = $this->em->getRepository('StatusApi\Entity\Status');
+        $item = $repo->findOneBy($criteria);
         if (!$item) {
             return false;
         }
@@ -217,8 +217,12 @@ class StatusDbPersistence implements ListenerAggregateInterface, StatusPersisten
     }
 
     public function onFetchAll($e) {
-        $result = $this->table->fetchAll($this->user);
-        return $result;
+        $query = $this->em->createQuery('SELECT s FROM \StatusApi\Entity\Status AS s
+          WHERE s.user = :user ORDER BY s.timestamp ASC')
+          ->setParameter('user', $this->user);
+        
+        $adapter  = new \DoctrineORMModule\Paginator\Adapter\DoctrinePaginator(new \Doctrine\ORM\Tools\Pagination\Paginator($query));
+        return new \Zend\Paginator\Paginator($adapter);
     }
 
 }
