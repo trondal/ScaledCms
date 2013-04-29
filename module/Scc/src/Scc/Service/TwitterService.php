@@ -70,17 +70,13 @@ class TwitterService implements EntityManagerAware, ListenerAggregateInterface {
         if (false === $id = $e->getParam('id', false)) {
             return false;
         }
-        $query = $this->em->createQuery('SELECT t FROM \Scc\Entity\Twitter t WHERE t.id = :id')
-                ->setParameter('id', $id);
-        return $query->getArrayResult();
         $repo = $this->em->getRepository('Scc\Entity\Twitter');
-        return $repo->find($id);
+        return $repo->findOneBy(array('id' => $id));
     }
     
     public function onFetchAll($e) {
-        echo '<pre>';
-        var_dump('FETCH ALL!!!!');
-        exit;
+        $repo = $this->em->getRepository('Scc\Entity\Twitter');
+        return $repo->findAll();
     }
     
 }

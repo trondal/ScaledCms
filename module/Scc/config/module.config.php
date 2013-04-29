@@ -123,7 +123,15 @@ return array(
             )
         )
     ),
+    'phlyrestfully' => array(
+        'renderer' => array(
+            'default_hydrator' => 'Hydrator\ClassMethods',
+        ),
+    ),
     'service_manager' => array(
+        'invokables' => array(
+            'Hydrator\ClassMethods' => 'Zend\Stdlib\Hydrator\ClassMethods'
+        ),
         'factories' => array(
             'translator' => 'Zend\I18n\Translator\TranslatorServiceFactory',
             'Scc\Service\User' => 'Scc\Service\Factory\User',
@@ -133,8 +141,8 @@ return array(
             'Scc\Form\LoginForm' => 'Scc\Form\Factory\LoginFormFactory',
             'Scc\Service\NodeService' => 'Scc\Service\Factory\Node',
             'Scc\Entity\Panel' => 'Scc\Service\Factory\PanelServiceFactory',
+            'Scc\Entity\Contact' => 'Scc\Service\Factory\ContactServiceFactory',
             'Scc\Service\Twitter' => 'Scc\Service\Factory\TwitterServiceFactory',
-            'Scc\Entity\Contact' => 'Scc\Service\Factory\ContactServiceFactory'
         )
     ),
     'translator' => array(
