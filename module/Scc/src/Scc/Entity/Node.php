@@ -75,10 +75,12 @@ class Node {
      */
     protected $component;
 
-    public function __construct(\Scc\Entity\ComponentAbstract $component) {
-        $this->component = $component;
-	$this->className = $component->getClassName();
-	$component->setNode($this);
+    public function __construct(\Scc\Entity\ComponentAbstract $component = null) {
+        if ($component) {
+            $this->component = $component;
+            $this->className = $component->getClassName();
+            $component->setNode($this);
+        }
     }
 
     public function getId() {
@@ -110,6 +112,12 @@ class Node {
     }
     
     public function loadComponent(\Scc\Entity\ComponentAbstract $component) {
+        $this->component = $component;
+        $this->className = $component->getClassName();
+        $component->setNode($this);
+    }
+    
+    public function setComponent(\Scc\Entity\ComponentAbstract $component) {
         $this->component = $component;
         $this->className = $component->getClassName();
         $component->setNode($this);

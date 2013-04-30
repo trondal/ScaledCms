@@ -1,0 +1,14 @@
+<?php
+
+$form->setAttribute('action', '')->prepare();
+
+echo $this->form()->openTag($form);
+
+$nodes = $form->get('nodes');
+foreach ($nodes as $element) {
+    echo $this->formElement($element);       // <-- Magic!
+    echo $this->formElementErrors($element);
+}
+
+echo $this->formElement($form->get('submit'));
+echo $this->form()->closeTag();

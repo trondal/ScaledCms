@@ -10,9 +10,9 @@ return array(
         'routes' => array(
             'admin' => array(
 		'type' => 'Zend\Mvc\Router\Http\Hostname',
+                'priority' => 100,
 		'options' => array(
-		    'priority' => 100,
-		    'route' => 'admin.:domain.:tld',
+		    'route' => 'admin.scaledcms.trondal',
 		    'defaults' => array(
 			'__NAMESPACE__' => 'Scc\Controller',
 		    )

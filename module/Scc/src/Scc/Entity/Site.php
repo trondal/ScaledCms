@@ -35,7 +35,7 @@ class Site {
     private $user;
 
     /**
-     * @ORM\OneToMany(targetEntity="Page", mappedBy="site")
+     * @ORM\OneToMany(targetEntity="Page", mappedBy="site", cascade={"persist"})
      * @ORM\OrderBy({"lft" = "ASC"})
      */
     private $pages;
@@ -70,9 +70,23 @@ class Site {
      * @param Page $page
      * @return Site
      */
-    public function addPage(Page $page) {
+    /*public function addPage(Page $page) {
 	$this->pages[] = $page;
 	$page->setSite($this);
+    }*/
+    
+    public function addPages(Collection $pages) {
+        foreach($pages as $page) {
+            $page->setSite($this);
+            $this->pages->add($page);
+        }
+    }
+    
+    public function removePages(Collection $pages) {
+        foreach ($pages as $page) {
+            $page->setSite(null);
+            $this->pages->removeElement($page);
+        }
     }
 
     /**

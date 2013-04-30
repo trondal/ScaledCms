@@ -1,0 +1,10 @@
+<?php
+
+$form->setAttribute('action', '')->prepare();
+
+echo $this->form()->openTag($form);
+
+echo $this->formCollection($form);
+
+echo $this->formElement($form->get('submit'));
+echo $this->form()->closeTag();

@@ -18,7 +18,7 @@ abstract class ComponentAbstract {
 
     /**
      * @var Node
-     * @ORM\ManyToOne(targetEntity="Node")
+     * @ORM\ManyToOne(targetEntity="Node", cascade={"persist"})
      */
     private $node;
 

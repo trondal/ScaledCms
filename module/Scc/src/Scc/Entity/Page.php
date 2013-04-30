@@ -166,7 +166,6 @@ class Page {
      */
     public function setSite(Site $site) {
 	$this->site = $site;
-	return $this;
     }
 
     /**

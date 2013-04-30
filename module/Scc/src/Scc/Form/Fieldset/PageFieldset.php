@@ -20,7 +20,8 @@ class PageFieldset extends Fieldset implements InputFilterProviderInterface {
 	$this->setObject(new Page('', ''));
 
 	$this->add(array(
-	    'name' => 'name',
+	    'name' => 'title',
+            'type' => 'Zend\Form\Element\Text',
 	    'options' => array(
 		'label' => 'Name'
 	    )

@@ -2,8 +2,8 @@
 
 namespace Scc\Form\Fieldset;
 
+use Scc\Controller\ComponentHydrator;
 use Scc\Entity\Site;
-use DoctrineModule\Stdlib\Hydrator\DoctrineObject;
 use Zend\Form\Fieldset;
 use Zend\InputFilter\InputFilterProviderInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -15,21 +15,14 @@ class SiteFieldset extends Fieldset implements InputFilterProviderInterface {
 
 	$em = $serviceLocator->get('Doctrine\ORM\EntityManager');
 
-	$hydrator = new DoctrineObject($em, 'Scc\Entity\Site');
+	$hydrator = new ComponentHydrator($em, 'Scc\Entity\Site');
 	$this->setHydrator($hydrator);
 	$this->setObject(new Site('', ''));
 
 	$this->add(array(
-	    'name' => 'name',
+	    'name' => 'title',
 	    'options' => array(
-		'label' => 'Name'
-	    )
-	));
-
-	$this->add(array(
-	    'name' => 'slug',
-	    'options' => array(
-		'label' => 'Slug'
+		'label' => 'Title'
 	    )
 	));
 
@@ -48,11 +41,8 @@ class SiteFieldset extends Fieldset implements InputFilterProviderInterface {
 	return array(
 	    'name' => array(
 		'required' => true
-	    ),
-	    'slug' => array(
-		'required' => true
 	    )
-	);
+        );
     }
 
 }
