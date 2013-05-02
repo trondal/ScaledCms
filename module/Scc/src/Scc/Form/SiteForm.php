@@ -6,6 +6,7 @@ use Scc\Controller\ComponentHydrator;
 use Scc\Form\Fieldset\SiteFieldset;
 use Zend\Form\Form;
 use Zend\ServiceManager\ServiceManager;
+use DoctrineModule\Stdlib\Hydrator\DoctrineObject;
 
 class SiteForm extends Form {
     
@@ -13,7 +14,7 @@ class SiteForm extends Form {
         parent::__construct('site');
         $em = $services->get('Doctrine\ORM\EntityManager');
         
-        $this->setHydrator(new ComponentHydrator($em, 'Scc\Entity\Site'));
+        $this->setHydrator(new DoctrineObject($em, 'Scc\Entity\Site'));
         
         $siteFieldset = new SiteFieldset($services);
         $siteFieldset->setName('sites');

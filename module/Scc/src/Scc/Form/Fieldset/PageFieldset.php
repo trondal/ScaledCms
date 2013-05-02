@@ -19,16 +19,25 @@ class PageFieldset extends Fieldset implements InputFilterProviderInterface {
 	$this->setHydrator($hydrator);
 	$this->setObject(new Page('', ''));
 
+        $this->add(array(
+            'name' => 'id',
+            'type' => 'Zend\Form\Element\Text',
+            'options' => array(
+                'label' => 'Page id'
+            )
+        ));
+        
 	$this->add(array(
 	    'name' => 'title',
             'type' => 'Zend\Form\Element\Text',
 	    'options' => array(
-		'label' => 'Name'
+		'label' => 'Title'
 	    )
 	));
 
 	$this->add(array(
 	    'name' => 'slug',
+            'type' => 'Zend\Form\Element\Text',
 	    'options' => array(
 		'label' => 'Slug'
 	    )
@@ -37,11 +46,11 @@ class PageFieldset extends Fieldset implements InputFilterProviderInterface {
 
     public function getInputFilterSpecification() {
 	return array(
-	    'name' => array(
+	    'title' => array(
 		'required' => true
 	    ),
 	    'slug' => array(
-		'required' => true
+		'required' => false
 	    )
 	);
     }

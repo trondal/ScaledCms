@@ -27,7 +27,19 @@ class AdminController extends AbstractActionController implements ResourceInterf
         $form = new \Scc\Form\SiteForm($this->getServiceLocator());
         $site = $em->getRepository('Scc\Entity\Site')->find(1);
         $form->bind($site);
-        
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $post = $request->getPost();
+            $form->setData($post);
+            if ($form->isValid()) {
+                $em->persist($site);
+                $em->flush();
+            } else {
+                echo '<pre>';
+                var_dump('not valid');
+                exit;
+            }
+        }
         return array('form' => $form);
     }
     

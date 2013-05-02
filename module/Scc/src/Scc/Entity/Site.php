@@ -70,10 +70,10 @@ class Site {
      * @param Page $page
      * @return Site
      */
-    /*public function addPage(Page $page) {
+    public function addPage(Page $page) {
 	$this->pages[] = $page;
 	$page->setSite($this);
-    }*/
+    }
     
     public function addPages(Collection $pages) {
         foreach($pages as $page) {

@@ -7,6 +7,7 @@ use Scc\Entity\Site;
 use Zend\Form\Fieldset;
 use Zend\InputFilter\InputFilterProviderInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use DoctrineModule\Stdlib\Hydrator\DoctrineObject;
 
 class SiteFieldset extends Fieldset implements InputFilterProviderInterface {
 
@@ -15,10 +16,17 @@ class SiteFieldset extends Fieldset implements InputFilterProviderInterface {
 
 	$em = $serviceLocator->get('Doctrine\ORM\EntityManager');
 
-	$hydrator = new ComponentHydrator($em, 'Scc\Entity\Site');
+	$hydrator = new DoctrineObject($em, 'Scc\Entity\Site');
 	$this->setHydrator($hydrator);
 	$this->setObject(new Site('', ''));
 
+        $this->add(array(
+                'name' => 'id',
+                'options' => array(
+                    'label' => 'Site Id'
+                )
+        ));
+        
 	$this->add(array(
 	    'name' => 'title',
 	    'options' => array(
@@ -39,7 +47,7 @@ class SiteFieldset extends Fieldset implements InputFilterProviderInterface {
 
     public function getInputFilterSpecification() {
 	return array(
-	    'name' => array(
+	    'title' => array(
 		'required' => true
 	    )
         );

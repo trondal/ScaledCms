@@ -1,10 +1,10 @@
 <?php
 
-$form->setAttribute('action', '')->prepare();
+//$form->setAttribute('action', $this->url('admin/admin-segment', array('controller' => 'admin', 'action' => 'site'), array('port' => 8080), true))->prepare();
 
+$form->setattribute('action', 'http://admin.scaledcms.trondal:8080/admin/site')->prepare();
 echo $this->form()->openTag($form);
 
 echo $this->formCollection($form);
 
-echo $this->formElement($form->get('submit'));
 echo $this->form()->closeTag();
