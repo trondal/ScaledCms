@@ -99,6 +99,10 @@ class Node {
 	return $this->className;
     }
 
+    public function setClassName($className) {
+        $this->className = $className;
+    }
+    
     public function setParent(Node $parent = null) {
 	$this->parent = $parent;
     }

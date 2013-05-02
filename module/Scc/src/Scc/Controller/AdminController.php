@@ -34,10 +34,6 @@ class AdminController extends AbstractActionController implements ResourceInterf
             if ($form->isValid()) {
                 $em->persist($site);
                 $em->flush();
-            } else {
-                echo '<pre>';
-                var_dump('not valid');
-                exit;
             }
         }
         return array('form' => $form);
@@ -51,11 +47,16 @@ class AdminController extends AbstractActionController implements ResourceInterf
         $node = $em->getRepository('Scc\Entity\Node')->find(2);
         $form->bind($node);
         
-        $model = new \Zend\View\Model\ViewModel(array(
-            'form' =>$form
-        ));
-        $model->setTemplate('scc/admin/site');
-        return $model;
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $post = $request->getPost();
+            $form->setData($post);
+            if ($form->isValid()) {
+                $em->persist($node);
+                $em->flush();
+            }
+        }
+        return array('form' => $form);
     }
     
     public function setAction() {

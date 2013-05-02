@@ -7,6 +7,7 @@ use Scc\Entity\Node;
 use Zend\Form\Fieldset;
 use Zend\InputFilter\InputFilterProviderInterface;
 use Zend\ServiceManager\ServiceManager;
+use DoctrineModule\Stdlib\Hydrator\DoctrineObject;
 
 class NodeFieldset extends Fieldset implements InputFilterProviderInterface {
  
@@ -15,7 +16,7 @@ class NodeFieldset extends Fieldset implements InputFilterProviderInterface {
         
         $em = $services->get('Doctrine\ORM\EntityManager');
 
-        $this->setHydrator(new ComponentHydrator($em, 'Scc\Entity\Node'))
+        $this->setHydrator(new DoctrineObject($em, 'Scc\Entity\Node'))
                 ->setObject(new Node());
         
         $this->add(array(
@@ -34,7 +35,7 @@ class NodeFieldset extends Fieldset implements InputFilterProviderInterface {
             )
         ));
         
-        $twitterFieldset = new TwitterFieldset($services);
+        /*$twitterFieldset = new TwitterFieldset($services);
         $this->add(array(
            'type' => 'Zend\Form\Element\Collection',
             'name' => 'className',
@@ -42,7 +43,7 @@ class NodeFieldset extends Fieldset implements InputFilterProviderInterface {
                 'label' => 'twitters',
                 'target_element' => $twitterFieldset
             )
-        ));
+        ));*/
     }
     
     public function getInputFilterSpecification() {
