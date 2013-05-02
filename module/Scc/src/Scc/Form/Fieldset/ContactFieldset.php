@@ -6,14 +6,14 @@ use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
 use Zend\Form\Fieldset;
 use Zend\InputFilter\InputFilterProviderInterface;
 
-class TwitterFieldset extends Fieldset implements InputFilterProviderInterface {
+class ContactFieldset extends Fieldset implements InputFilterProviderInterface {
 
     public function __construct(\Zend\ServiceManager\ServiceLocatorInterface $services) {
         parent::__construct('twitter');
         
         $em = $services->get('Doctrine\ORM\EntityManager');
-        $this->setHydrator(new DoctrineHydrator($em, 'Scc\Entity\Twitter'))
-                ->setObject(new \Scc\Entity\Twitter(''));
+        $this->setHydrator(new DoctrineHydrator($em, 'Scc\Entity\Contact'))
+                ->setObject(new \Scc\Entity\Contact('', '', ''));
 
         $this->add(array(
             'name' => 'id',
@@ -21,10 +21,10 @@ class TwitterFieldset extends Fieldset implements InputFilterProviderInterface {
         ));
 
         $this->add(array(
-            'name' => 'html',
+            'name' => 'title',
             'type' => 'Zend\Form\Element\Text',
             'options' => array(
-                'label' => 'Html content'
+                'label' => 'Contact title'
             ),
             'attributes' => array(
                 'required' => 'required'
@@ -40,7 +40,7 @@ class TwitterFieldset extends Fieldset implements InputFilterProviderInterface {
             'id' => array(
                 'required' => false
             ),
-            'html' => array(
+            'title' => array(
                 'required' => true
             )
         );

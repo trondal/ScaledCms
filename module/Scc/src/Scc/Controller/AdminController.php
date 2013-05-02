@@ -44,7 +44,7 @@ class AdminController extends AbstractActionController implements ResourceInterf
 
         $form = new \Scc\Form\NodeForm($this->getServiceLocator());
         
-        $node = $em->getRepository('Scc\Entity\Node')->find(2);
+        $node = $em->getRepository('Scc\Entity\Node')->find(3);
         $form->bind($node);
         
         $request = $this->getRequest();

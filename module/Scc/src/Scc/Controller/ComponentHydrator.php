@@ -32,8 +32,14 @@ class ComponentHydrator extends DoctrineObject {
                 $repo = $this->objectManager->getRepository($value);
 
                 $child = $repo->findBy(array('node' => $object->getId()));
-                $data[$fieldName] = $this->extractValue($fieldName, $child);
-            } else {
+                
+                $array = explode('\\', $value);
+                $name = lcfirst($array[count($array) - 1] . 's');
+
+                $data[$name] = $this->extractValue($fieldName, $child);
+                $data[$fieldName] = $value;
+                
+            } else { 
                 $data[$fieldName] = $this->extractValue($fieldName, $object->$getter());
             }
         }
