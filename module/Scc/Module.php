@@ -21,7 +21,7 @@ use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\Paginator\Paginator;
 
-class Module implements BootstrapListenerInterface, ConfigProviderInterface, 
+class Module implements BootstrapListenerInterface, ConfigProviderInterface,
         AutoloaderProviderInterface, ServiceProviderInterface, ConsoleUsageProviderInterface,
         ViewHelperProviderInterface {
 
@@ -43,7 +43,7 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface,
             array($this, 'onDispatchCollection'),
             -1
         );
-        
+
         // For errors in the ResourceControllers and in. Not for module.php
         /*$sm = $app->getServiceManager();
         $eventManager->attach(MvcEvent::EVENT_DISPATCH_ERROR, function() use($sm, $eventManager) {
@@ -51,7 +51,7 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface,
             $apiProblemListener = $sm->getServiceManager()->get('PhlyRestfully\ApiProblemListener');
             $eventManager->attach($apiProblemListener);
         }, 1);*/
-        
+
         // Add ACL for Api route
         //$eventManager->attach(MvcEvent::EVENT_ROUTE, array($this, 'checkAccessControl'), -100);
     }
@@ -82,12 +82,12 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface,
 
     public function authApiControl(MvcEvent $e) {
         $routeMatch = $e->getRouteMatch();
-        
+
         if ($routeMatch->getMatchedRouteName() !== 'api/api-segment') {
             // No api route requested.
             return;
         }
-        
+
         // Change this to the Rest login controller
         $controller = $routeMatch->getParam('controller');
         $request = $e->getRequest();
@@ -103,20 +103,20 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface,
             // Already authenticated
             return;
         }
-        
+
         $sharedEventManager = $e->getApplication()->getEventManager()->getSharedManager();
 
         $sharedEventManager->attach('PhlyRestfully\ResourceController', 'dispatch', function ($e) {
             $problem = new ApiProblem(HttpResponse::STATUS_CODE_401, 'Must be logged in to access the api.');
             $e->setParam('api-problem', $problem);
         }, 100);
-        
+
     }
 
     public function authAdminControl(MvcEvent $e) {
 
         $routeMatch = $e->getRouteMatch();
-        
+
         if ($routeMatch->getMatchedRouteName() !== 'admin/admin-segment') {
             // No admin route requested.
             return;
@@ -136,10 +136,10 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface,
         if ($authService->hasIdentity() === true) {
             // Already authenticated
             return;
-        }    
+        }
         // not authenticated, redirect to login
         $url = $e->getRouter()->assemble(array(
-            'domain' => $routeMatch->getParam('domain'), 
+            'domain' => $routeMatch->getParam('domain'),
             'tld' => $routeMatch->getParam('tld'),
             'controller' => 'admin',
             'action' => 'login'),
@@ -151,7 +151,7 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface,
         $response->setStatusCode(302);
         $response->sendHeaders();
         return $response;
-        
+
     }
 
     /**
@@ -210,7 +210,7 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface,
             )
         );
     }
-    
+
     public function onDispatchCollection(MvcEvent $e) {
         $result = $e->getResult();
         if (!$result instanceof RestfulJsonModel) {
@@ -221,13 +221,14 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface,
         }
         $collection = $result->getPayload();
 
-        if (!$collection->collection instanceof \Doctrine\ORM\Tools\Pagination\Paginator) {
+        if (!$collection->collection instanceof Paginator) {
             return;
         }
+
         $collection->setAttributes(array(
-            'count'    => $collection->collection->count(),
+            'count'    => $collection->collection->getTotalItemCount(),
             'page'     => $collection->page,
-            'per_page' => $collection->pageSize,
+            'per_page' => $collection->pageSize
         ));
     }
 }

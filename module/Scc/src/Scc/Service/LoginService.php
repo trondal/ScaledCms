@@ -11,6 +11,9 @@ use Zend\Authentication\AuthenticationService;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
 use Zend\Http\PhpEnvironment\RemoteAddress;
+use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
+use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
+use Zend\Paginator\Paginator;
 
 class LoginService implements EntityManagerAware, ListenerAggregateInterface, AuthServiceAware, AuthAttemptServiceAware {
 
@@ -18,25 +21,25 @@ class LoginService implements EntityManagerAware, ListenerAggregateInterface, Au
      * @var EntityManager
      */
     protected $em;
-    
+
     /**
      *
      * @var AuthenticationService
      */
     protected $authService;
-            
+
     protected $listeners = array();
-    
+
     protected $authAttemptService;
-    
+
     public function setEntityManager(EntityManager $em) {
         $this->em = $em;
     }
-    
+
     public function setAuthService(AuthenticationService $authService) {
         $this->authService = $authService;
     }
-    
+
     public function setAuthAttemptService(AuthAttemptService $authAttemptService) {
         $this->authAttemptService = $authAttemptService;
     }
@@ -60,7 +63,7 @@ class LoginService implements EntityManagerAware, ListenerAggregateInterface, Au
             }
         }
     }
-    
+
     public function onCreate($e) {
         $data = $e->getParam('data', false);
 
@@ -68,9 +71,9 @@ class LoginService implements EntityManagerAware, ListenerAggregateInterface, Au
 	$adapter->setIdentityValue($data->username);
 	$adapter->setCredentialValue($data->password);
 	$result = $this->authService->authenticate();
-        
+
         if ($result->isValid()) {
-            // Auth. ok, log occurrance and do internal redirect to getList.
+            // Authentication ok
             // TODO: should use a logging scheme of some kind.
             $identity = $result->getIdentity();
             $this->authService->getStorage()->write($identity);
@@ -84,15 +87,15 @@ class LoginService implements EntityManagerAware, ListenerAggregateInterface, Au
         }
         // TODO: does not return anything if not ok.
     }
-       
+
     public function onDelete($e) {
         $this->authService->clearIdentity();
         return true;
     }
-    
+
     public function onFetch($e) {
         $this->authService->getIdentity()->getId();
-        
+
         if (false === $id = $e->getParam('id', false)) {
             return false;
         }
@@ -100,12 +103,15 @@ class LoginService implements EntityManagerAware, ListenerAggregateInterface, Au
         $repo = $this->em->getRepository('Scc\Entity\AuthAttempt');
         return $repo->findOneBy(array('id' => $id));
     }
-    
-    public function onFetchAll($e) {
-        $dql = $this->em->createQuery('SELECT a FROM \Scc\Entity\AuthAttempt a WHERE a.user = :user ORDER BY a.id DESC')
+
+    public function onFetchAll(\PhlyRestfully\ResourceEvent $e) {
+        $dql = $this->em->createQuery('SELECT a FROM \Scc\Entity\AuthAttempt a
+            WHERE a.user = :user ORDER BY a.time DESC')
             ->setParameter('user', $this->authService->getIdentity());
-        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($dql);
+        $adapter = new DoctrineAdapter(new ORMPaginator($dql));
+
+        $paginator = new Paginator($adapter);
         return $paginator;
     }
-    
+
 }
