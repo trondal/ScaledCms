@@ -3,35 +3,25 @@
 namespace Scc\Form\Fieldset;
 
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
-use Scc\Entity\Twitter;
+use Scc\Entity\Panel;
 use Zend\Form\Fieldset;
 use Zend\InputFilter\InputFilterProviderInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class TwitterFieldset extends Fieldset implements InputFilterProviderInterface {
+class PanelFieldset extends Fieldset implements InputFilterProviderInterface {
 
     public function __construct(ServiceLocatorInterface $services) {
-        parent::__construct('twitter');
+        parent::__construct('panel');
         
         $em = $services->get('Doctrine\ORM\EntityManager');
-        $this->setHydrator(new DoctrineHydrator($em, 'Scc\Entity\Twitter'))
-                ->setObject(new Twitter(''));
+        $this->setHydrator(new DoctrineHydrator($em, 'Scc\Entity\Panel'))
+                ->setObject(new Panel());
 
         $this->add(array(
             'name' => 'id',
             'type' => 'Zend\Form\Element\Text'
         ));
 
-        $this->add(array(
-            'name' => 'html',
-            'type' => 'Zend\Form\Element\Text',
-            'options' => array(
-                'label' => 'Html content'
-            ),
-            'attributes' => array(
-                'required' => 'required'
-            )
-        ));
     }
 
     /**
@@ -41,9 +31,6 @@ class TwitterFieldset extends Fieldset implements InputFilterProviderInterface {
         return array(
             'id' => array(
                 'required' => false
-            ),
-            'html' => array(
-                'required' => true
             )
         );
     }

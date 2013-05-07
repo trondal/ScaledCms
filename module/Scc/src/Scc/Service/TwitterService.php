@@ -43,9 +43,9 @@ class TwitterService implements EntityManagerAware, ListenerAggregateInterface {
     }
     
     public function onCreate($e) {
-        echo '<pre>';
-        var_dump('POST');
-        exit;
+        $data = $e->getParam('data', false);
+        $node = new Node();
+        $twitter = new \Scc\Entity\Twitter($data['html']);
     }
     
     public function onUpdate($e) {

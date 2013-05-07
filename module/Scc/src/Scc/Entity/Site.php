@@ -47,7 +47,6 @@ class Site {
 
     public function __construct($title, $slug = null) {
 	$this->title = $title;
-	$this->slug = $slug;
 	$this->pages = new ArrayCollection();
         $this->hostNames = new ArrayCollection();
     }

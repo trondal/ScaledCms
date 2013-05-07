@@ -41,5 +41,11 @@ return array(
 	'entity_resolver' => array(
 	    'orm_default' => array()
 	)
-    )
+    ),
+    /*'swagger' => array(
+        //List a path or paths containing Swagger Annotated classes
+        'paths' => array(
+            __DIR__ . '/../../module/Scc/src/Scc/Entity',
+        ),
+    )*/
 );

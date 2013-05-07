@@ -11,14 +11,45 @@ use Scc\Entity\Twitter;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
 
-class AdminController extends AbstractActionController implements ResourceInterface {
+class AdminController extends AbstractActionController implements ResourceInterface, AuthServiceAware {
 
+    /**
+     * @var \Zend\Authentication\AuthenticationService
+     */
+    protected $authService;
+    
+    public function setAuthService(\Zend\Authentication\AuthenticationService $authService) {
+        $this->authService = $authService;
+    }
+    
     public function getResourceId() {
         return __CLASS__;
     }
 
     public function indexAction() {
         $this->layout()->setTemplate('layout/admin');
+    }
+    
+    public function loginAction() {
+	$form = $this->getServiceLocator()->get('Scc\Form\LoginForm');
+
+	$request = $this->getRequest();
+
+	if ($request->isPost()) {
+	    $form->setData($request->getPost());
+
+	    $adapter = $this->authService->getAdapter();
+	    $adapter->setIdentityValue($this->params()->fromPost('username'));
+	    $adapter->setCredentialValue($this->params()->fromPost('password'));
+	    $authResult = $this->authService->authenticate();
+
+	    if ($authResult->isValid()) {
+		return $this->redirect()->toRoute(array('admin/admin-segment'));
+	    }
+            
+	}
+
+	return array('form' => $form);
     }
 
     public function siteAction() {

@@ -25,7 +25,7 @@ class User {
      * @var string
      * @ORM\Column(type="string", length=32, nullable=false)
      */
-    private $name;
+    private $userName;
 
     /**
      * @var string
@@ -45,8 +45,8 @@ class User {
      */
     private $sites;
 
-    public function __construct($name, $password, $email) {
-	$this->name = $name;
+    public function __construct($userName, $password, $email) {
+	$this->userName = $userName;
 	$this->password = $password;
 	$this->email = $email;
 	$this->sites = new ArrayCollection();
@@ -56,12 +56,12 @@ class User {
 	return $this->id;
     }
 
-    public function getName() {
-	return $this->name;
+    public function getUserName() {
+	return $this->userName;
     }
 
-    public function setName($name) {
-	$this->name = $name;
+    public function setUserName($username) {
+	$this->userName = $username;
     }
 
     public function getEmail() {

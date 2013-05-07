@@ -3,17 +3,19 @@
 namespace Scc\Form\Fieldset;
 
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject as DoctrineHydrator;
+use Scc\Entity\Contact;
 use Zend\Form\Fieldset;
 use Zend\InputFilter\InputFilterProviderInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 class ContactFieldset extends Fieldset implements InputFilterProviderInterface {
 
-    public function __construct(\Zend\ServiceManager\ServiceLocatorInterface $services) {
-        parent::__construct('twitter');
+    public function __construct(ServiceLocatorInterface $services) {
+        parent::__construct('contact');
         
         $em = $services->get('Doctrine\ORM\EntityManager');
         $this->setHydrator(new DoctrineHydrator($em, 'Scc\Entity\Contact'))
-                ->setObject(new \Scc\Entity\Contact('', '', ''));
+                ->setObject(new Contact('', '', ''));
 
         $this->add(array(
             'name' => 'id',
@@ -41,7 +43,10 @@ class ContactFieldset extends Fieldset implements InputFilterProviderInterface {
                 'required' => false
             ),
             'title' => array(
-                'required' => true
+                'required' => true,
+                'validators' => array(
+                    
+                )
             )
         );
     }

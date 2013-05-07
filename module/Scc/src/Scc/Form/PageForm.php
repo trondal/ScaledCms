@@ -3,22 +3,22 @@
 namespace Scc\Form;
 
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject;
-use Scc\Form\Fieldset\NodeFieldset;
+use Scc\Form\Fieldset\PageFieldset;
 use Zend\Form\Form;
 use Zend\ServiceManager\ServiceManager;
 
-class NodeForm extends Form {
+class PageForm extends Form {
 
     public function __construct(ServiceManager $services) {
-        parent::__construct('create-node');
+        parent::__construct('create-page');
         $em = $services->get('Doctrine\ORM\EntityManager');
         
-        $this->setHydrator(new DoctrineObject($em, 'Scc\Entity\Node'));
+        $this->setHydrator(new DoctrineObject($em, 'Scc\Entity\Page'));
         
-        $nodeFieldset = new NodeFieldset($services);
-        $nodeFieldset->setName('nodes');
-        $nodeFieldset->setUseAsBaseFieldset(true);
-        $this->add($nodeFieldset);
+        $pageFieldset = new PageFieldset($services);
+        $pageFieldset->setName('page');
+        $pageFieldset->setUseAsBaseFieldset(true);
+        $this->add($pageFieldset);
         
         $this->add(array(
             'type' => 'Zend\Form\Element\Submit',

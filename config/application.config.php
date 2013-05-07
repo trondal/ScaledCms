@@ -2,10 +2,10 @@
 
 return array(
     'modules' => array(
+        'PhlyRestfully',
 	'Scc',
 	'DoctrineModule',
-	'DoctrineORMModule',
-        'PhlyRestfully'
+	'DoctrineORMModule'
     ),
     'module_listener_options' => array(
 	'config_glob_paths' => array(

@@ -2,8 +2,8 @@
 
 namespace Scc\Form\Fieldset;
 
-use Scc\Entity\Page;
 use DoctrineModule\Stdlib\Hydrator\DoctrineObject;
+use Scc\Entity\Page;
 use Zend\Form\Fieldset;
 use Zend\InputFilter\InputFilterProviderInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -40,6 +40,16 @@ class PageFieldset extends Fieldset implements InputFilterProviderInterface {
             'type' => 'Zend\Form\Element\Text',
 	    'options' => array(
 		'label' => 'Slug'
+	    )
+	));
+        
+        $nodeFieldSet = new \Scc\Form\Fieldset\NodeFieldset($serviceLocator);
+	$this->add(array(
+	    'type' => 'Zend\Form\Element\Collection',
+	    'name' => 'nodes',
+	    'options' => array(
+		'label' => 'Nodes',
+		'target_element' => $nodeFieldSet
 	    )
 	));
     }

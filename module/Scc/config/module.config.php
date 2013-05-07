@@ -12,7 +12,7 @@ return array(
 		'type' => 'Zend\Mvc\Router\Http\Hostname',
                 'priority' => 100,
 		'options' => array(
-		    'route' => 'admin.scaledcms.trondal',
+		    'route' => 'admin.:domain.:tld',
 		    'defaults' => array(
 			'__NAMESPACE__' => 'Scc\Controller',
 		    )
@@ -37,7 +37,7 @@ return array(
 	    ),
             'api' => array(
                 'type' => 'Zend\Mvc\Router\Http\Hostname',
-                'priority' => 100,
+                'priority' => 90,
                 'options' => array(
                     'route' => 'api.:domain.:tld',
                     'defaults' => array(
@@ -126,11 +126,11 @@ return array(
     'phlyrestfully' => array(
         'renderer' => array(
             'default_hydrator' => 'Hydrator\ClassMethods',
-        ),
+        )
     ),
     'service_manager' => array(
         'invokables' => array(
-            'Hydrator\ClassMethods' => 'Zend\Stdlib\Hydrator\ClassMethods'
+            'Hydrator\ClassMethods' => 'Zend\Stdlib\Hydrator\ClassMethods',
         ),
         'factories' => array(
             'translator' => 'Zend\I18n\Translator\TranslatorServiceFactory',
@@ -143,6 +143,8 @@ return array(
             'Scc\Entity\Panel' => 'Scc\Service\Factory\PanelServiceFactory',
             'Scc\Entity\Contact' => 'Scc\Service\Factory\ContactServiceFactory',
             'Scc\Service\Twitter' => 'Scc\Service\Factory\TwitterServiceFactory',
+            'Scc\Service\Login' => 'Scc\Service\Factory\LoginServiceFactory',
+            'Scc\Service\AuthAttemptService' => 'Scc\Service\Factory\AuthAttemptServiceFactory'
         )
     ),
     'translator' => array(
@@ -201,7 +203,7 @@ return array(
             'orm_default' => array(
                 'objectManager' => 'Doctrine\ORM\EntityManager',
                 'identityClass' => 'Scc\Entity\User',
-                'identityProperty' => 'username',
+                'identityProperty' => 'email',
                 'credentialProperty' => 'password',
                 'credentialCallable' => function(User $user, $passwordGiven) {
                     $bcrypt = new Bcrypt();

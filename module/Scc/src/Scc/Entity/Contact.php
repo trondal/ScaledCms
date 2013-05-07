@@ -2,8 +2,8 @@
 
 namespace Scc\Entity;
 
-use Scc\Entity\ComponentAbstract;
 use Doctrine\ORM\Mapping as ORM;
+use Scc\Entity\ComponentAbstract;
 
 /**
  * @ORM\Entity

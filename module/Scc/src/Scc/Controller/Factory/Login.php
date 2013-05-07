@@ -2,18 +2,27 @@
 
 namespace Scc\Controller\Factory;
 
-use Scc\Controller\LoginController;
+use PhlyRestfully\ResourceController;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 class Login implements FactoryInterface {
 
-    public function createService(ServiceLocatorInterface $services) {
-	$serviceLocator = $services->getServiceLocator();
+    public function createService(ServiceLocatorInterface $controllerManager) {
+        $services = $controllerManager->getServiceLocator();
+        $resource = $services->get('Scc\Service\Login');
 
-	$controller = new LoginController;
-	$controller->setAuthService($serviceLocator->get('Zend\Authentication\AuthenticationService'));
-	return $controller;
+        $configuration = $services->get('Configuration');
+        $pageSize = isset($configuration['app']['page_size']) ? $configuration['app']['page_size'] : 10;
+        $controller = new ResourceController('Scc\Controller\LoginController');
+        $controller->setResource($resource);
+        $controller->setPageSize($pageSize);
+        $controller->setRoute('api/api-segment');
+        $controller->setCollectionName('login');
+        
+        $controller->setCollectionHttpOptions(array('GET'));
+        $controller->setResourceHttpOptions(array('GET', 'POST', 'DELETE'));
+        return $controller;
     }
 
 }

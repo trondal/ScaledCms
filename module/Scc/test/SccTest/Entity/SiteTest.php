@@ -10,8 +10,7 @@ class SiteTest extends \PHPUnit_Framework_TestCase {
     public function initialState() {
 	$site = new \Scc\Entity\Site('', '');
 
-	$this->assertEquals('', $site->getName());
-	$this->assertEquals('', $site->getSlug());
+	$this->assertEquals('', $site->getTitle());
 
 	$this->assertCount(0, $site->getPages());
 	$this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $site->getPages());
@@ -22,14 +21,12 @@ class SiteTest extends \PHPUnit_Framework_TestCase {
      */
     public function settersAndGetters() {
 	$site = new \Scc\Entity\Site('', '');
-	$site->setName('Name');
-	$site->setSlug('Slug');
+	$site->setTitle('Title');
 
 	$pageMock = $this->getMockBuilder('Scc\Entity\Page')->disableOriginalConstructor(true)->getMock();
 	$site->addPage($pageMock);
 
-	$this->assertEquals('Name', $site->getName());
-	$this->assertEquals('Slug', $site->getSlug());
+	$this->assertEquals('Title', $site->getTitle());
 	$this->assertCount(1, $site->getPages());
     }
 
