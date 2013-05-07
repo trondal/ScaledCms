@@ -3,16 +3,16 @@
 namespace Scc\Service;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
+use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
+use PhlyRestfully\ResourceEvent;
 use Scc\Controller\AuthServiceAware;
 use Scc\Controller\EntityManagerAware;
 use Scc\Entity\AuthAttempt;
-use Scc\Entity\Node;
 use Zend\Authentication\AuthenticationService;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
 use Zend\Http\PhpEnvironment\RemoteAddress;
-use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
-use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
 use Zend\Paginator\Paginator;
 
 class LoginService implements EntityManagerAware, ListenerAggregateInterface, AuthServiceAware, AuthAttemptServiceAware {
@@ -42,11 +42,6 @@ class LoginService implements EntityManagerAware, ListenerAggregateInterface, Au
 
     public function setAuthAttemptService(AuthAttemptService $authAttemptService) {
         $this->authAttemptService = $authAttemptService;
-    }
-
-    public function findOneByNode(Node $node) {
-        $repo = $this->em->getRepository('Scc\Entity\Login');
-        return $repo->findOneByNode($node);
     }
 
     public function attach(EventManagerInterface $events) {
@@ -104,7 +99,7 @@ class LoginService implements EntityManagerAware, ListenerAggregateInterface, Au
         return $repo->findOneBy(array('id' => $id));
     }
 
-    public function onFetchAll(\PhlyRestfully\ResourceEvent $e) {
+    public function onFetchAll(ResourceEvent $e) {
         $dql = $this->em->createQuery('SELECT a FROM \Scc\Entity\AuthAttempt a
             WHERE a.user = :user ORDER BY a.time DESC')
             ->setParameter('user', $this->authService->getIdentity());
