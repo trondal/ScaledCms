@@ -14,14 +14,14 @@ class Login implements FactoryInterface {
 
         $configuration = $services->get('Configuration');
         $pageSize = isset($configuration['api']['page_size']) ? $configuration['api']['page_size'] : 10;
-        $controller = new ResourceController('Scc\Controller\LoginController');
+        $controller = new ResourceController('Scc\Controller\Login');
         $controller->setResource($resource);
         $controller->setPageSize($pageSize);
         $controller->setRoute('api/api-segment');
         $controller->setCollectionName('login');
 
         $controller->setCollectionHttpOptions(array('GET', 'POST'));
-        $controller->setResourceHttpOptions(array('GET', 'POST', 'DELETE'));
+        $controller->setResourceHttpOptions(array('GET', 'DELETE'));
         return $controller;
     }
 
