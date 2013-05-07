@@ -3,6 +3,7 @@
 namespace Scc;
 
 use PhlyRestfully\ApiProblem;
+use PhlyRestfully\View\RestfulJsonModel;
 use Scc\Service\Factory\AclFactory;
 use Scc\View\Helper\Contact;
 use Scc\View\Helper\Twitter;
@@ -18,6 +19,7 @@ use Zend\ModuleManager\Feature\ServiceProviderInterface;
 use Zend\ModuleManager\Feature\ViewHelperProviderInterface;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
+use Zend\Paginator\Paginator;
 
 class Module implements BootstrapListenerInterface, ConfigProviderInterface, 
         AutoloaderProviderInterface, ServiceProviderInterface, ConsoleUsageProviderInterface,
@@ -36,6 +38,12 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface,
         // Add auth protection for api route
         $eventManager->attach(MvcEvent::EVENT_ROUTE, array($this, 'authApiControl'), -90);
 
+        // Add metadata to collections
+        $eventManager->attach(MvcEvent::EVENT_DISPATCH,
+            array($this, 'onDispatchCollection'),
+            -1
+        );
+        
         // For errors in the ResourceControllers and in. Not for module.php
         /*$sm = $app->getServiceManager();
         $eventManager->attach(MvcEvent::EVENT_DISPATCH_ERROR, function() use($sm, $eventManager) {
@@ -201,5 +209,25 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface,
                 },
             )
         );
+    }
+    
+    public function onDispatchCollection(MvcEvent $e) {
+        $result = $e->getResult();
+        if (!$result instanceof RestfulJsonModel) {
+            return;
+        }
+        if (!$result->isHalCollection()) {
+            return;
+        }
+        $collection = $result->getPayload();
+
+        if (!$collection->collection instanceof \Doctrine\ORM\Tools\Pagination\Paginator) {
+            return;
+        }
+        $collection->setAttributes(array(
+            'count'    => $collection->collection->count(),
+            'page'     => $collection->page,
+            'per_page' => $collection->pageSize,
+        ));
     }
 }

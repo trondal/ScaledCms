@@ -20,7 +20,7 @@ class Login implements FactoryInterface {
         $controller->setRoute('api/api-segment');
         $controller->setCollectionName('login');
         
-        $controller->setCollectionHttpOptions(array('GET'));
+        $controller->setCollectionHttpOptions(array('GET', 'POST'));
         $controller->setResourceHttpOptions(array('GET', 'POST', 'DELETE'));
         return $controller;
     }

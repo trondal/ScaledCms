@@ -96,13 +96,16 @@ class LoginService implements EntityManagerAware, ListenerAggregateInterface, Au
         if (false === $id = $e->getParam('id', false)) {
             return false;
         }
+
         $repo = $this->em->getRepository('Scc\Entity\AuthAttempt');
         return $repo->findOneBy(array('id' => $id));
     }
     
     public function onFetchAll($e) {
-        $repo = $this->em->getRepository('Scc\Entity\AuthAttempt');
-        return $repo->findByUser($this->authService->getIdentity());
+        $dql = $this->em->createQuery('SELECT a FROM \Scc\Entity\AuthAttempt a WHERE a.user = :user ORDER BY a.id DESC')
+            ->setParameter('user', $this->authService->getIdentity());
+        $paginator = new \Doctrine\ORM\Tools\Pagination\Paginator($dql);
+        return $paginator;
     }
     
 }
