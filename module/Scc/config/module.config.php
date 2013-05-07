@@ -46,7 +46,19 @@ return array(
                 ),
                 'may_terminate' => false,
                 'child_routes' => array(
+                    'api-doc' => array(
+                        'priority' => 100,
+                        'type' => 'Segment',
+                        'options' => array(
+                            'route' => '/docs[/:resource]',
+                            'defaults' => array(
+                                'controller' => 'Docs',
+                                'action' => 'index'
+                            )
+                        )
+                    ),
                     'api-segment' => array(
+                        'priority' => 90,
                         'type' => 'Segment',
                         'options' => array(
                             'route' => '/[:controller[/:id]]',
@@ -147,19 +159,10 @@ return array(
             'Scc\Service\AuthAttemptService' => 'Scc\Service\Factory\AuthAttemptServiceFactory'
         )
     ),
-    'translator' => array(
-        'locale' => 'en_US',
-        'translation_file_patterns' => array(
-            array(
-                'type' => 'phparray',
-                'base_dir' => __DIR__ . '/../language',
-                'pattern' => '%s.php'
-            )
-        )
-    ),
     'controllers' => array(
         'invokables' => array(
             'Scc\Controller\Contact' => 'Scc\Controller\ContactController',
+            'Scc\Controller\Docs' => 'Scc\Controller\DocsController'
         ),
         'factories' => array(
             'Scc\Controller\Index' => 'Scc\Controller\Factory\Index',
@@ -184,6 +187,19 @@ return array(
         ),
         'template_path_stack' => array(
             __DIR__ . '/../view'
+        ),
+        'strategies' => array(
+            'ViewJsonStrategy',
+        )
+    ),
+        'translator' => array(
+        'locale' => 'en_US',
+        'translation_file_patterns' => array(
+            array(
+                'type' => 'phparray',
+                'base_dir' => __DIR__ . '/../language',
+                'pattern' => '%s.php'
+            )
         )
     ),
     'doctrine' => array(

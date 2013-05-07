@@ -6,6 +6,8 @@
         "doctrine/migrations":"dev-master",
         "zendframework/zendframework":"2.1.5",
         "gedmo/doctrine-extensions":"2.3.5",
-        "phly/phly-restfully": "dev-master"
+        "phly/phly-restfully": "dev-master",
+        "outeredge/swagger-module": "dev-master",
+        "zircote/swagger-php":"dev-master"
     }
 }

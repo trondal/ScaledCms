@@ -3,6 +3,14 @@
 namespace Application;
 
 return array(
+     'swagger' => array(
+        /**
+         * List a path or paths containing Swagger Annotated classes
+         */
+        'paths' => array(
+        realpath(__DIR__ . '/../../module/Scc/src/Scc/Model'),
+        ),
+    ),
     'doctrine' => array(
 	'connection' => array(
 	    // default connection name
