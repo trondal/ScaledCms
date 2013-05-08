@@ -10,7 +10,7 @@ class Login implements FactoryInterface {
 
     public function createService(ServiceLocatorInterface $controllerManager) {
         $services = $controllerManager->getServiceLocator();
-        $resource = $services->get('Scc\Service\Login');
+        $resource = $services->get('Scc\Service\LoginResource');
 
         $configuration = $services->get('Configuration');
         $pageSize = isset($configuration['api']['page_size']) ? $configuration['api']['page_size'] : 10;

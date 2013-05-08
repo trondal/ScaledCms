@@ -141,6 +141,9 @@ return array(
         )
     ),
     'service_manager' => array(
+        'aliases' => array(
+            'Scc\Entity\Twitter' => 'Scc\Service\TwitterService'
+        ),
         'invokables' => array(
             'Hydrator\ClassMethods' => 'Zend\Stdlib\Hydrator\ClassMethods',
         ),
@@ -154,8 +157,10 @@ return array(
             'Scc\Service\NodeService' => 'Scc\Service\Factory\Node',
             'Scc\Entity\Panel' => 'Scc\Service\Factory\PanelServiceFactory',
             'Scc\Entity\Contact' => 'Scc\Service\Factory\ContactServiceFactory',
-            'Scc\Service\Twitter' => 'Scc\Service\Factory\TwitterServiceFactory',
-            'Scc\Service\Login' => 'Scc\Service\Factory\LoginServiceFactory',
+            'Scc\Service\TwitterService' => 'Scc\Service\Factory\TwitterServiceFactory',
+            'Scc\Service\TwitterResource' => 'Scc\Service\Factory\TwitterResourceFactory',
+            'Scc\Service\LoginResource' => 'Scc\Service\Factory\LoginResourceFactory',
+            'Scc\Service\LoginService' => 'Scc\Service\Factory\LoginServiceFactory',
             'Scc\Service\AuthAttemptService' => 'Scc\Service\Factory\AuthAttemptServiceFactory'
         )
     ),
