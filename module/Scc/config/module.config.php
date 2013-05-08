@@ -9,32 +9,32 @@ return array(
     'router' => array(
         'routes' => array(
             'admin' => array(
-		'type' => 'Zend\Mvc\Router\Http\Hostname',
+                'type' => 'Zend\Mvc\Router\Http\Hostname',
                 'priority' => 100,
-		'options' => array(
-		    'route' => 'admin.:domain.:tld',
-		    'defaults' => array(
-			'__NAMESPACE__' => 'Scc\Controller',
-		    )
-		),
-		'may_terminate' => false,
+                'options' => array(
+                    'route' => 'admin.:domain.:tld',
+                    'defaults' => array(
+                        '__NAMESPACE__' => 'Scc\Controller',
+                    )
+                ),
+                'may_terminate' => false,
                 'child_routes' => array(
                     'admin-segment' => array(
-                        'type'    => 'Segment',
+                        'type' => 'Segment',
                         'options' => array(
-                            'route'    => '/[:controller[/:action]]',
+                            'route' => '/[:controller[/:action]]',
                             'constraints' => array(
                                 'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                                'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                                'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                             ),
                             'defaults' => array(
-				'controller' => 'Admin',
-				'action' => 'index'
+                                'controller' => 'Admin',
+                                'action' => 'index'
                             )
                         )
                     )
                 )
-	    ),
+            ),
             'api' => array(
                 'type' => 'Zend\Mvc\Router\Http\Hostname',
                 'priority' => 90,
@@ -70,36 +70,36 @@ return array(
                 )
             ),
             'index' => array(
-		'type' => 'Zend\Mvc\Router\Http\Hostname',
-		'options' => array(
-		    'priority' => 50,
-		    'route' => ':subdomain.[:optional.]:domain.:tld',
-		    'defaults' => array(
-			'__NAMESPACE__' => 'Scc\Controller',
-			'controller' => 'Index',
-			'action' => 'index'
-		    )
-		),
-		'may_terminate' => true,
-		'child_routes' => array(
-		    'userslug' => array(
-			'type' => 'Zend\Mvc\Router\Http\Segment',
-			'options' => array(
-			    'route' => '/[:a][/:b][/:c][/:d]',
-			    'constraints' => array(
-				'a' => '[a-zA-Z][a-zA-Z0-9_-]+',
-				'b' => '[a-zA-Z][a-zA-Z0-9_-]+',
-				'c' => '[a-zA-Z][a-zA-Z0-9_-]+',
-				'd' => '[a-zA-Z][a-zA-Z0-9_-]+',
-			    ),
-			    'defaults' => array(
-				'controller' => 'Index',
-				'action' => 'index',
-			    ),
-			)
-		    )
-		)
-	    )
+                'type' => 'Zend\Mvc\Router\Http\Hostname',
+                'options' => array(
+                    'priority' => 50,
+                    'route' => ':subdomain.[:optional.]:domain.:tld',
+                    'defaults' => array(
+                        '__NAMESPACE__' => 'Scc\Controller',
+                        'controller' => 'Index',
+                        'action' => 'index'
+                    )
+                ),
+                'may_terminate' => true,
+                'child_routes' => array(
+                    'userslug' => array(
+                        'type' => 'Zend\Mvc\Router\Http\Segment',
+                        'options' => array(
+                            'route' => '/[:a][/:b][/:c][/:d]',
+                            'constraints' => array(
+                                'a' => '[a-zA-Z][a-zA-Z0-9_-]+',
+                                'b' => '[a-zA-Z][a-zA-Z0-9_-]+',
+                                'c' => '[a-zA-Z][a-zA-Z0-9_-]+',
+                                'd' => '[a-zA-Z][a-zA-Z0-9_-]+',
+                            ),
+                            'defaults' => array(
+                                'controller' => 'Index',
+                                'action' => 'index',
+                            ),
+                        )
+                    )
+                )
+            )
         )
     ),
     'console' => array(
@@ -142,26 +142,28 @@ return array(
     ),
     'service_manager' => array(
         'aliases' => array(
+            'Scc\Entity\Contact' => 'Scc\Service\ContactService',
+            'Scc\Entity\Panel' => 'Scc\Service\PanelService',
             'Scc\Entity\Twitter' => 'Scc\Service\TwitterService'
         ),
         'invokables' => array(
             'Hydrator\ClassMethods' => 'Zend\Stdlib\Hydrator\ClassMethods',
         ),
         'factories' => array(
-            'translator' => 'Zend\I18n\Translator\TranslatorServiceFactory',
-            'Scc\Service\User' => 'Scc\Service\Factory\User',
-            'Scc\Service\SiteService' => 'Scc\Service\Factory\Site',
-            'Scc\Service\Acl' => 'Scc\Service\Factory\AclFactory',
-            'Scc\Service\PageService' => 'Scc\Service\Factory\Page',
             'Scc\Form\LoginForm' => 'Scc\Form\Factory\LoginFormFactory',
-            'Scc\Service\NodeService' => 'Scc\Service\Factory\Node',
-            'Scc\Entity\Panel' => 'Scc\Service\Factory\PanelServiceFactory',
-            'Scc\Entity\Contact' => 'Scc\Service\Factory\ContactServiceFactory',
-            'Scc\Service\TwitterService' => 'Scc\Service\Factory\TwitterServiceFactory',
-            'Scc\Service\TwitterResource' => 'Scc\Service\Factory\TwitterResourceFactory',
+            'Scc\Service\AclService' => 'Scc\Service\Factory\AclServiceFactory',
+            'Scc\Service\AuthAttemptService' => 'Scc\Service\Factory\AuthAttemptServiceFactory',
+            'Scc\Service\ContactService' => 'Scc\Service\Factory\ContactServiceFactory',
             'Scc\Service\LoginResource' => 'Scc\Service\Factory\LoginResourceFactory',
             'Scc\Service\LoginService' => 'Scc\Service\Factory\LoginServiceFactory',
-            'Scc\Service\AuthAttemptService' => 'Scc\Service\Factory\AuthAttemptServiceFactory'
+            'Scc\Service\NodeService' => 'Scc\Service\Factory\NodeServiceFactory',
+            'Scc\Service\PageService' => 'Scc\Service\Factory\PageServiceFactory',
+            'Scc\Service\PanelService' => 'Scc\Service\Factory\PanelServiceFactory',
+            'Scc\Service\SiteService' => 'Scc\Service\Factory\SiteServiceFactory',
+            'Scc\Service\TwitterService' => 'Scc\Service\Factory\TwitterServiceFactory',
+            'Scc\Service\TwitterResource' => 'Scc\Service\Factory\TwitterResourceFactory',
+            'Scc\Service\UserService' => 'Scc\Service\Factory\UserServiceFactory',
+            'translator' => 'Zend\I18n\Translator\TranslatorServiceFactory'
         )
     ),
     'controllers' => array(
@@ -170,12 +172,12 @@ return array(
             'Scc\Controller\Docs' => 'Scc\Controller\DocsController'
         ),
         'factories' => array(
-            'Scc\Controller\Index' => 'Scc\Controller\Factory\Index',
-            'Scc\Controller\Console' => 'Scc\Controller\Factory\Console',
-            'Scc\Controller\Page' => 'Scc\Controller\Factory\Page',
             'Scc\Controller\Admin' => 'Scc\Controller\Factory\Admin',
+            'Scc\Controller\Console' => 'Scc\Controller\Factory\Console',
+            'Scc\Controller\Index' => 'Scc\Controller\Factory\Index',
             'Scc\Controller\Login' => 'Scc\Controller\Factory\Login',
-            'Scc\Controller\Twitter' => 'Scc\Controller\Factory\Twitter',
+            'Scc\Controller\Page' => 'Scc\Controller\Factory\Page',
+            'Scc\Controller\Twitter' => 'Scc\Controller\Factory\Twitter'
         )
     ),
     'view_manager' => array(
@@ -197,7 +199,7 @@ return array(
             'ViewJsonStrategy',
         )
     ),
-        'translator' => array(
+    'translator' => array(
         'locale' => 'en_US',
         'translation_file_patterns' => array(
             array(

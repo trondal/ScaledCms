@@ -9,7 +9,7 @@ use Zend\Permissions\Acl\Role\GenericRole;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class AclFactory implements FactoryInterface {
+class AclServiceFactory implements FactoryInterface {
 
     const GUEST = 'guest';
     const ADMIN  = 'admin';

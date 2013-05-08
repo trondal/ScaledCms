@@ -2,14 +2,14 @@
 
 namespace Scc\Service;
 
-use Scc\Controller\EntityManagerAware;
 use Doctrine\ORM\EntityManager;
+use Scc\Controller\EntityManagerAware;
 
-class User implements EntityManagerAware {
+class UserService implements EntityManagerAware {
 
     /**
      *
-     * @var \Doctrine\ORM\EntityManager
+     * @var EntityManager
      */
     protected $em;
 

@@ -2,17 +2,16 @@
 
 namespace Scc\Service\Factory;
 
-use Scc\Service\NodeService;
+use Scc\Service\PageService;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class Node implements FactoryInterface {
+class PageServiceFactory implements FactoryInterface {
 
     public function createService(ServiceLocatorInterface $serviceLocator) {
-	$service = new NodeService();
+	$service = new PageService();
 	$service->setEntityManager($serviceLocator->get('Doctrine\ORM\EntityManager'));
 
 	return $service;
     }
-
 }

@@ -5,10 +5,10 @@ namespace Scc\Service\Factory;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class Site implements FactoryInterface {
+class UserServiceFactory implements FactoryInterface {
 
     public function createService(ServiceLocatorInterface $serviceLocator) {
-	$service = new \Scc\Service\SiteService();
+	$service = new \Scc\Service\UserService();
 	$service->setEntityManager($serviceLocator->get('Doctrine\ORM\EntityManager'));
 
 	return $service;
