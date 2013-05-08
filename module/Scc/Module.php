@@ -46,10 +46,10 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface,
 
         // For errors in the ResourceControllers and in. Not for module.php
         /*$sm = $app->getServiceManager();
-        $eventManager->attach(MvcEvent::EVENT_DISPATCH_ERROR, function() use($sm, $eventManager) {
-            //$application = $mvcEvent->getApplication();
-            $apiProblemListener = $sm->getServiceManager()->get('PhlyRestfully\ApiProblemListener');
-            $eventManager->attach($apiProblemListener);
+          $eventManager->attach(MvcEvent::EVENT_DISPATCH_ERROR, function() use($sm, $eventManager) {
+          //$application = $mvcEvent->getApplication();
+          $apiProblemListener = $sm->getServiceManager()->get('PhlyRestfully\ApiProblemListener');
+          $eventManager->attach($apiProblemListener);
         }, 1);*/
 
         // Add ACL for Api route
@@ -75,7 +75,14 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface,
             'factories' => array(
                 'Zend\Authentication\AuthenticationService' => function($serviceManager) {
                     return $serviceManager->get('doctrine.authenticationservice.orm_default');
-                }
+                },
+                'doctrine.cache.scc_memcache' => function () {
+                    $cache = new \Doctrine\Common\Cache\MemcacheCache();
+                    $memcache = new \Memcache();
+                    $memcache->connect('localhost', 11211);
+                    $cache->setMemcache($memcache);
+                    return $cache;
+                },
             )
         );
     }
@@ -107,9 +114,9 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface,
         $sharedEventManager = $e->getApplication()->getEventManager()->getSharedManager();
 
         $sharedEventManager->attach('PhlyRestfully\ResourceController', 'dispatch', function ($e) {
-            $problem = new ApiProblem(HttpResponse::STATUS_CODE_401, 'Must be logged in to access the api.');
-            $e->setParam('api-problem', $problem);
-        }, 100);
+                    $problem = new ApiProblem(HttpResponse::STATUS_CODE_401, 'Must be logged in to access the api.');
+                    $e->setParam('api-problem', $problem);
+                }, 100);
 
     }
 
