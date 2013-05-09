@@ -28,7 +28,7 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface,
     public function onBootstrap(EventInterface $e) {
         $app = $e->getApplication();
 
-        $eventManager = $e->getApplication()->getEventManager();
+        $eventManager = $app->getEventManager();
         $moduleRouteListener = new ModuleRouteListener();
         $moduleRouteListener->attach($eventManager);
 
@@ -222,11 +222,21 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface,
     }
 
     public function onDispatchCollection(MvcEvent $e) {
+        $routeMatch = $e->getRouteMatch();
+
+        if ($routeMatch->getMatchedRouteName() !== 'api/api-segment') {
+            // No api route requested.
+            return;
+        }
+
         $result = $e->getResult();
+
         if (!$result instanceof RestfulJsonModel) {
+            // Not jsonModel, would not decode anyway
             return;
         }
         if (!$result->isHalCollection()) {
+            // Not a HalCollection, out of scope for this method.
             return;
         }
         $collection = $result->getPayload();
