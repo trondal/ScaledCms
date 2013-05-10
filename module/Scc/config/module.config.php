@@ -82,8 +82,23 @@ return array(
                 ),
                 'may_terminate' => true,
                 'child_routes' => array(
+                     'node' => array(
+                        'type' => 'Zend\Mvc\Router\Http\Segment',
+                        'priority' => 100,
+                        'options' => array(
+                            'route' => '/node/:id',
+                            'constraints' => array(
+                                'id' => '[0-9]'
+                            ),
+                            'defaults' => array(
+                                'controller' => 'Node',
+                                'action' => 'index'
+                            )
+                        )
+                    ),
                     'userslug' => array(
                         'type' => 'Zend\Mvc\Router\Http\Segment',
+                        'priority' => 50,
                         'options' => array(
                             'route' => '/[:a][/:b][/:c][/:d]',
                             'constraints' => array(
@@ -176,6 +191,7 @@ return array(
             'Scc\Controller\Console' => 'Scc\Controller\Factory\Console',
             'Scc\Controller\Index' => 'Scc\Controller\Factory\Index',
             'Scc\Controller\Login' => 'Scc\Controller\Factory\Login',
+            'Scc\Controller\Node' => 'Scc\Controller\Factory\Node',
             'Scc\Controller\Page' => 'Scc\Controller\Factory\Page',
             'Scc\Controller\Twitter' => 'Scc\Controller\Factory\Twitter'
         )

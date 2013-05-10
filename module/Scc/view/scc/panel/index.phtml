@@ -1,9 +1,9 @@
 <div style="border:1px solid black;margin: 2px 2px 2px 2px;padding:2px 2px 2px 2px">
-<?php 
-    foreach ($this->node->getChildren() as $child) {
-        $classNameArray = explode('\\',$child->getClassName());
-        $helperName = end($classNameArray);
-        echo $this->$helperName($child->getComponent());
+<?php
+    foreach ($this->node->getChildren() as $childNode) {
+        $classNameArray = explode('\\',$childNode->getClassName());
+        $helperName = end($classNameArray) . 'Helper';
+        echo $this->$helperName($childNode);
     }
-?>    
+?>
 </div>

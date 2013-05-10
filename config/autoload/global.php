@@ -21,9 +21,9 @@ return array(
 	),
 	'configuration' => array(
 	    'orm_default' => array(
-		'metadata_cache' => 'scc_memcache',
-		'query_cache' => 'scc_memcache',
-		'result_cache' => 'scc_memcache',
+		'metadata_cache' => 'array',
+		'query_cache' => 'array',
+		'result_cache' => 'array',
 		'driver' => 'orm_default',
 		'generate_proxies' => true,
 		'proxy_dir' => sys_get_temp_dir(),
@@ -34,7 +34,7 @@ return array(
 	'driver' => array(
 	    'orm_default' => array(
 		'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
-		'cache' => 'scc_memcache'
+		'cache' => 'array'
 	    )
 	),
 	'entitymanager' => array(

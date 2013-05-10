@@ -2,13 +2,16 @@
 
 namespace Scc\View\Helper;
 
-class Tree extends \Zend\Form\View\Helper\AbstractHelper {
+use Scc\Entity\Page;
+use Zend\Form\View\Helper\AbstractHelper;
 
-    public function __invoke(\Scc\Entity\Page $page) {
+class TreeHelper extends AbstractHelper {
+
+    public function __invoke(Page $page) {
 	return $this->displayTree($page);
     }
 
-    private function displayTree(\Scc\Entity\Page $parent, $level = 0) {
+    private function displayTree(Page $parent, $level = 0) {
 	$html = '';
 	if ($level === 0) {
 	    $html .= '<ul>';

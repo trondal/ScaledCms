@@ -4,6 +4,7 @@ namespace Scc\Controller;
 
 use Scc\Service\NodeService;
 use Scc\Service\PageService;
+use Scc\Service\SiteService;
 use Scc\Service\SiteServiceAware;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Permissions\Acl\Resource\ResourceInterface;
@@ -21,9 +22,9 @@ class IndexController extends AbstractActionController
      * @var NodeService
      */
     protected $nodeService;
-    
+
     /**
-     * @var SiteService 
+     * @var SiteService
      */
     protected $siteService;
 
@@ -35,10 +36,10 @@ class IndexController extends AbstractActionController
 	$this->nodeService = $nodeService;
     }
 
-    public function setSiteService(\Scc\Service\SiteService $siteService) {
+    public function setSiteService(SiteService $siteService) {
         $this->siteService = $siteService;
     }
-    
+
     public function getResourceId() {
 	return __CLASS__;
     }
@@ -47,7 +48,7 @@ class IndexController extends AbstractActionController
         $serverUrl = $this->getServiceLocator()->get('viewhelpermanager')->get('ServerUrl');
         // Strip ports due to Varnish.
         $tmpArray = explode(':', $serverUrl->getHost());
-        $hostName = $tmpArray[0]; 
+        $hostName = $tmpArray[0];
 
 	$ary[] = $this->params()->fromRoute('a');
 	$ary[] = $this->params()->fromRoute('b');
@@ -71,19 +72,12 @@ class IndexController extends AbstractActionController
         }
         $nodes = $page->getNodes();
 
-	/*$components = array();
-	foreach ($page->getNodes() as $node) {
-	    $components[] = $this->nodeService->findByNode($node);
-	}*/
-
 	$view = new ViewModel(array(
 	    'page' => $page,
 	    'path' => $this->pageService->getMaterializedPath($page),
 	    'node' => $nodes[0]
 	));
 
-        // first node is always connected to an panel
-        $view->setTemplate('scc/panel/index');
 	return $view;
     }
 

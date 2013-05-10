@@ -2,11 +2,14 @@
 
 namespace Scc;
 
+use Doctrine\Common\Cache\MemcacheCache;
+use Memcache;
 use PhlyRestfully\ApiProblem;
 use PhlyRestfully\View\RestfulJsonModel;
 use Scc\Service\Factory\AclFactory;
-use Scc\View\Helper\Contact;
-use Scc\View\Helper\Twitter;
+use Scc\View\Helper\ContactHelper;
+use Scc\View\Helper\PanelHelper;
+use Scc\View\Helper\TwitterHelper;
 use Zend\Console\Adapter\AdapterInterface;
 use Zend\EventManager\EventInterface;
 use Zend\Http\Response;
@@ -80,8 +83,8 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface,
                     return $serviceManager->get('doctrine.authenticationservice.orm_default');
                 },
                 'doctrine.cache.scc_memcache' => function () {
-                    $cache = new \Doctrine\Common\Cache\MemcacheCache();
-                    $memcache = new \Memcache();
+                    $cache = new MemcacheCache();
+                    $memcache = new Memcache();
                     $memcache->connect('localhost', 11211);
                     $cache->setMemcache($memcache);
                     return $cache;
@@ -203,20 +206,21 @@ class Module implements BootstrapListenerInterface, ConfigProviderInterface,
     public function getViewHelperConfig() {
         return array(
             'factories' => array(
-                'Twitter' => function($sm) {
-                    $helper = new Twitter();
-                    $locator = $sm->getServiceLocator();
-                    $helper->setEntityManager($locator->get('Doctrine\ORM\EntityManager'));
+                'TwitterHelper' => function() {
+                    $helper = new TwitterHelper();
                     return $helper;
                 },
-                'Contact' => function($sm) {
+                'ContactHelper' => function($sm) {
                     $locator = $sm->getServiceLocator();
                     $request = $locator->get('Request');
-                    $helper = new Contact();
-                    $helper->setEntityManager($locator->get('Doctrine\ORM\EntityManager'));
+                    $helper = new ContactHelper();
                     $helper->setRequest($request);
                     return $helper;
                 },
+                'PanelHelper' => function() {
+                    $helper = new PanelHelper();
+                    return $helper;
+                }
             )
         );
     }

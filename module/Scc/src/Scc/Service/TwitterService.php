@@ -5,13 +5,14 @@ namespace Scc\Service;
 use Doctrine\ORM\EntityManager;
 use Scc\Controller\EntityManagerAware;
 use Scc\Entity\Node;
+use Scc\Entity\Twitter;
 use Zend\EventManager\EventManagerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
 
 class TwitterService implements EntityManagerAware, ListenerAggregateInterface {
 
     /**
-     * @var \Doctrine\ORM\EntityManager
+     * @var EntityManager
      */
     protected $em;
     protected $listeners = array();
@@ -41,13 +42,13 @@ class TwitterService implements EntityManagerAware, ListenerAggregateInterface {
             }
         }
     }
-    
+
     public function onCreate($e) {
         $data = $e->getParam('data', false);
         $node = new Node();
-        $twitter = new \Scc\Entity\Twitter($data['html']);
+        $twitter = new Twitter($data['html']);
     }
-    
+
     public function onUpdate($e) {
         echo '<pre>';
         var_dump('UPDATe');
@@ -59,13 +60,13 @@ class TwitterService implements EntityManagerAware, ListenerAggregateInterface {
         var_dump('PATHC');
         exit;
     }
-    
+
     public function onDelete($e) {
         echo '<pre>';
         var_dump('DELETE');
         exit;
     }
-    
+
     public function onFetch($e) {
         if (false === $id = $e->getParam('id', false)) {
             return false;
@@ -73,10 +74,10 @@ class TwitterService implements EntityManagerAware, ListenerAggregateInterface {
         $repo = $this->em->getRepository('Scc\Entity\Twitter');
         return $repo->findOneBy(array('id' => $id));
     }
-    
+
     public function onFetchAll($e) {
         $repo = $this->em->getRepository('Scc\Entity\Twitter');
         return $repo->findAll();
     }
-    
+
 }

@@ -20,9 +20,19 @@ class NodeService implements EntityManagerAware {
 	$this->em = $em;
     }
 
+    public function find($id) {
+        $repo = $this->em->getRepository('Scc\Entity\Node');
+        return $repo->find($id);
+    }
+
     public function findComponentByNode(Node $node) {
 	$repo = $this->em->getRepository('Scc\Entity\Node');
 	return $repo->getComponent($node);
+    }
+
+    public function getChildren($node = null, $direct = false, $sortByField = null, $direction = 'ASC', $includeNode = false) {
+        $repo = $this->em->getRepository('Scc\Entity\Node');
+        return $repo->getChildren($node, $direct, $sortByField, $direction, $includeNode);
     }
 
 }
