@@ -5,6 +5,6 @@
         "doctrine/doctrine-orm-module": "*",
         "doctrine/migrations":"dev-master",
         "zendframework/zendframework":"*",
-        "gedmo/doctrine-extensions":"*",
+        "gedmo/doctrine-extensions":"*"
     }
 }
