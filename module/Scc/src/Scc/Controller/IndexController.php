@@ -58,6 +58,10 @@ class IndexController extends AbstractActionController
 	$paths = array_filter($ary);
 
         $site = $this->siteService->findOneByHostName($hostName);
+        if (!$site) {
+            $this->getResponse()-> setStatusCode(404);
+	    return;
+        }
 	$page = $this->pageService->findByMaterializedPathAndSite($paths, $site);
 
         if (!$page) {
