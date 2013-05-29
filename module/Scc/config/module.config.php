@@ -73,7 +73,7 @@ return array(
                 'type' => 'Zend\Mvc\Router\Http\Hostname',
                 'options' => array(
                     'priority' => 50,
-                    'route' => ':subdomain.[:optional.]:domain.:tld',
+                    'route' => ':subdomain.[:opt1.][:opt1.][:opt1.][:opt1.]:domain.:tld',
                     'defaults' => array(
                         '__NAMESPACE__' => 'Scc\Controller',
                         'controller' => 'Index',
